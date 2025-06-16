@@ -150,5 +150,109 @@
         "deadlineTimeoutSeconds": 10
       }
     ]
+  },
+  {
+    "description": "Honeypot configuration for multiple services with distinct vulnerabilities.",
+    "id": "4ed9a0fa-9e7a-4905-abce-792b92c47c02",
+    "services": [
+      {
+        "apiVersion": "v1",
+        "protocol": "http",
+        "address": ":8080",
+        "description": "HTTP service simulating a vulnerable web application.",
+        "cve_tags": [
+          "CVE-2024-11025"
+        ],
+        "cve_description": "An authenticated attacker with low privileges may use a SQL Injection vulnerability in the affected products administration panel to gain read and write access to a specific log file of the device.",
+        "commands": [
+          {
+            "regex": ".*",
+            "handler": "SQL Injection Vulnerability Detected",
+            "headers": [
+              "Content-Type: text/plain"
+            ],
+            "statusCode": 200
+          }
+        ],
+        "plugin": {
+          "llmProvider": "openai",
+          "llmModel": "gpt-4o-mini",
+          "openAISecretKey": "placeholder",
+          "prompt": "You are interacting with a vulnerable web application."
+        }
+      },
+      {
+        "apiVersion": "v1",
+        "protocol": "ssh",
+        "address": ":22",
+        "description": "SSH service with a focus on password security.",
+        "cve_tags": [
+          "CVE-2024-0024"
+        ],
+        "cve_description": "Improper input validation in UserManagerService.java could lead to local escalation of privilege.",
+        "commands": [
+          {
+            "regex": ".*",
+            "handler": "Access granted.",
+            "plugin": null
+          }
+        ],
+        "passwordRegex": "^[a-zA-Z0-9]{8,}$",
+        "deadlineTimeoutSeconds": 300,
+        "serverName": "ubuntu",
+        "plugin": {
+          "llmProvider": "openai",
+          "llmModel": "gpt-4o-mini",
+          "openAISecretKey": "placeholder",
+          "prompt": "You are interacting with an SSH service."
+        }
+      },
+      {
+        "apiVersion": "v1",
+        "protocol": "tcp",
+        "address": ":3306",
+        "description": "TCP service designed to simulate database connections.",
+        "cve_tags": [
+          "CVE-2024-0006"
+        ],
+        "cve_description": "Information exposure in the logging system allows attackers to obtain database user credentials in log files.",
+        "banner": "Welcome to the database service.",
+        "deadlineTimeoutSeconds": 60
+      },
+      {
+        "apiVersion": "v1",
+        "protocol": "http",
+        "address": ":3000",
+        "description": "HTTP service with unauthorized enumeration vulnerability.",
+        "cve_tags": [
+          "CVE-2024-1223"
+        ],
+        "cve_description": "Unauthorized enumeration of information from the embedded device APIs under specific conditions.",
+        "commands": [
+          {
+            "regex": ".*",
+            "handler": "Unauthorized access attempt.",
+            "headers": [
+              "Content-Type: application/json"
+            ],
+            "statusCode": 403
+          }
+        ],
+        "plugin": null
+      },
+      {
+        "apiVersion": "v1",
+        "protocol": "tcp",
+        "address": ":5555",
+        "description": "TCP service simulating a vulnerable mobile application backend.",
+        "cve_tags": [
+          "CVE-2024-11206"
+        ],
+        "cve_description": "Unauthorized access vulnerability in the mobile application can lead to the leakage of user information.",
+        "banner": "Mobile application backend service.",
+        "deadlineTimeoutSeconds": 120
+      }
+    ],
+    "timestamp": "2025-06-16T10:01:24.912030+00:00"
   }
 ]

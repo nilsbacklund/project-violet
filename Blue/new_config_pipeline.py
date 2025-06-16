@@ -10,15 +10,18 @@ from datetime import datetime, timezone
 import yaml
 import re
 import uuid
+from dotenv import load_dotenv
 
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+load_dotenv()
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+BASE_DIR = Path(__file__).resolve().parent
 
 # Paths to data files
-data_dir = Path(__file__).parent / 'data'
-service_configs_path = data_dir / 'service_configs.json'
-attack_patterns_path = data_dir / 'attack_patterns.json'
-vulns_db_path = data_dir / 'vulns_DB.json'
-schema_path = data_dir / 'services_schema.json'
+service_configs_path = BASE_DIR.parent /'BeelzebubServices'/'service_configs.json'
+attack_patterns_path = BASE_DIR.parent/'AttackPatterns'/'attack_patterns.json'
+vulns_db_path = BASE_DIR.parent/'Blue'/'RagData'/'vulns_DB.json'
+schema_path = BASE_DIR.parent/'BeelzebubServices'/'services_schema.json'
 
 def load_json(path):
     with open(path, 'r') as f:
@@ -117,7 +120,7 @@ def main():
     model = SentenceTransformer(MODEL_NAME)
     
     # Load vulnerability embeddings
-    vulns_embeddings = np.load(data_dir / 'vulns_embeddings_e5.npy')
+    vulns_embeddings = np.load('Blue/RagData/vulns_embeddings_e5.npy')
 
     # Embed the user query using e5-large-v2
     query_embedding = model.encode([user_query])[0]
@@ -211,7 +214,7 @@ def main():
 
     
     # Save config (append mode)
-    config_file = "beelzebub_config.json"
+    config_file = BASE_DIR.parent / "BeelzebubServices" / "service_configs.json"
     configs = []
 
     # If file exists and is not empty, load existing configs

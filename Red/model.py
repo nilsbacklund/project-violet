@@ -1,0 +1,70 @@
+from enum import Enum
+
+class LLMHost(str, Enum):
+    OPENAI = "openai"
+    ANTHROPIC = "anthropic"
+    OLLAMA = "ollama"
+    OLLAMA_NO_FC = "ollama_no_fc"
+
+class LLMModel(str, Enum):
+    GPT_4_1_NANO = "gpt-4.1-nano"
+    GPT_4_1 = "gpt-4.1"
+    GPT_3_5_TURBO = "gpt-3.5-turbo"
+    GPT_4 = "gpt-4"
+    GPT_4O_MINI = "gpt-4o-mini"
+    GPT_4_1_MINI = "gpt-4.1-mini"
+    O4_MINI = "o4-mini"
+    OLLAMA_LLAMA32_3b = "llama3.2:3b"
+    OLLAMA_DEEPSEEK_R1_1b = "deepseek-r1:1.5b"
+
+class LLMConfig:
+    def __init__(self, host: LLMHost, model: LLMModel):
+        self.host = host
+        self.model = model
+
+class ResponseObject:
+    def __init__(self, message: str, function: str = None, arguments: dict = None):
+        self.message = message
+        self.function = function
+        self.arguments = arguments
+
+    def __repr__(self):
+        return f"ResponseObject(message={self.message}, function={self.function}, arguments={self.arguments})"
+    
+    def to_dict(self):
+        return {
+            'message': self.message,
+            'function': self.function,
+            'arguments': self.arguments
+        }
+
+class MitreMethodUsed():
+    def __init__(self):
+        self.tactic_used = None
+        self.technique_used = None
+
+    def __repr__(self):
+        return f"MethodUsed(tactic={self.tactic_used}, technique={self.technique_used})"
+    
+    def to_dict(self):
+        return {
+            'tactic_used': self.tactic_used,
+            'technique_used': self.technique_used
+        }
+
+class DataLogObject():
+    def __init__(self, itteration):
+        self.itteration = itteration
+        self.llm_response = None
+        self.tool_response = None
+        self.mitre_attack_method = MitreMethodUsed()
+        self.beelzebub_response = []
+    
+    def to_dict(self):
+        return {
+            'itteration': self.itteration,
+            'llm_response': self.llm_response.to_dict() if self.llm_response else None,
+            'tool_response': self.tool_response,
+            'mitre_attack_method': self.mitre_attack_method.to_dict() if self.mitre_attack_method else None,
+            'beelzebub_response': self.beelzebub_response
+        }

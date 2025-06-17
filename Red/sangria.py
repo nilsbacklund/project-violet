@@ -97,16 +97,23 @@ def run_attacks(n_attacks, save_logs):
     return all_logs
 
 
-def save_logs_to_file(all_logs, session_id, save_logs_flag=True):
-    if not save_logs_flag:
+def save_logs_to_file(all_logs, session_id, save_logs=True):
+    if not save_logs:
         print("Saving logs is disabled.")
         return
     
-    
+    print(f"Saving logs to file for session {session_id}...")
+    print([[log.to_dict() for log in session_log] for session_log in all_logs])
     # Create the logs directory if it doesn't exist
     
-    with open('../logs/full_logs_' + str(session_id) + '.json', 'w') as f:
-        json.dump([[log.to_dict() for log in session_log] for session_log in all_logs], f, indent=4)
+    os.makedirs('logs', exist_ok=True)
+    path = f'logs/full_logs_{session_id}.json'
+    data = [[log.to_dict() for log in session_log] for session_log in all_logs]
+
+    with open(path, 'w') as f:
+        json.dump(data, f, indent=4)
+
+    print("File written:", os.path.exists(path), "Size:", os.path.getsize(path))
 
     print(f"\nMessages saved to logs/full_logs_{str(session_id)}.json")
 

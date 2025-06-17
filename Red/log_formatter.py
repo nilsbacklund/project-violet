@@ -14,11 +14,11 @@ def format_logs_to_lables(full_logs, session_id):
             if not log_dict['llm_response']:
                 continue
 
-            if not log_dict['llm_response']['function'] == 'run_command':
+            if not log_dict['llm_response'].__dict__['function'] == 'run_command':
                 continue
 
-            tactic = log_dict['mitre_attack_method']['tactic_used']
-            technique = log_dict['mitre_attack_method']['technique_used']
+            tactic = log_dict['mitre_attack_method'].__dict__['tactic_used']
+            technique = log_dict['mitre_attack_method'].__dict__['technique_used']
 
             if not tactic or not technique:
                 continue
@@ -64,10 +64,10 @@ def save_labels(formatted_logs, session_id):
     import os
     import json
 
-    if not os.path.exists('../logs/labels'):
-        os.makedirs('../logs/labels')
+    if not os.path.exists('logs/labels'):
+        os.makedirs('logs/labels')
 
-    with open(f'../logs/labels/labels_{session_id}.json', 'w') as f:
+    with open(f'logs/labels/labels_{session_id}.json', 'w') as f:
         json.dump([log.to_dict() for log in formatted_logs], f, indent=4)
 
     print(f"Labels saved to logs/labels/labels_{session_id}.json")

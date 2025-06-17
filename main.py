@@ -3,7 +3,7 @@ from config import attacks_per_configuration, save_logs, n_configurations
 from Red.sangria import run_attacks, save_logs_to_file
 from Red.log_formatter import format_logs_to_lables, save_labels
 from Blue.new_config_pipeline import generate_new_honeypot_config, save_config_as_file, get_honeypot_config, set_honeypot_config
-from Honeypot.honeypot_tools import rebuild_dockers, start_dockers, stop_dockers
+from Honeypot.honeypot_tools import start_dockers, stop_dockers
 
 def main():
     config_id = "00"
@@ -15,8 +15,10 @@ def main():
         print(f"Configuration Iteration {i + 1} / {n_configurations}")
         
         if i != 0:
+            stop_dockers()
             config_id, honeypot_config = generate_new_honeypot_config()
             set_honeypot_config(honeypot_config)
+            start_dockers()
 
         full_logs = run_attacks(n_attacks=attacks_per_configuration, save_logs=save_logs)
         if not full_logs:
@@ -28,7 +30,6 @@ def main():
 
         lables = format_logs_to_lables(full_logs, config_id)
         save_labels(lables, config_id)
-        rebuild_dockers()
 
     stop_dockers()
 

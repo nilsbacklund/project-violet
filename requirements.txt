@@ -8,3 +8,5 @@ python-dotenv
 langfuse-sdk
 pexpect
 jsonschema
+opentelemetry-sdk
+sentence-transformers

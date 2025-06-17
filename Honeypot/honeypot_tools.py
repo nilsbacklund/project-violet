@@ -1,16 +1,5 @@
 import subprocess
 
-def rebuild_dockers():
-    try:
-        subprocess.run(["sudo", "docker-compose", "-f", "Honeypot/docker-compose.yml", "down"], check=True)
-        subprocess.run(["sudo", "docker-compose", "-f", "Honeypot/docker-compose.yml","build"], check=True)
-        subprocess.run(["sudo", "docker-compose", "-f", "Honeypot/docker-compose.yml","up", "-d"], check=True)
-
-        print("Docker containers rebuilt")
-    except subprocess.CalledProcessError as e:
-        print(f"An error occurred in rebuilding docker containers: {e}")
-
-
 def start_dockers():
     try:
         subprocess.run(["sudo", "docker-compose","-f", "Honeypot/docker-compose.yml", "build"], check=True)

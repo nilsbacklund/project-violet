@@ -1,0 +1,104 @@
+{
+  "description": "Honeypot configuration for cybersecurity research featuring various services and vulnerabilities.",
+  "id": "14b33714-b391-4f11-9d7b-70aa03ccfdc3",
+  "services": [
+    {
+      "apiVersion": "v1",
+      "protocol": "http",
+      "address": ":8080",
+      "description": "HTTP service vulnerable to SQL injection.",
+      "cve_tags": [
+        "CVE-2024-12229"
+      ],
+      "cve_description": "A vulnerability classified as critical was found in PHPGurukul Complaint Management System 1.0, allowing SQL injection through the search argument.",
+      "commands": [
+        {
+          "regex": ".*",
+          "handler": "SQL Injection Test Response",
+          "headers": [
+            "Content-Type: text/html"
+          ],
+          "statusCode": 200
+        }
+      ],
+      "plugin": null
+    },
+    {
+      "apiVersion": "v1",
+      "protocol": "ssh",
+      "address": ":22",
+      "description": "SSH service with a privilege escalation vulnerability.",
+      "cve_tags": [
+        "CVE-2024-11024"
+      ],
+      "cve_description": "The AppPresser plugin for WordPress is vulnerable to privilege escalation via account takeover due to improper validation of password reset codes.",
+      "commands": [
+        {
+          "regex": ".*",
+          "handler": "SSH Command Response",
+          "plugin": null
+        }
+      ],
+      "passwordRegex": ".*",
+      "deadlineTimeoutSeconds": 300,
+      "serverName": "fake-server",
+      "plugin": {
+        "llmProvider": "openai",
+        "llmModel": "gpt-4o-mini",
+        "openAISecretKey": "placeholder",
+        "prompt": "Respond to SSH commands with appropriate actions."
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "protocol": "tcp",
+      "address": ":3306",
+      "description": "TCP service exposing logging information.",
+      "cve_tags": [
+        "CVE-2024-0006"
+      ],
+      "cve_description": "Information exposure in the logging system allows local attackers to obtain database user credentials.",
+      "banner": "Welcome to the TCP honeypot service.",
+      "deadlineTimeoutSeconds": 120
+    },
+    {
+      "apiVersion": "v1",
+      "protocol": "http",
+      "address": ":9000",
+      "description": "HTTP service vulnerable to DoS attacks.",
+      "cve_tags": [
+        "CVE-2024-10650"
+      ],
+      "cve_description": "An unauthenticated Denial of Service vulnerability identified in ChuanhuChatGPT, allowing exploitation by sending large data payloads.",
+      "commands": [
+        {
+          "regex": ".*",
+          "handler": "DoS Vulnerability Response",
+          "headers": [
+            "Content-Type: text/plain"
+          ],
+          "statusCode": 200
+        }
+      ],
+      "plugin": {
+        "llmProvider": "openai",
+        "llmModel": "gpt-4o-mini",
+        "openAISecretKey": "placeholder",
+        "prompt": "Handle HTTP requests that may lead to DoS."
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "protocol": "tcp",
+      "address": ":8081",
+      "description": "TCP service vulnerable to stored XSS.",
+      "cve_tags": [
+        "CVE-2024-10117"
+      ],
+      "cve_description": "The WP Crowdfunding plugin for WordPress is vulnerable to stored cross-site scripting via insufficient input sanitization.",
+      "banner": "TCP honeypot for XSS testing.",
+      "deadlineTimeoutSeconds": 60
+    }
+  ],
+  "timestamp": "2025-06-17T13:49:45.086873+00:00"
+}

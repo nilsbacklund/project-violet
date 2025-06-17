@@ -1,0 +1,113 @@
+{
+  "description": "Honeypot configuration for various services to study cybersecurity threats and vulnerabilities.",
+  "id": "ca1801ec-d108-4be4-9520-24927e48865e",
+  "services": [
+    {
+      "apiVersion": "v1",
+      "protocol": "http",
+      "address": ":8080",
+      "description": "HTTP service vulnerable to clickjacking.",
+      "cve_tags": [
+        "CVE-2024-10454"
+      ],
+      "cve_description": "Clickjacking vulnerability in Clibo Manager v1.1.9.12 due to lack of X-Frame-Options header, allowing attackers to hijack user clicks.",
+      "commands": [
+        {
+          "regex": ".*login.*",
+          "handler": "Welcome to Clibo Manager. Please log in.",
+          "headers": [
+            "X-Content-Type-Options: nosniff"
+          ],
+          "statusCode": 200
+        }
+      ],
+      "plugin": {
+        "llmProvider": "openai",
+        "llmModel": "gpt-4o-mini",
+        "openAISecretKey": "placeholder",
+        "prompt": "User requests to log in to Clibo Manager."
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "protocol": "ssh",
+      "address": ":22",
+      "description": "SSH service vulnerable to information exposure.",
+      "cve_tags": [
+        "CVE-2024-0006"
+      ],
+      "cve_description": "Local attackers can access application logs to retrieve database user credentials, leading to unauthorized access.",
+      "commands": [
+        {
+          "regex": ".*(login|authenticate).*",
+          "handler": "Authentication successful. Welcome to the SSH honeypot.",
+          "plugin": null
+        }
+      ],
+      "passwordRegex": "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$",
+      "deadlineTimeoutSeconds": 300,
+      "serverName": "ssh-honeypot",
+      "plugin": null
+    },
+    {
+      "apiVersion": "v1",
+      "protocol": "http",
+      "address": ":9090",
+      "description": "HTTP service vulnerable to stored XSS.",
+      "cve_tags": [
+        "CVE-2024-12090"
+      ],
+      "cve_description": "Stored XSS vulnerability in ENOVIA Collaborative Industry Innovator allows arbitrary script execution in users' browsers.",
+      "commands": [
+        {
+          "regex": ".*submit.*",
+          "handler": "Data submitted successfully. Processing your request.",
+          "headers": [
+            "Content-Security-Policy: default-src 'self'"
+          ],
+          "statusCode": 200
+        }
+      ],
+      "plugin": {
+        "llmProvider": "openai",
+        "llmModel": "gpt-4o-mini",
+        "openAISecretKey": "placeholder",
+        "prompt": "User submits data through the web form."
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "protocol": "tcp",
+      "address": ":3306",
+      "description": "TCP service vulnerable to path traversal.",
+      "cve_tags": [
+        "CVE-2024-12088"
+      ],
+      "cve_description": "Rsync client vulnerability with --safe-links option allowing path traversal, which may lead to arbitrary file writes.",
+      "banner": "Welcome to the TCP honeypot. Connection established.",
+      "deadlineTimeoutSeconds": 60
+    },
+    {
+      "apiVersion": "v1",
+      "protocol": "ssh",
+      "address": ":2222",
+      "description": "SSH service vulnerable to privilege escalation.",
+      "cve_tags": [
+        "CVE-2024-11024"
+      ],
+      "cve_description": "Vulnerability in AppPresser plugin allowing privilege escalation via account takeover due to improper password reset validation.",
+      "commands": [
+        {
+          "regex": ".*reset-password.*",
+          "handler": "Password reset initiated. Please check your email.",
+          "plugin": null
+        }
+      ],
+      "passwordRegex": "^.{6,}$",
+      "deadlineTimeoutSeconds": 120,
+      "serverName": "ssh-honeypot-privilege",
+      "plugin": null
+    }
+  ],
+  "timestamp": "2025-06-17T13:41:41.306630+00:00"
+}

@@ -5,7 +5,6 @@ from Red.log_formatter import format_logs_to_lables, save_labels
 from Blue.new_config_pipeline import generate_new_honeypot_config, save_config_as_file, get_base_config, set_honeypot_config
 
 
-
 def main():
     base_honeypot_config = get_base_config(id=00)
     set_honeypot_config(base_honeypot_config)

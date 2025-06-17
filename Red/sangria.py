@@ -2,16 +2,16 @@
 import json
 import sys
 import os
-from schema import response, start_ssh, get_new_hp_logs
-import sangria_config
+from Red.schema import response, start_ssh, get_new_hp_logs
+import Red.sangria_config as sangria_config
 
 # Add parent directory to path to import config
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
 
-from defender_llm import run_command
-from tools import handle_tool_call
-from model import MitreMethodUsed, DataLogObject
+from Red.defender_llm import run_command
+from Red.tools import handle_tool_call
+from Red.model import MitreMethodUsed, DataLogObject
 from langfuse_sdk import Langfuse
 
 import os

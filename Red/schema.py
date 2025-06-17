@@ -7,7 +7,7 @@ import os
 from dotenv import load_dotenv
 from pydantic import BaseModel
 from types import SimpleNamespace
-from model import ResponseObject
+from Red.model import ResponseObject
 
 import platform
 if platform.system() != 'Windows':

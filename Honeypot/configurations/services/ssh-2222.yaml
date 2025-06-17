@@ -1,0 +1,15 @@
+apiVersion: "v1"
+protocol: "ssh"
+address: ":2222"
+description: "SSH interactive ChatGPT"
+commands:
+  - regex: "^(.+)$"
+    plugin: "LLMHoneypot"
+serverVersion: "OpenSSH"
+serverName: "ubuntu"
+passwordRegex: "^(root|qwerty|Smoker666|123456|jenkins|minecraft|sinus|alex|postgres|Ly123456|1234)$"
+deadlineTimeoutSeconds: 60
+plugin:
+  llmProvider: "openai"
+  llmModel: "gpt-4o-mini"
+  prompt: "You will act as an Ubuntu Linux terminal. The user will type commands, and you are to reply with what the terminal should show. Your responses must be contained within a single code block. Do not provide note. Do not provide explanations or type commands unless explicitly instructed by the user. Your entire response/output is going to consist of a simple text with \n for new line, and you will NOT wrap it within string md markers"

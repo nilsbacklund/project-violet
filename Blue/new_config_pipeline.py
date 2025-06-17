@@ -19,10 +19,11 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 BASE_DIR = Path(__file__).resolve().parent
 
-service_configs_path = BASE_DIR.parent / 'BeelzebubServices' / 'service_configs.json'
+service_configs_path = BASE_DIR.parent / 'BeelzebubServices'
 attack_patterns_path = BASE_DIR.parent / 'AttackPatterns' / 'attack_patterns.json'
 vulns_db_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'vulns_DB.json'
-schema_path = BASE_DIR.parent / 'BeelzebubServices' / 'services_schema.json'
+vulns_embeddings_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'vulns_embeddings_e5.npy'
+schema_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'services_schema.json'
 
 # Handeling print output based on config 
 _builtin_print = print
@@ -66,11 +67,20 @@ def extract_json(text):
     return match.group(1) if match else text.strip()
 
 # Pipeline Functions
-def sample_previous_configs(service_configs, attack_patterns, sample_size=5):
-    if len(service_configs) <= sample_size:
-        sampled_configs = service_configs
+
+def sample_previous_configs(services_dir, attack_patterns, sample_size=5):
+    services_dir = Path(services_dir)
+    json_files = list(services_dir.glob("config_*.json"))
+    if len(json_files) == 0:
+        raise ValueError("No config files found in the directory.")
+    if len(json_files) <= sample_size:
+        sampled_files = json_files
     else:
-        sampled_configs = random.sample(service_configs, sample_size)
+        sampled_files = random.sample(json_files, sample_size)
+    sampled_configs = []
+    for file in sampled_files:
+        with open(file, "r") as f:
+            sampled_configs.append(json.load(f))
     config_attack_info = []
     for config in sampled_configs:
         config_id = config['id']
@@ -203,18 +213,27 @@ def append_config_to_file(config, config_file):
     with open(config_file, "w", encoding="utf-8") as f:
         json.dump(configs, f, indent=2)
 
+
+def save_config_as_file(config, output_dir):
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    config_id = config.get('id', 'unknown')
+    filename = f"config_{config_id}.json"
+    filepath = output_dir / filename
+    with open(filepath, "w") as f:
+        json.dump(config, f, indent=2)
+    print(f"Config saved to {filepath}")
+
 # Main Pipeline
 def generate_new_honeypot_config():
-    service_configs = load_json(service_configs_path)
     attack_patterns = load_json(attack_patterns_path)
     vulns_db = load_json(vulns_db_path)
-    config_attack_info = sample_previous_configs(service_configs, attack_patterns)
+    config_attack_info = sample_previous_configs(service_configs_path, attack_patterns)
     llm_prompt = build_llm_prompt(config_attack_info)
     print(llm_prompt)
     user_query = query_openai(llm_prompt)
     print(user_query)
-
-    top5_vulns = retrieve_top_vulns(user_query, vulns_db, BASE_DIR.parent / 'Blue' / 'RagData' / 'vulns_embeddings_e5.npy')
+    top5_vulns = retrieve_top_vulns(user_query, vulns_db, vulns_embeddings_path)
     print("\nTop 5 vulnerabilities for new config:")
     for vuln in top5_vulns:
         cve_id = None
@@ -237,8 +256,13 @@ def generate_new_honeypot_config():
     if not validate_config(config, schema_path):
         print("Config is invalid. Not saving.")
         return
-    append_config_to_file(config, BASE_DIR.parent / 'BeelzebubServices' / 'service_configs.json')
-    print("\nConfig appended to 'service_configs.json'")
+    output_dir = BASE_DIR.parent / 'BeelzebubServices'
+    save_config_as_file(config, output_dir)
+    config_id = config.get('id', None)
+
+    print("\nConfig saved to 'BeelzebubServices' with id:", config_id)
+
+    return config_id
 
 if __name__ == "__main__":
     generate_new_honeypot_config()

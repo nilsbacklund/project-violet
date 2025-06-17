@@ -67,20 +67,22 @@ def extract_json(text):
     match = re.search(r'({[\s\S]+})', text)
     return match.group(1) if match else text.strip()
 
-def get_base_config(id):
+def get_honeypot_config(id):
     base_config_path = BASE_DIR.parent / 'BeelzebubServices' / f'config_{id}.json'
     return load_json(base_config_path)
 
 def set_honeypot_config(config):
-    # parse config file and write to /beelyebbub/configurations/servives
-    target_dir = BASE_DIR.parent / "BeelzebubServices" / "configurations" / "services"
+    target_dir = BASE_DIR.parent / "Honeypot" / "configurations" / "services"
     target_dir.mkdir(parents=True, exist_ok=True)
+    services = config.get('services', [])
     config_id = config.get('id', 'unknown')
-    filename = f"config_{config_id}.json"
-    target_path = target_dir / filename
-    with open(target_path, "w") as f:
-        json.dump(config, f, indent=2)
-    print(f"Config written to {target_path}")
+    for service in services:
+        service_name = service.get('name', 'unnamed_service')
+        filename = f"service_{config_id}_{service_name}.yaml"
+        target_path = target_dir / filename
+        with open(target_path, "w") as f:
+            yaml.dump(service, f)
+        print(f"Service config written to {target_path}")
 
 # Pipeline Functions
 

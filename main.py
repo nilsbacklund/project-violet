@@ -2,7 +2,13 @@
 import uuid
 from config import attacks_per_configuration, save_logs, n_configurations
 from Red.sangria import run_attacks, save_logs_to_file
+<<<<<<< HEAD
 from Blue.new_config_pipeline import generate_new_honeypot_config, save_config_as_file, get_base_config
+=======
+from Red.log_formatter import format_logs_for_network
+from Blue.new_config_pipeline import generate_new_honeypot_config, save_config_as_file
+>>>>>>> 5e5894e5bdb02eb442da235d5af6c53b520a5329
+
 
 def main():
     base_honeypot_config = get_base_config(id=00)
@@ -20,7 +26,7 @@ def main():
             continue
         save_logs_to_file(full_logs, config_id, save_logs)
 
-        format_logs_for_network()
+        format_logs_for_network(full_logs)
 
         save_config_as_file(new_config)
         save_labels()

@@ -1,0 +1,9 @@
+openai
+ollama
+requests
+beautifulsoup4
+pandas
+pydantic
+python-dotenv
+langfuse-sdk
+pexpect

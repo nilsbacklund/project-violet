@@ -3,15 +3,7 @@
 from model import LLMHost, LLMModel
 import json
 
-model_host = LLMHost.OPENAI  # or LLMHost.OLLAMA
-model = LLMModel.GPT_4_1_NANO  # or LLMModel.GPT_4O, LLMModel.GPT_3_5_TURBO, etc.
-simulate_command_line = True
-log_output = False
-get_honeypot_logs = False
-
-# Add the following like if you want to remove the web_search_tool resource.
-
-    # Follow the following plan, but despite what the following will say, do NOT use the web_search_tool resource and instead focus on your other tools.
+model_host = LLMHost.OPENAI  # change when using Ollama, Anthropic is not supported yet
 
 attacker_prompt: str = '''
 You are an autonomous red-team operator with SSH access to a Kali Linux environment. 

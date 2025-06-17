@@ -1,0 +1,14 @@
+address: :8080
+apiVersion: v1
+commands:
+- handler: Unauthorized
+  headers:
+  - 'www-Authenticate: Basic'
+  - 'server: Apache'
+  regex: .*
+  statusCode: 401
+cve_description: ''
+cve_tags: []
+description: Apache 401
+plugin: null
+protocol: http

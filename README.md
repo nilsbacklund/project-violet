@@ -1,5 +1,4 @@
 # project-violet
-Creating better cyber security defense by labeling attacks
 
 ## Overview
 Project Violet is an automated cybersecurity research platform that simulates realistic attack scenarios against configurable honeypots to generate labeled datasets for improving defensive capabilities. The system uses AI-powered red team attacks, adaptive blue team defenses, and the Beelzebub honeypot to create a continuous feedback loop for cybersecurity improvement.

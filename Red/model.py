@@ -68,3 +68,18 @@ class DataLogObject():
             'mitre_attack_method': self.mitre_attack_method.to_dict() if self.mitre_attack_method else None,
             'beelzebub_response': self.beelzebub_response
         }
+
+
+class LabledCommandObject():
+    def __init__(self, command: str, tactic: str, technique: str):
+        self.command = command
+        self.tactic = tactic
+        self.technique = technique
+
+    def to_dict(self):
+        return {
+            'command': self.command,
+            'tactic': self.tactic,
+            'technique': self.technique
+        }
+    

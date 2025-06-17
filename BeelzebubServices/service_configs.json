@@ -457,5 +457,213 @@
       }
     ],
     "timestamp": "2025-06-17T06:41:38.904875+00:00"
+  },
+  {
+    "description": "Configuration for a set of honeypot services for cybersecurity research.",
+    "id": "7c64fa7d-b62c-40d4-a570-63715d4b8edd",
+    "services": [
+      {
+        "apiVersion": "v1",
+        "protocol": "http",
+        "address": ":8080",
+        "description": "HTTP service simulating a vulnerable web application.",
+        "cve_tags": [
+          "CVE-2024-10455"
+        ],
+        "cve_description": "Reachable Assertion in BPv7 parser in \u00b5D3TN v0.14.0 allows attacker to disrupt service via malformed Extension Block.",
+        "commands": [
+          {
+            "regex": ".*",
+            "handler": "HTTP service is running.",
+            "headers": [
+              "Content-Type: text/plain"
+            ],
+            "statusCode": 200
+          }
+        ],
+        "plugin": {
+          "llmProvider": "openai",
+          "llmModel": "gpt-4o-mini",
+          "openAISecretKey": "placeholder",
+          "prompt": "Simulate a conversation with a user interacting with a vulnerable web application."
+        }
+      },
+      {
+        "apiVersion": "v1",
+        "protocol": "ssh",
+        "address": ":22",
+        "description": "SSH service with command injection vulnerability.",
+        "cve_tags": [
+          "CVE-2024-10118"
+        ],
+        "cve_description": "SECOM WRTR-304GN-304TW-UPSC does not properly filter user input allowing command injection.",
+        "commands": [
+          {
+            "regex": ".*",
+            "handler": "Command received. Processing...",
+            "plugin": null
+          }
+        ],
+        "passwordRegex": ".*",
+        "deadlineTimeoutSeconds": 300,
+        "serverName": "fake-server",
+        "plugin": null
+      },
+      {
+        "apiVersion": "v1",
+        "protocol": "tcp",
+        "address": ":3333",
+        "description": "TCP service simulating a vulnerable application layer protocol.",
+        "cve_tags": [
+          "CVE-2024-0860"
+        ],
+        "cve_description": "Vulnerable to cleartext transmission of sensitive information, allowing packet capture.",
+        "banner": "Welcome to TCP service.",
+        "deadlineTimeoutSeconds": 60
+      },
+      {
+        "apiVersion": "v1",
+        "protocol": "http",
+        "address": ":8081",
+        "description": "HTTP service with unauthorized enumeration vulnerability.",
+        "cve_tags": [
+          "CVE-2024-1223"
+        ],
+        "cve_description": "Potentially allows unauthorized enumeration of information from embedded device APIs.",
+        "commands": [
+          {
+            "regex": ".*",
+            "handler": "Unauthorized access attempt logged.",
+            "headers": [
+              "Content-Type: application/json"
+            ],
+            "statusCode": 403
+          }
+        ],
+        "plugin": {
+          "llmProvider": "openai",
+          "llmModel": "gpt-4o-mini",
+          "openAISecretKey": "placeholder",
+          "prompt": "Respond to unauthorized access attempts on the API."
+        }
+      },
+      {
+        "apiVersion": "v1",
+        "protocol": "tcp",
+        "address": ":4000",
+        "description": "TCP service with vulnerabilities in network protocol header fields.",
+        "cve_tags": [
+          "CVE-2024-10604"
+        ],
+        "cve_description": "Vulnerabilities in algorithms used by Fuchsia to populate network protocol header fields allow for guessing under specific circumstances.",
+        "banner": "Welcome to TCP vulnerable service.",
+        "deadlineTimeoutSeconds": 120
+      }
+    ],
+    "timestamp": "2025-06-17T06:57:33.099588+00:00"
+  },
+  {
+    "description": "Top-level container for a set of honeypot service configurations.",
+    "id": "c3b76a58-0c0b-476b-ae32-e9d6e5099427",
+    "services": [
+      {
+        "apiVersion": "v1",
+        "protocol": "http",
+        "address": ":8080",
+        "description": "HTTP honeypot simulating a vulnerable web application.",
+        "cve_tags": [
+          "CVE-2024-10771"
+        ],
+        "cve_description": "Missing input validation during firmware updates allows remote code execution.",
+        "commands": [
+          {
+            "regex": "^GET /vulnerable-endpoint$",
+            "handler": "Vulnerable endpoint accessed.",
+            "headers": [
+              "Content-Type: text/plain"
+            ],
+            "statusCode": 200
+          }
+        ],
+        "plugin": {
+          "llmProvider": "openai",
+          "llmModel": "gpt-4o-mini",
+          "openAISecretKey": "placeholder",
+          "prompt": "You are an AI assisting with a vulnerable web application. Respond to simulated attacks."
+        }
+      },
+      {
+        "apiVersion": "v1",
+        "protocol": "ssh",
+        "address": ":22",
+        "description": "SSH honeypot mimicking a server vulnerable to command injection.",
+        "cve_tags": [
+          "CVE-2024-10118"
+        ],
+        "cve_description": "Improper input filtering allows unauthenticated remote attackers to execute arbitrary commands.",
+        "commands": [
+          {
+            "regex": "^.*$",
+            "handler": "Command not recognized. Try again.",
+            "plugin": null
+          }
+        ],
+        "passwordRegex": ".*",
+        "deadlineTimeoutSeconds": 300,
+        "serverName": "vulnerable-server",
+        "plugin": null
+      },
+      {
+        "apiVersion": "v1",
+        "protocol": "tcp",
+        "address": ":3306",
+        "description": "TCP honeypot for a database service with potential SQL injection vulnerability.",
+        "cve_tags": [
+          "CVE-2024-11025"
+        ],
+        "cve_description": "Authenticated low privilege users can exploit SQL injection to access sensitive logs.",
+        "banner": "Welcome to the test database service.",
+        "deadlineTimeoutSeconds": 60
+      },
+      {
+        "apiVersion": "v1",
+        "protocol": "http",
+        "address": ":9090",
+        "description": "HTTP service exposing vulnerabilities in device APIs.",
+        "cve_tags": [
+          "CVE-2024-1223"
+        ],
+        "cve_description": "Unauthorized enumeration of information from embedded device APIs.",
+        "commands": [
+          {
+            "regex": "^GET /api/device-info$",
+            "handler": "Device information retrieved.",
+            "headers": [
+              "Content-Type: application/json"
+            ],
+            "statusCode": 200
+          }
+        ],
+        "plugin": {
+          "llmProvider": "openai",
+          "llmModel": "gpt-4o-mini",
+          "openAISecretKey": "placeholder",
+          "prompt": "Respond to queries about the device information API."
+        }
+      },
+      {
+        "apiVersion": "v1",
+        "protocol": "tcp",
+        "address": ":4444",
+        "description": "TCP service vulnerable to cleartext transmission of sensitive data.",
+        "cve_tags": [
+          "CVE-2024-0860"
+        ],
+        "cve_description": "Vulnerability allowing an attacker to capture unencrypted packets.",
+        "banner": "Welcome to the unencrypted TCP service.",
+        "deadlineTimeoutSeconds": 120
+      }
+    ],
+    "timestamp": "2025-06-17T06:58:23.645058+00:00"
   }
 ]

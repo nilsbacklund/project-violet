@@ -9,10 +9,6 @@ save_configuration = True
 print_output = True
 
 attacks_per_configuration = 1
-n_configurations = 1
-
-# %%
-if simulate_command_line:
-    save_logs = False
+n_configurations = 2
     
 # %%

@@ -15,3 +15,4 @@ n_configurations = 10
 if simulate_command_line:
     save_logs = False
     
+# %%

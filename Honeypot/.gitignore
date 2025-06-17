@@ -5,3 +5,4 @@ logs
 .history
 coverage*.out
 .env
+BeelzebubServices

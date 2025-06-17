@@ -7,21 +7,34 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 import yaml
 from datetime import datetime, timezone
-import yaml
 import re
 import uuid
 from dotenv import load_dotenv
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from config import print_output
 
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 BASE_DIR = Path(__file__).resolve().parent
 
-# Paths to data files
-service_configs_path = BASE_DIR.parent /'BeelzebubServices'/'service_configs.json'
-attack_patterns_path = BASE_DIR.parent/'AttackPatterns'/'attack_patterns.json'
-vulns_db_path = BASE_DIR.parent/'Blue'/'RagData'/'vulns_DB.json'
-schema_path = BASE_DIR.parent/'BeelzebubServices'/'services_schema.json'
+service_configs_path = BASE_DIR.parent / 'BeelzebubServices' / 'service_configs.json'
+attack_patterns_path = BASE_DIR.parent / 'AttackPatterns' / 'attack_patterns.json'
+vulns_db_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'vulns_DB.json'
+schema_path = BASE_DIR.parent / 'BeelzebubServices' / 'services_schema.json'
+
+# Handeling print output based on config 
+_builtin_print = print
+
+def silent_print(*args, **kwargs):
+    pass
+
+# Override print globally
+if not print_output:
+    print = silent_print
+else:
+    print = _builtin_print
 
 def load_json(path):
     with open(path, 'r') as f:
@@ -41,15 +54,7 @@ def query_openai(prompt: str, model: str = "gpt-4o-mini", temperature: float = 0
         temperature=temperature,
         stream=False,
     )
-    # The first choice always contains the assistant reply:
     return response.choices[0].message.content.strip()
-
-def embed_text(text, model="text-embedding-3-small"):
-    response = openai.embeddings.create(
-        input=[text],
-        model=model
-    )
-    return response.data[0].embedding
 
 def cosine_similarity(a, b):
     a = np.array(a)
@@ -60,19 +65,12 @@ def extract_json(text):
     match = re.search(r'({[\s\S]+})', text)
     return match.group(1) if match else text.strip()
 
-def main():
-    # Load DBs
-    service_configs = load_json(service_configs_path)
-    attack_patterns = load_json(attack_patterns_path)
-    vulns_db = load_json(vulns_db_path)
-
-    # 1. Randomly select up to 5 previous configs
-    if len(service_configs) <= 5:
+# Pipeline Functions
+def sample_previous_configs(service_configs, attack_patterns, sample_size=5):
+    if len(service_configs) <= sample_size:
         sampled_configs = service_configs
     else:
-        sampled_configs = random.sample(service_configs, 5)
-
-    # 2. For each config, get associated attack patterns
+        sampled_configs = random.sample(service_configs, sample_size)
     config_attack_info = []
     for config in sampled_configs:
         config_id = config['id']
@@ -89,8 +87,9 @@ def main():
             'attacks': attacks,
             'vulnerabilities': cve_tags
         })
+    return config_attack_info
 
-    # 3. Prepare the LLM prompt
+def build_llm_prompt(config_attack_info):
     llm_prompt = """
     You are helping design the next iteration of honeypot configurations by generating a user query for a Retrieval-Augmented Generation (RAG) system. This system retrieves vulnerabilities from a database using semantic similarity, so your generated query must clearly direct it toward vulnerabilities that are different from those already explored.
 
@@ -105,57 +104,26 @@ def main():
     """
     for entry in config_attack_info:
         llm_prompt += f"Config ID: {entry['config_id']}\nDescription: {entry['description']}\nServices: {[s['description'] for s in entry['services']]}\nAttacks: {[a['technique'] for a in entry['attacks']]}\n\n"
-
     llm_prompt += "Now generate a specific user query that will retrieve exactly 5 novel and diverse vulnerabilities:\nUser query: "
-   
-    # 4. Print or return the prompt (for LLM use)
-    print(llm_prompt)
+    return llm_prompt
 
-    # 5. Query OpenAI LLM
-    user_query = query_openai(llm_prompt)
-    print(user_query)
-
-    # 6. RAG retrieval: Embed the user query and retrieve top 5 vulnerabilities using e5-large-v2
+def retrieve_top_vulns(user_query, vulns_db, embeddings_path, top_n=5):
     MODEL_NAME = 'intfloat/e5-large-v2'
     model = SentenceTransformer(MODEL_NAME)
-    
-    # Load vulnerability embeddings
-    vulns_embeddings = np.load('Blue/RagData/vulns_embeddings_e5.npy')
-
-    # Embed the user query using e5-large-v2
+    vulns_embeddings = np.load(embeddings_path)
     query_embedding = model.encode([user_query])[0]
-
-    # Compute cosine similarities
     similarities = [cosine_similarity(query_embedding, emb) for emb in vulns_embeddings]
-    top5_idx = np.argsort(similarities)[-5:][::-1]
-
+    top_idx = np.argsort(similarities)[-top_n:][::-1]
     if isinstance(vulns_db, dict) and "CVE_Items" in vulns_db:
         vulns_db_list = vulns_db["CVE_Items"]
     else:
         vulns_db_list = vulns_db
-            
-    top5_vulns = [vulns_db_list[i] for i in top5_idx]
+    top_vulns = [vulns_db_list[i] for i in top_idx]
+    return top_vulns
 
-    print("\nTop 5 vulnerabilities for new config:")
-    for vuln in top5_vulns:
-        cve_id = None
-        description = None
-        if 'cve' in vuln:
-            cve_id = vuln['cve'].get('CVE_data_meta', {}).get('ID', 'N/A')
-            desc_data = vuln['cve'].get('description', {}).get('description_data', [])
-            if desc_data and isinstance(desc_data, list):
-                description = desc_data[0].get('value', 'No description')
-        # Fallbacks
-        if not cve_id:
-            cve_id = vuln.get('id', 'N/A')
-        if not description:
-            description = vuln.get('description', 'No description')
-        print(f"- {cve_id}: {description}")
-
-    # 5. Generate new config using the 5 vulnerabilities
+def build_config_prompt(schema_path, top_vulns):
     with open(schema_path, "r", encoding="utf8") as f:
         schema_text = f.read()
-
     config_prompt = (
         "You are an AI assistant tasked with generating a new Beelzebub honeypot configuration "
         "used for cybersecurity research.\n\n"
@@ -173,15 +141,14 @@ def main():
         "Begin output with an opening `{` and end with a closing `}`.\n"
     )
     config_prompt += f"\nSchema:\n{schema_text}\n\nVulnerabilities:\n"
-    for v in top5_vulns:
+    for v in top_vulns:
         cve_id = v.get("cve", {}).get("CVE_data_meta", {}).get("ID", "N/A")
         descs = v.get("cve", {}).get("description", {}).get("description_data", [])
         description = " ".join(d.get("value", "") for d in descs)
         config_prompt += f"- {cve_id}: {description}\n"
+    return config_prompt
 
-    print("\nPrompt sent to LLM for config generation:\n")
-    print(config_prompt[:1000], "...")
-
+def generate_config_with_llm(config_prompt):
     openai_client = openai.OpenAI(api_key=OPENAI_API_KEY)
     response = openai_client.chat.completions.create(
         model="gpt-4o-mini",
@@ -189,21 +156,18 @@ def main():
         temperature=0.7,
     )
     llm_output = response.choices[0].message.content
-
     json_str = extract_json(llm_output)
-
     try:
         config = json.loads(json_str)
     except Exception:
         config = yaml.safe_load(json_str)
+    return config
 
-    # Clean top-level
+def clean_and_finalize_config(config):
     config.pop("$schema", None)
     config.pop("title", None)
     config["id"] = str(uuid.uuid4())
     config["timestamp"] = datetime.now(timezone.utc).isoformat()
-
-    # Clean each service
     for service in config.get("services", []):
         service.pop("id", None)
         if service.get("protocol") in ["http", "ssh"]:
@@ -211,13 +175,22 @@ def main():
                 service["plugin"] = None
         else:
             service.pop("plugin", None)
+    return config
 
-    
-    # Save config (append mode)
-    config_file = BASE_DIR.parent / "BeelzebubServices" / "service_configs.json"
+def validate_config(config, schema_path):
+    import jsonschema
+    with open(schema_path, "r", encoding="utf8") as f:
+        schema = json.load(f)
+    try:
+        jsonschema.validate(instance=config, schema=schema)
+        print("Config is valid according to schema.")
+        return True
+    except jsonschema.ValidationError as e:
+        print("Config validation error:", e)
+        return False
+
+def append_config_to_file(config, config_file):
     configs = []
-
-    # If file exists and is not empty, load existing configs
     if os.path.exists(config_file) and os.path.getsize(config_file) > 0:
         with open(config_file, "r", encoding="utf-8") as f:
             try:
@@ -226,15 +199,46 @@ def main():
                     configs = [configs]
             except Exception:
                 configs = []
-
-    # Append the new config
     configs.append(config)
-
-    # Save the updated list
     with open(config_file, "w", encoding="utf-8") as f:
         json.dump(configs, f, indent=2)
 
-    print("\nConfig appended to 'beelzebub_config.json'")
+# Main Pipeline
+def generate_new_honeypot_config():
+    service_configs = load_json(service_configs_path)
+    attack_patterns = load_json(attack_patterns_path)
+    vulns_db = load_json(vulns_db_path)
+    config_attack_info = sample_previous_configs(service_configs, attack_patterns)
+    llm_prompt = build_llm_prompt(config_attack_info)
+    print(llm_prompt)
+    user_query = query_openai(llm_prompt)
+    print(user_query)
+
+    top5_vulns = retrieve_top_vulns(user_query, vulns_db, BASE_DIR.parent / 'Blue' / 'RagData' / 'vulns_embeddings_e5.npy')
+    print("\nTop 5 vulnerabilities for new config:")
+    for vuln in top5_vulns:
+        cve_id = None
+        description = None
+        if 'cve' in vuln:
+            cve_id = vuln['cve'].get('CVE_data_meta', {}).get('ID', 'N/A')
+            desc_data = vuln['cve'].get('description', {}).get('description_data', [])
+            if desc_data and isinstance(desc_data, list):
+                description = desc_data[0].get('value', 'No description')
+        if not cve_id:
+            cve_id = vuln.get('id', 'N/A')
+        if not description:
+            description = vuln.get('description', 'No description')
+        print(f"- {cve_id}: {description}")
+    config_prompt = build_config_prompt(schema_path, top5_vulns)
+    print("\nPrompt sent to LLM for config generation:\n")
+    print(config_prompt[:1000], "...")
+    config = generate_config_with_llm(config_prompt)
+    config = clean_and_finalize_config(config)
+    if not validate_config(config, schema_path):
+        print("Config is invalid. Not saving.")
+        return
+    append_config_to_file(config, BASE_DIR.parent / 'BeelzebubServices' / 'service_configs.json')
+    print("\nConfig appended to 'service_configs.json'")
 
 if __name__ == "__main__":
-    main()
+    generate_new_honeypot_config()

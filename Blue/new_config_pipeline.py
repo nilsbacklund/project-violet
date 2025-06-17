@@ -74,6 +74,11 @@ def get_honeypot_config(id):
 def set_honeypot_config(config):
     target_dir = BASE_DIR.parent / "Honeypot" / "configurations" / "services"
     target_dir.mkdir(parents=True, exist_ok=True)
+
+    for file in target_dir.iterdir():
+        if file.is_file():
+            file.unlink()
+
     services = config.get('services', [])
     config_id = config.get('id', 'unknown')
     for service in services:

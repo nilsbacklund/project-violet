@@ -1,0 +1,16 @@
+address: :2222
+apiVersion: v1
+commands:
+- handler: Information exposure detected.
+  plugin: null
+  regex: .*
+cve_description: The Envo Extra plugin for WordPress is vulnerable to Information
+  Exposure due to insufficient restrictions, allowing access to private posts.
+cve_tags:
+- CVE-2024-10770
+deadlineTimeoutSeconds: 120
+description: SSH service vulnerable to information exposure.
+passwordRegex: .*
+plugin: null
+protocol: ssh
+serverName: mock-server

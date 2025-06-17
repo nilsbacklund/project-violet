@@ -10,7 +10,7 @@
 
 ## Main.py
 - base config for hoeypt
-- loop new cofig
+- loop new cofig (sessionID)
     - Generate new config from old data
     - set config to honeypot
     - run cupple of sessions (loop through red-llm)

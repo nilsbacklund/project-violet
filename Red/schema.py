@@ -8,9 +8,9 @@ from dotenv import load_dotenv
 from pydantic import BaseModel
 from types import SimpleNamespace
 from model import ResponseObject
-from config import tools, simulate_command_line
 
-if not simulate_command_line:
+import platform
+if platform.system() != 'Windows':
     import pexpect
 
 import subprocess

@@ -1,0 +1,113 @@
+{
+  "description": "Configuration bundle for a set of honeypot services with unique vulnerabilities.",
+  "id": "0ab4f24c-d908-40dd-989d-b1fcfa303de7",
+  "services": [
+    {
+      "apiVersion": "v1",
+      "protocol": "http",
+      "address": ":8080",
+      "description": "HTTP service simulating an API with a vulnerability for unauthorized information enumeration.",
+      "cve_tags": [
+        "CVE-2024-1223"
+      ],
+      "cve_description": "This vulnerability potentially allows unauthorized enumeration of information from the embedded device APIs.",
+      "commands": [
+        {
+          "regex": "/api/users",
+          "handler": "Unauthorized access to user information.",
+          "headers": [
+            "Content-Type: application/json"
+          ],
+          "statusCode": 403
+        }
+      ],
+      "plugin": {
+        "llmProvider": "openai",
+        "llmModel": "gpt-4o-mini",
+        "openAISecretKey": "placeholder",
+        "prompt": "Simulate a response for unauthorized API access."
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "protocol": "ssh",
+      "address": ":22",
+      "description": "SSH service with a command injection vulnerability allowing arbitrary system command execution.",
+      "cve_tags": [
+        "CVE-2024-10118"
+      ],
+      "cve_description": "Unauthenticated remote attackers can exploit this vulnerability to inject and execute arbitrary system commands on the device.",
+      "commands": [
+        {
+          "regex": ".*",
+          "handler": "Command execution failed.",
+          "plugin": null
+        }
+      ],
+      "passwordRegex": ".*",
+      "deadlineTimeoutSeconds": 60,
+      "serverName": "ubuntu",
+      "plugin": {
+        "llmProvider": "openai",
+        "llmModel": "gpt-4o-mini",
+        "openAISecretKey": "placeholder",
+        "prompt": "Respond to an SSH command."
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "protocol": "http",
+      "address": ":8081",
+      "description": "HTTP service with a vulnerability that allows command injection through the admin interface.",
+      "cve_tags": [
+        "CVE-2024-10653"
+      ],
+      "cve_description": "Allows remote attackers with administrative privileges to inject and execute OS commands on the server.",
+      "commands": [
+        {
+          "regex": "/admin/execute",
+          "handler": "Executing command...",
+          "headers": [
+            "Content-Type: application/json"
+          ],
+          "statusCode": 200
+        }
+      ],
+      "plugin": null
+    },
+    {
+      "apiVersion": "v1",
+      "protocol": "tcp",
+      "address": ":3306",
+      "description": "TCP service with a privilege escalation vulnerability due to misconfigured Docker images.",
+      "cve_tags": [
+        "CVE-2024-11075"
+      ],
+      "cve_description": "A user with unprivileged access can escalate privileges to administrative level due to Docker misconfiguration.",
+      "banner": "Welcome to the TCP service. Please authenticate.",
+      "deadlineTimeoutSeconds": 30
+    },
+    {
+      "apiVersion": "v1",
+      "protocol": "http",
+      "address": ":8082",
+      "description": "HTTP service with a missing authentication vulnerability allowing unauthorized access to router functionalities.",
+      "cve_tags": [
+        "CVE-2024-11980"
+      ],
+      "cve_description": "Unauthenticated remote attackers can directly access specific functionalities to obtain partial device information.",
+      "commands": [
+        {
+          "regex": "/settings",
+          "handler": "Access to settings granted.",
+          "headers": [
+            "Content-Type: application/json"
+          ],
+          "statusCode": 200
+        }
+      ],
+      "plugin": null
+    }
+  ],
+  "timestamp": "2025-06-17T08:34:13.330661+00:00"
+}

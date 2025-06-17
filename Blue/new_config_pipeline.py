@@ -8,6 +8,7 @@ from sentence_transformers import SentenceTransformer
 import yaml
 from datetime import datetime, timezone
 import re
+import jsonschema
 import uuid
 from dotenv import load_dotenv
 import sys
@@ -24,7 +25,6 @@ attack_patterns_path = BASE_DIR.parent / 'AttackPatterns' / 'attack_patterns.jso
 vulns_db_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'vulns_DB.json'
 vulns_embeddings_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'vulns_embeddings_e5.npy'
 schema_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'services_schema.json'
-output_dir = BASE_DIR.parent / 'BeelzebubServices'
 
 # Handeling print output based on config 
 _builtin_print = print
@@ -204,7 +204,6 @@ def clean_and_finalize_config(config):
     return config
 
 def validate_config(config, schema_path):
-    import jsonschema
     with open(schema_path, "r", encoding="utf8") as f:
         schema = json.load(f)
     try:
@@ -215,7 +214,8 @@ def validate_config(config, schema_path):
         print("Config validation error:", e)
         return False
 
-def save_config_as_file(config, output_dir):
+def save_config_as_file(config):
+    output_dir = BASE_DIR.parent / 'BeelzebubServices'
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     config_id = config.get('id', 'unknown')

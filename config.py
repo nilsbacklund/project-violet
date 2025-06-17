@@ -8,8 +8,8 @@ save_logs = True
 save_configuration = True
 print_output = True
 
-attacks_per_configuration = 10
-n_configurations = 10
+attacks_per_configuration = 1
+n_configurations = 1
 
 # %%
 if simulate_command_line:

@@ -177,6 +177,18 @@ def clean_and_finalize_config(config):
             service.pop("plugin", None)
     return config
 
+def validate_config(config, schema_path):
+    import jsonschema
+    with open(schema_path, "r", encoding="utf8") as f:
+        schema = json.load(f)
+    try:
+        jsonschema.validate(instance=config, schema=schema)
+        print("Config is valid according to schema.")
+        return True
+    except jsonschema.ValidationError as e:
+        print("Config validation error:", e)
+        return False
+
 def append_config_to_file(config, config_file):
     configs = []
     if os.path.exists(config_file) and os.path.getsize(config_file) > 0:
@@ -192,7 +204,7 @@ def append_config_to_file(config, config_file):
         json.dump(configs, f, indent=2)
 
 # Main Pipeline
-def main_config_generation():
+def generate_new_honeypot_config():
     service_configs = load_json(service_configs_path)
     attack_patterns = load_json(attack_patterns_path)
     vulns_db = load_json(vulns_db_path)
@@ -222,8 +234,11 @@ def main_config_generation():
     print(config_prompt[:1000], "...")
     config = generate_config_with_llm(config_prompt)
     config = clean_and_finalize_config(config)
+    if not validate_config(config, schema_path):
+        print("Config is invalid. Not saving.")
+        return
     append_config_to_file(config, BASE_DIR.parent / 'BeelzebubServices' / 'service_configs.json')
     print("\nConfig appended to 'service_configs.json'")
 
 if __name__ == "__main__":
-    main_config_generation()
+    generate_new_honeypot_config()

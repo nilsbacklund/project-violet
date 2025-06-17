@@ -3,7 +3,8 @@ import uuid
 from config import attacks_per_configuration, save_logs, n_configurations
 from Red.sangria import run_attacks, save_logs_to_file
 from Red.log_formatter import format_logs_for_network
-from Blue.new_config_pipeline import generate_new_honeypot_config, save_config_as_file
+from Blue.new_config_pipeline import generate_new_honeypot_config, save_config_as_file, get_base_config, set_honeypot_config
+
 
 
 def main():

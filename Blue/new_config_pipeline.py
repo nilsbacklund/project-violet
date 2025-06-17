@@ -67,9 +67,13 @@ def extract_json(text):
     match = re.search(r'({[\s\S]+})', text)
     return match.group(1) if match else text.strip()
 
-def base_config(id):
+def get_base_config(id):
     base_config_path = BASE_DIR.parent / 'BeelzebubServices' / f'config_{id}.json'
     return load_json(base_config_path)
+
+def set_honeypot_config(config):
+    # to set the honeypot configuration.
+    pass
 
 # Pipeline Functions
 

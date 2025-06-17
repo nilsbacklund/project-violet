@@ -24,6 +24,7 @@ attack_patterns_path = BASE_DIR.parent / 'AttackPatterns' / 'attack_patterns.jso
 vulns_db_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'vulns_DB.json'
 vulns_embeddings_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'vulns_embeddings_e5.npy'
 schema_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'services_schema.json'
+output_dir = BASE_DIR.parent / 'BeelzebubServices'
 
 # Handeling print output based on config 
 _builtin_print = print
@@ -65,6 +66,10 @@ def cosine_similarity(a, b):
 def extract_json(text):
     match = re.search(r'({[\s\S]+})', text)
     return match.group(1) if match else text.strip()
+
+def base_config(id):
+    base_config_path = BASE_DIR.parent / 'BeelzebubServices' / f'config_{id}.json'
+    return load_json(base_config_path)
 
 # Pipeline Functions
 
@@ -199,21 +204,6 @@ def validate_config(config, schema_path):
         print("Config validation error:", e)
         return False
 
-def append_config_to_file(config, config_file):
-    configs = []
-    if os.path.exists(config_file) and os.path.getsize(config_file) > 0:
-        with open(config_file, "r", encoding="utf-8") as f:
-            try:
-                configs = json.load(f)
-                if not isinstance(configs, list):
-                    configs = [configs]
-            except Exception:
-                configs = []
-    configs.append(config)
-    with open(config_file, "w", encoding="utf-8") as f:
-        json.dump(configs, f, indent=2)
-
-
 def save_config_as_file(config, output_dir):
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -256,13 +246,10 @@ def generate_new_honeypot_config():
     if not validate_config(config, schema_path):
         print("Config is invalid. Not saving.")
         return
-    output_dir = BASE_DIR.parent / 'BeelzebubServices'
-    save_config_as_file(config, output_dir)
+
     config_id = config.get('id', None)
-
     print("\nConfig saved to 'BeelzebubServices' with id:", config_id)
-
-    return config_id
+    return config_id, config
 
 if __name__ == "__main__":
     generate_new_honeypot_config()

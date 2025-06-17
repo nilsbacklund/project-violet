@@ -1,5 +1,5 @@
 # %%
-from model import DataLogObject, LabledCommandObject
+from Red.model import DataLogObject, LabledCommandObject
 
 def format_logs_to_lables(full_logs, session_id):
     formated_logs = []

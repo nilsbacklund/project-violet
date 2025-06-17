@@ -1,7 +1,7 @@
 # %%
 import warnings
-from defender_llm import run_command
-from model import MitreMethodUsed
+from Red.defender_llm import run_command
+from Red.model import MitreMethodUsed
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup

@@ -1,6 +1,6 @@
 # %%
 
-from model import LLMHost, LLMModel
+from Red.model import LLMHost, LLMModel
 import json
 
 model_host = LLMHost.OPENAI  # change when using Ollama, Anthropic is not supported yet

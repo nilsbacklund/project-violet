@@ -3,10 +3,11 @@ from config import attacks_per_configuration, save_logs, n_configurations
 from Red.sangria import run_attacks, save_logs_to_file
 from Red.log_formatter import format_logs_to_lables, save_labels
 from Blue.new_config_pipeline import generate_new_honeypot_config, save_config_as_file, get_base_config, set_honeypot_config
+from Honeypot.honeypot_tools import rebuild_dockers
 
 
 def main():
-    base_honeypot_config = get_base_config(id=00)
+    base_honeypot_config = get_base_config(id="00")
     set_honeypot_config(base_honeypot_config)
 
     for i in range(n_configurations):
@@ -25,9 +26,14 @@ def main():
 
         lables = format_logs_to_lables(full_logs)
         save_labels(lables, config_id)
+        rebuild_dockers()
+
+
 
 
 if __name__ == "__main__":
     main()
+    main()
+
 
 # %%

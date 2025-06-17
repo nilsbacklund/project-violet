@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  kali:
+    image: bloatedkali3
+    container_name: kali2
+    privileged: true
+    ports:
+      - "3022:3022"  # SSH from host -> Kali
+    networks:
+      honeynet:
+        ipv4_address: 172.20.0.2
+
+  beelzebub:
+    build: .
+    container_name: beelzebub
+    restart: always
+    ports:
+      - "8081:8081"
+      - "2112:2112"
+    environment:
+      RABBITMQ_URI: ${RABBITMQ_URI}
+      OPEN_AI_SECRET_KEY: ${OPENAI_API_KEY}
+    volumes:
+      - "./configurations:/configurations"
+    networks:
+      honeynet:
+        ipv4_address: 172.20.0.3
+
+networks:
+  honeynet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+

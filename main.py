@@ -2,6 +2,7 @@
 import uuid
 from config import attacks_per_configuration, save_logs, n_configurations
 from Red.sangria import run_attacks, save_logs_to_file
+from Blue.new_config_pipeline import generate_new_honeypot_config
 
 def main():
     base_honeypot_config = get_base_config(id=None)

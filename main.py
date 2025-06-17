@@ -6,7 +6,6 @@ from Red.log_formatter import format_logs_for_network
 from Blue.new_config_pipeline import generate_new_honeypot_config, save_config_as_file, get_base_config, set_honeypot_config
 
 
-
 def main():
     base_honeypot_config = get_base_config(id=00)
     set_honeypot_config(base_honeypot_config)
@@ -26,6 +25,7 @@ def main():
         format_logs_for_network(full_logs)
 
         save_config_as_file(new_config)
+        # docker down && docker build && docker up
         save_labels()
 
 

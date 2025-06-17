@@ -82,8 +82,8 @@ def set_honeypot_config(config):
     services = config.get('services', [])
     config_id = config.get('id', 'unknown')
     for service in services:
-        service_name = service.get('name', 'unnamed_service')
-        filename = f"service_{config_id}_{service_name}.yaml"
+        service_name = service.get('protocol', 'unnamed_service')
+        filename = f"service_{service_name}_{config_id}.yaml"
         target_path = target_dir / filename
         with open(target_path, "w") as f:
             yaml.dump(service, f)

@@ -190,7 +190,7 @@ def get_new_hp_logs():
     last_checked = datetime.datetime.utcnow().isoformat()
 
     log_output = process.stdout.read().strip()
-    if not log_output:
+    if log_output:
         print(log_output)
         try:
             log_lines = log_output.strip().split('\n')

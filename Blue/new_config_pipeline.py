@@ -13,7 +13,7 @@ import uuid
 from dotenv import load_dotenv
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from config import print_output
+from config import print_output, llm_model_config
 
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -48,7 +48,9 @@ def get_attack_patterns_for_config(config_id, attack_patterns):
             return session.get('patterns', [])
     return []
 
-def query_openai(prompt: str, model: str = "gpt-4o-mini", temperature: float = 0.7) -> str:
+def query_openai(prompt: str, model: str = None, temperature: float = 0.7) -> str:
+    if model is None:
+        model = llm_model_config
     openai_client = openai.OpenAI(api_key=OPENAI_API_KEY)
     response = openai_client.chat.completions.create(
         model=model,
@@ -182,13 +184,7 @@ def build_config_prompt(schema_path, top_vulns):
     return config_prompt
 
 def generate_config_with_llm(config_prompt):
-    openai_client = openai.OpenAI(api_key=OPENAI_API_KEY)
-    response = openai_client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[{"role": "user", "content": config_prompt}],
-        temperature=0.7,
-    )
-    llm_output = response.choices[0].message.content
+    llm_output = query_openai(config_prompt, model=llm_model_config)
     json_str = extract_json(llm_output)
     try:
         config = json.loads(json_str)
@@ -266,7 +262,7 @@ def generate_new_honeypot_config():
         return
 
     config_id = config.get('id', None)
-    print("\nConfig saved to 'BeelzebubServices' with id:", config_id)
+    print("\nConfig Object saved with id:", config_id)
     return config_id, config
 
 if __name__ == "__main__":

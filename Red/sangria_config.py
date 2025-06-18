@@ -61,7 +61,7 @@ tools = [
                     "description": "The name of the technique from MITRE ATT&CK" # , ex. Txxxx."
                 }
             },
-            "required": ["command"]
+            "required": ["command", "tactic_used", "technique_used"]
         }
     },
     {

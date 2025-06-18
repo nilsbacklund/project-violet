@@ -28,8 +28,8 @@ def main():
         save_logs_to_file(full_logs, config_id, save_logs)
         save_config_as_file(honeypot_config)
 
-        lables = format_logs_to_lables(full_logs, config_id)
-        save_labels(lables, config_id)
+        # lables = format_logs_to_lables(full_logs, config_id)
+        # save_labels(lables, config_id)
 
     stop_dockers()
 

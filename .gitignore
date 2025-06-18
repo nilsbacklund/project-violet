@@ -5,4 +5,5 @@ logs/
 unused_code.md
 Blue/RagData/vulns_DB.json
 Blue/RagData/vulns_embeddings_e5.npy
+BeelzebubServices
 .DS_Store

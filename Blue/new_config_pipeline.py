@@ -12,12 +12,15 @@ import jsonschema
 import uuid
 from dotenv import load_dotenv
 import sys
+# Add parent directory to sys.path to allow imports from project root
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from config import print_output
+from config import print_output, llm_model_config
 
+# Load environment variables (for OpenAI API key)
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
+# Set up base directory and important paths
 BASE_DIR = Path(__file__).resolve().parent
 
 service_configs_path = BASE_DIR.parent / 'BeelzebubServices'
@@ -26,7 +29,7 @@ vulns_db_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'vulns_DB.json'
 vulns_embeddings_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'vulns_embeddings_e5.npy'
 schema_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'services_schema.json'
 
-# Handeling print output based on config 
+# Handle print output based on config setting
 _builtin_print = print
 
 def silent_print(*args, **kwargs):
@@ -39,16 +42,28 @@ else:
     print = _builtin_print
 
 def load_json(path):
+    """
+    Load a JSON file from the given path and return its contents as a Python object.
+    """
     with open(path, 'r') as f:
         return json.load(f)
 
 def get_attack_patterns_for_config(config_id, attack_patterns):
+    """
+    Retrieve attack patterns associated with a specific config ID from the attack patterns list.
+    """
     for session in attack_patterns:
         if session.get('config_id') == config_id:
             return session.get('patterns', [])
     return []
 
-def query_openai(prompt: str, model: str = "gpt-4o-mini", temperature: float = 0.7) -> str:
+def query_openai(prompt: str, model: str = None, temperature: float = 0.7) -> str:
+    """
+    Query the OpenAI LLM with a prompt and return the generated response as a string.
+    Uses the model specified in config.py unless overridden.
+    """
+    if model is None:
+        model = llm_model_config
     openai_client = openai.OpenAI(api_key=OPENAI_API_KEY)
     response = openai_client.chat.completions.create(
         model=model,
@@ -59,26 +74,39 @@ def query_openai(prompt: str, model: str = "gpt-4o-mini", temperature: float = 0
     return response.choices[0].message.content.strip()
 
 def cosine_similarity(a, b):
+    """
+    Compute the cosine similarity between two vectors a and b.
+    """
     a = np.array(a)
     b = np.array(b)
     return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
 
 def extract_json(text):
+    """
+    Extract a JSON object from a string using regex. Returns the JSON string or the original text if not found.
+    """
     match = re.search(r'({[\s\S]+})', text)
     return match.group(1) if match else text.strip()
 
 def get_honeypot_config(id):
+    """
+    Load a honeypot config by its ID from the BeelzebubServices directory.
+    """
     base_config_path = BASE_DIR.parent / 'BeelzebubServices' / f'config_{id}.json'
     return load_json(base_config_path)
 
 def set_honeypot_config(config):
+    """
+    Save each service from the honeypot config as a separate YAML file in the Honeypot/configurations/services directory.
+    Each file is named using the config ID and the service name.
+    Before saving, clear the directory to avoid leftover files from previous runs.
+    """
     target_dir = BASE_DIR.parent / "Honeypot" / "configurations" / "services"
     target_dir.mkdir(parents=True, exist_ok=True)
-
+    # Remove old service files to avoid stale configs
     for file in target_dir.iterdir():
         if file.is_file():
             file.unlink()
-
     services = config.get('services', [])
     config_id = config.get('id', 'unknown')
     for service in services:
@@ -92,6 +120,10 @@ def set_honeypot_config(config):
 # Pipeline Functions
 
 def sample_previous_configs(services_dir, attack_patterns, sample_size=5):
+    """
+    Randomly sample up to sample_size previous honeypot config files from the given directory.
+    Extract relevant information for each sampled config for use in LLM prompting.
+    """
     services_dir = Path(services_dir)
     json_files = list(services_dir.glob("config_*.json"))
     if len(json_files) == 0:
@@ -123,6 +155,9 @@ def sample_previous_configs(services_dir, attack_patterns, sample_size=5):
     return config_attack_info
 
 def build_llm_prompt(config_attack_info):
+    """
+    Build a prompt for the LLM that summarizes previous honeypot configs and instructs it to generate a new user query for the RAG.
+    """
     llm_prompt = """
     You are helping design the next iteration of honeypot configurations by generating a user query for a Retrieval-Augmented Generation (RAG) system. This system retrieves vulnerabilities from a database using semantic similarity, so your generated query must clearly direct it toward vulnerabilities that are different from those already explored.
 
@@ -141,6 +176,10 @@ def build_llm_prompt(config_attack_info):
     return llm_prompt
 
 def retrieve_top_vulns(user_query, vulns_db, embeddings_path, top_n=5):
+    """
+    Given a user query, embed it and compute cosine similarity to all vulnerability embeddings.
+    Return the top_n most similar vulnerabilities from the database.
+    """
     MODEL_NAME = 'intfloat/e5-large-v2'
     model = SentenceTransformer(MODEL_NAME)
     vulns_embeddings = np.load(embeddings_path)
@@ -155,6 +194,9 @@ def retrieve_top_vulns(user_query, vulns_db, embeddings_path, top_n=5):
     return top_vulns
 
 def build_config_prompt(schema_path, top_vulns):
+    """
+    Build a prompt for the LLM to generate a new honeypot config, including the schema and selected vulnerabilities.
+    """
     with open(schema_path, "r", encoding="utf8") as f:
         schema_text = f.read()
     config_prompt = (
@@ -182,13 +224,10 @@ def build_config_prompt(schema_path, top_vulns):
     return config_prompt
 
 def generate_config_with_llm(config_prompt):
-    openai_client = openai.OpenAI(api_key=OPENAI_API_KEY)
-    response = openai_client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[{"role": "user", "content": config_prompt}],
-        temperature=0.7,
-    )
-    llm_output = response.choices[0].message.content
+    """
+    Use the query_openai function to generate a new honeypot config from the LLM, then parse the result as JSON or YAML.
+    """
+    llm_output = query_openai(config_prompt, model=llm_model_config)
     json_str = extract_json(llm_output)
     try:
         config = json.loads(json_str)
@@ -197,6 +236,9 @@ def generate_config_with_llm(config_prompt):
     return config
 
 def clean_and_finalize_config(config):
+    """
+    Clean up and finalize the generated config: remove schema/title, assign a new UUID, timestamp, and fix service fields.
+    """
     config.pop("$schema", None)
     config.pop("title", None)
     config["id"] = str(uuid.uuid4())
@@ -211,6 +253,9 @@ def clean_and_finalize_config(config):
     return config
 
 def validate_config(config, schema_path):
+    """
+    Validate the generated config against the provided JSON schema.
+    """
     with open(schema_path, "r", encoding="utf8") as f:
         schema = json.load(f)
     try:
@@ -222,6 +267,9 @@ def validate_config(config, schema_path):
         return False
 
 def save_config_as_file(config):
+    """
+    Save the generated config as a JSON file in the BeelzebubServices directory, named by its ID.
+    """
     output_dir = BASE_DIR.parent / 'BeelzebubServices'
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -234,6 +282,16 @@ def save_config_as_file(config):
 
 # Main Pipeline
 def generate_new_honeypot_config():
+    """
+    Main pipeline to generate a new honeypot config:
+    - Loads attack patterns and vulnerabilities
+    - Samples previous configs
+    - Builds LLM prompt and queries LLM for user query for RAG
+    - Retrieves top vulnerabilities
+    - Builds and queries LLM for new config
+    - Cleans, validates, and saves the config
+    Returns the config ID and config object.
+    """
     attack_patterns = load_json(attack_patterns_path)
     vulns_db = load_json(vulns_db_path)
     config_attack_info = sample_previous_configs(service_configs_path, attack_patterns)
@@ -266,7 +324,7 @@ def generate_new_honeypot_config():
         return
 
     config_id = config.get('id', None)
-    print("\nConfig saved to 'BeelzebubServices' with id:", config_id)
+    print("\nConfig Object saved with id:", config_id)
     return config_id, config
 
 if __name__ == "__main__":

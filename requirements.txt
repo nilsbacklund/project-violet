@@ -10,3 +10,6 @@ pexpect
 jsonschema
 opentelemetry-sdk
 sentence-transformers
+transformers
+torch
+pandas

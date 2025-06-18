@@ -60,21 +60,16 @@ def run_single_attack(max_itterations, save_logs):
             
             data_log.tool_response = tool_response['content']
             data_log.mitre_attack_method = mitre_method_used
-        else:
-            user_response = {
-                "role": "user",
-                "content": "Create a plan and execute it with the tools aviable."
-            }
-            
-            messages.append(user_response)
 
         mitre_method_used_list.append(mitre_method_used)
 
         # print the respones
-        print(f"Assistant: {assistant_response.message}")
-        print(f"Tool call: {assistant_response.function, assistant_response.arguments}")
-        print(f"Command response: {tool_response['content'] if tool_response else 'No tool call made'}")
-        print(f"Mitre Method Used: {mitre_method_used if mitre_method_used else 'No Mitre Method Used'}")
+        if assistant_response.message:
+            print(f"Sangria: {assistant_response.message}")
+        if assistant_response.function:
+            print(f"Tool call: {assistant_response.function, assistant_response.arguments}")
+            print(f"Command response: {tool_response['content'] if tool_response else 'No tool call made'}")
+            print(f"Mitre Method Used: {mitre_method_used if mitre_method_used else 'No Mitre Method Used'}")
         print("-" * 50)
         
         if save_logs:

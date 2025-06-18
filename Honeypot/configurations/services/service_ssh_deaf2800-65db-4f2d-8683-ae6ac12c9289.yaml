@@ -1,0 +1,16 @@
+address: :2222
+apiVersion: v1
+commands:
+- handler: Command executed with potential path traversal.
+  plugin: null
+  regex: .*
+cve_description: Any user can delete an arbitrary folder (recursively) on a remote
+  server due to bad input sanitization leading to path traversal.
+cve_tags:
+- CVE-2024-0763
+deadlineTimeoutSeconds: 60
+description: SSH service with vulnerability to command injection.
+passwordRegex: .*
+plugin: null
+protocol: ssh
+serverName: fake-ssh-server

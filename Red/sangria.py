@@ -21,7 +21,7 @@ import os
 tools = sangria_config.tools
 messages = sangria_config.messages
 mitre_method_used_list = []
-max_itterations = 5
+max_itterations = 25
 
 def run_single_attack(max_itterations, save_logs):
     # start SSH connection to Kali Linux
@@ -41,7 +41,7 @@ def run_single_attack(max_itterations, save_logs):
         assistant_response = response(sangria_config.model_host, config.llm_model_sangria, messages, tools)
         data_log.llm_response = assistant_response
 
-        print(assistant_response)
+        # print(assistant_response)
 
         tool_response = None
         mitre_method_used = MitreMethodUsed()
@@ -98,7 +98,7 @@ def save_logs_to_file(all_logs, session_id, save_logs=True):
         return
     
     print(f"Saving logs to file for session {session_id}...")
-    print([[log.to_dict() for log in session_log] for session_log in all_logs])
+    # print([[log.to_dict() for log in session_log] for session_log in all_logs])
     # Create the logs directory if it doesn't exist
     
     os.makedirs('logs', exist_ok=True)

@@ -89,6 +89,16 @@ tools = [
             },
             "required": ["query"]
         }
+    },
+    {
+        "type": "function",
+        "name": "terminate",
+        "description": "Terminate the operation if the system is a honeypot or if you do not want to proceed.",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
     }
 ]
 

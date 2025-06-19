@@ -2,6 +2,11 @@
 from Red.model import DataLogObject, LabledCommandObject
 
 def format_logs_to_lables(full_logs, session_id):
+    """
+        Format the full logs to a list of LabledCommandObject instances.
+        Each command is associated with its MITRE ATT&CK tactic and technique.
+    """
+    
     formated_logs = []
     for i, attack_log in enumerate(full_logs):
         formated_log_attack = []

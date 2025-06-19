@@ -24,6 +24,11 @@ mitre_method_used_list = []
 max_itterations = 25
 
 def run_single_attack(max_itterations, save_logs):
+    '''
+        Main loop for running a single attack session.
+        This function will let the LLM respond to the user, call tools, and log the responses.
+        The goal is to let it run a series of commands to a console and log the responses.
+    '''
     # start SSH connection to Kali Linux
     if not config.simulate_command_line:
         ssh = start_ssh()
@@ -40,8 +45,6 @@ def run_single_attack(max_itterations, save_logs):
         # get response from OpenAI
         assistant_response = response(sangria_config.model_host, config.llm_model_sangria, messages, tools)
         data_log.llm_response = assistant_response
-
-        # print(assistant_response)
 
         tool_response = None
         mitre_method_used = MitreMethodUsed()
@@ -67,13 +70,14 @@ def run_single_attack(max_itterations, save_logs):
         mitre_method_used_list.append(mitre_method_used)
 
         # print the respones
-        if assistant_response.message:
-            print(f"Sangria: {assistant_response.message}")
-        if assistant_response.function:
-            print(f"Tool call: {assistant_response.function, assistant_response.arguments}")
-            print(f"Command response: {tool_response['content'] if tool_response else 'No tool call made'}")
-            print(f"Mitre Method Used: {mitre_method_used if mitre_method_used else 'No Mitre Method Used'}")
-        print("-" * 50)
+        if config.print_output:
+            if assistant_response.message:
+                print(f"Sangria: {assistant_response.message}")
+            if assistant_response.function:
+                print(f"Tool call: {assistant_response.function, assistant_response.arguments}")
+                print(f"Command response: {tool_response['content'] if tool_response else 'No tool call made'}")
+                print(f"Mitre Method Used: {mitre_method_used if mitre_method_used else 'No Mitre Method Used'}")
+                print("-" * 50)
         
         if save_logs:
             beelzebub_logs = get_new_hp_logs()
@@ -85,6 +89,10 @@ def run_single_attack(max_itterations, save_logs):
     return full_logs
 
 def run_attacks(n_attacks, save_logs):
+    '''
+        Run multiple attack sessions.
+        Each session will run a attack and log the responses.
+    '''
     all_logs = []
 
     for i in range(n_attacks):
@@ -96,6 +104,12 @@ def run_attacks(n_attacks, save_logs):
 
 
 def save_logs_to_file(all_logs, session_id, save_logs=True):
+    '''
+        Save the logs to a file.
+        The file will be saved in the logs/full_logs directory.
+        The file will be named full_logs_<session_id>.json
+    '''
+
     if not save_logs:
         print("Saving logs is disabled.")
         return
@@ -121,4 +135,3 @@ def save_logs_to_file(all_logs, session_id, save_logs=True):
 # all_logs = run_attacks(2, save_logs=True)
 # save_logs_to_file(all_logs, 'test_id', save_logs_flag=True)
 
-# %%

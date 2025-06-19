@@ -1,12 +1,14 @@
 from enum import Enum
 
 class LLMHost(str, Enum):
+    """Enumeration of supported LLM hosts. API keys must be in the .env file or ollama must be running."""
     OPENAI = "openai"
-    ANTHROPIC = "anthropic"
+    # ANTHROPIC = "anthropic"
     OLLAMA = "ollama"
     OLLAMA_NO_FC = "ollama_no_fc"
 
 class LLMModel(str, Enum):
+    """Enumeration LLM models."""
     GPT_4_1_NANO = "gpt-4.1-nano"
     GPT_4_1 = "gpt-4.1"
     GPT_3_5_TURBO = "gpt-3.5-turbo"
@@ -18,11 +20,13 @@ class LLMModel(str, Enum):
     OLLAMA_DEEPSEEK_R1_1b = "deepseek-r1:1.5b"
 
 class LLMConfig:
+    """Configuration for the LLM host and model."""
     def __init__(self, host: LLMHost, model: LLMModel):
         self.host = host
         self.model = model
 
 class ResponseObject:
+    """Object to hold the response from the LLM."""
     def __init__(self, message: str, function: str = None, arguments: dict = None):
         self.message = message
         self.function = function
@@ -39,6 +43,7 @@ class ResponseObject:
         }
 
 class MitreMethodUsed():
+    """Object to hold the MITRE ATT&CK method used in the attack."""
     def __init__(self):
         self.tactic_used = None
         self.technique_used = None
@@ -53,6 +58,7 @@ class MitreMethodUsed():
         }
 
 class DataLogObject():
+    """Object to hold the data log for each iteration of the attack."""
     def __init__(self, itteration):
         self.itteration = itteration
         self.llm_response = None
@@ -71,6 +77,7 @@ class DataLogObject():
 
 
 class LabledCommandObject():
+    """Object to hold a command with its associated MITRE ATT&CK tactic and technique."""
     def __init__(self, command: str, tactic: str, technique: str):
         self.command = command
         self.tactic = tactic

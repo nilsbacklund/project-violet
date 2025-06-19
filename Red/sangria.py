@@ -21,7 +21,7 @@ import os
 tools = sangria_config.tools
 messages = sangria_config.messages
 mitre_method_used_list = []
-max_itterations = 20
+max_itterations = 25
 
 def run_single_attack(max_itterations, save_logs):
     # start SSH connection to Kali Linux
@@ -41,7 +41,7 @@ def run_single_attack(max_itterations, save_logs):
         assistant_response = response(sangria_config.model_host, config.llm_model_sangria, messages, tools)
         data_log.llm_response = assistant_response
 
-        print(assistant_response)
+        # print(assistant_response)
 
         tool_response = None
         mitre_method_used = MitreMethodUsed()
@@ -60,21 +60,16 @@ def run_single_attack(max_itterations, save_logs):
             
             data_log.tool_response = tool_response['content']
             data_log.mitre_attack_method = mitre_method_used
-        else:
-            user_response = {
-                "role": "user",
-                "content": "Create a plan and execute it with the tools aviable."
-            }
-            
-            messages.append(user_response)
 
         mitre_method_used_list.append(mitre_method_used)
 
         # print the respones
-        print(f"Assistant: {assistant_response.message}")
-        print(f"Tool call: {assistant_response.function, assistant_response.arguments}")
-        print(f"Command response: {tool_response['content'] if tool_response else 'No tool call made'}")
-        print(f"Mitre Method Used: {mitre_method_used if mitre_method_used else 'No Mitre Method Used'}")
+        if assistant_response.message:
+            print(f"Sangria: {assistant_response.message}")
+        if assistant_response.function:
+            print(f"Tool call: {assistant_response.function, assistant_response.arguments}")
+            print(f"Command response: {tool_response['content'] if tool_response else 'No tool call made'}")
+            print(f"Mitre Method Used: {mitre_method_used if mitre_method_used else 'No Mitre Method Used'}")
         print("-" * 50)
         
         if save_logs:
@@ -103,7 +98,7 @@ def save_logs_to_file(all_logs, session_id, save_logs=True):
         return
     
     print(f"Saving logs to file for session {session_id}...")
-    print([[log.to_dict() for log in session_log] for session_log in all_logs])
+    # print([[log.to_dict() for log in session_log] for session_log in all_logs])
     # Create the logs directory if it doesn't exist
     
     os.makedirs('logs', exist_ok=True)

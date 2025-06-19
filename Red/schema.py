@@ -25,7 +25,7 @@ openai_client = openai.OpenAI()
 
 def start_ssh():
     ssh = pexpect.spawn('ssh -p 3022 root@localhost')
-    ssh.expect(pexpect.TIMEOUT, timeout=1)
+    ssh.expect(pexpect.TIMEOUT, timeout=2)
     ssh.sendline('toor')
     ssh.expect(pexpect.TIMEOUT, timeout=1)
     ssh.before.decode('utf-8').strip()
@@ -191,7 +191,7 @@ def get_new_hp_logs():
 
     log_output = process.stdout.read().strip()
     if log_output:
-        print(log_output)
+        #print(log_output)
         try:
             log_lines = log_output.strip().split('\n')
             logs = [json.loads(line) for line in log_lines if line.strip()]

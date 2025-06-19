@@ -121,7 +121,7 @@ def terminal_tool(args, ssh):
 def terminate_tool(args):
     if args:
         warnings.warn("Tool call 'terminate' does not require any arguments. Ignoring provided arguments.")
-    terminate_response = "Terminating process. Exiting . . ."
+    terminate_response = "Sangris feels like it has completed its task and is now terminating the session."
     print(terminate_response)
     tool_response = {
         "role": "function",

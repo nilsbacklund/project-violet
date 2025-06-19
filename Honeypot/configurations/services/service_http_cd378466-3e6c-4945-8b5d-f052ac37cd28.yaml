@@ -1,0 +1,19 @@
+address: :3000
+apiVersion: v1
+commands:
+- handler: XSS vulnerability triggered
+  headers:
+  - 'Content-Type: text/html'
+  regex: /monofiles/opensaved.php
+  statusCode: 200
+cve_description: Cross-site scripting vulnerability in MonoCMS allowing remote attackers
+  to inject scripts.
+cve_tags:
+- CVE-2024-10928
+description: HTTP service with XSS vulnerability in MonoCMS.
+plugin:
+  llmModel: gpt-4o-mini
+  llmProvider: openai
+  openAISecretKey: placeholder
+  prompt: Generate responses for XSS attempts.
+protocol: http

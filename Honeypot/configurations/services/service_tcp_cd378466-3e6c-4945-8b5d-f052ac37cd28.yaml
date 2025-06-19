@@ -1,0 +1,10 @@
+address: :3306
+apiVersion: v1
+banner: Welcome to the vulnerable database service!
+cve_description: Unauthorized data modification vulnerability in WPForms plugin for
+  WordPress.
+cve_tags:
+- CVE-2024-11205
+deadlineTimeoutSeconds: 120
+description: TCP service simulating a vulnerable database connection.
+protocol: tcp

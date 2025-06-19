@@ -21,7 +21,7 @@ import os
 tools = sangria_config.tools
 messages = sangria_config.messages
 mitre_method_used_list = []
-max_itterations = 5
+max_itterations = 20
 
 def run_single_attack(max_itterations, save_logs):
     # start SSH connection to Kali Linux
@@ -107,7 +107,8 @@ def save_logs_to_file(all_logs, session_id, save_logs=True):
     # Create the logs directory if it doesn't exist
     
     os.makedirs('logs', exist_ok=True)
-    path = f'logs/full_logs_{session_id}.json'
+    os.makedirs('logs/full_logs', exist_ok=True)
+    path = f'logs/full_logs/full_logs_{session_id}.json'
     data = [[log.to_dict() for log in session_log] for session_log in all_logs]
 
     with open(path, 'w') as f:
@@ -115,7 +116,7 @@ def save_logs_to_file(all_logs, session_id, save_logs=True):
 
     print("File written:", os.path.exists(path), "Size:", os.path.getsize(path))
 
-    print(f"\nMessages saved to logs/full_logs_{str(session_id)}.json")
+    print(f"\nMessages saved to logs/full_logs/full_logs_{str(session_id)}.json")
 
 # %%
 

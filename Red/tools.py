@@ -9,6 +9,9 @@ import urllib.parse
 import json
 
 def handle_tool_call(response, ssh):
+    """
+    Handle the tool call from the LLM response.
+    """
     tool_name = response.function
     args = response.arguments or {}
     tool_response = None
@@ -26,7 +29,9 @@ def handle_tool_call(response, ssh):
     return tool_response, mitre_method
 
 def search_and_scrape(query: str, num_results=4, max_chars=2500):
-    # DuckDuckGo search
+    """
+    Perform a web search using DuckDuckGo and scrape the top results.
+    """
 
     url = "https://html.duckduckgo.com/html/"
     headers = {"User-Agent": "Mozilla/5.0"}
@@ -80,6 +85,11 @@ def handle_web_search_tool(arguments):
     return search_and_scrape(**arguments)
 
 def terminal_tool(args, ssh):
+    """
+    Handle the 'run_command' tool call.
+    This function checks for the 'command' key in the arguments and runs the command on the
+    Kali Linux SSH, associating it with a MITRE ATT&CK tactic and technique if provided.
+    """
     command_key = "command"
     tactic_key = "tactic_used"
     technique_key = "technique_used"
@@ -110,7 +120,6 @@ def terminal_tool(args, ssh):
 
     mitre_method = MitreMethodUsed()
 
-
     if tactic_key in args:
         mitre_method.tactic_used = args[tactic_key]
     if technique_key in args:
@@ -119,6 +128,10 @@ def terminal_tool(args, ssh):
     return tool_response, mitre_method
 
 def terminate_tool(args):
+    """
+    Handle the 'terminate' tool call.
+    This function does not require any arguments and simply returns a termination message.
+    """
     if args:
         warnings.warn("Tool call 'terminate' does not require any arguments. Ignoring provided arguments.")
     terminate_response = "Sangris feels like it has completed its task and is now terminating the session."

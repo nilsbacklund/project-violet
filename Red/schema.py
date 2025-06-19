@@ -178,6 +178,10 @@ def response(model_host, model_name, messages, tools):
 # %%
 last_checked = datetime.datetime.utcnow().isoformat()
 def get_new_hp_logs():
+    """
+    Fetch new logs from the Beelzebub container since the last check.
+    Returns a list of parsed JSON objects or raw logs if parsing fails.
+    """
     global last_checked
 
     process = subprocess.Popen(
@@ -208,7 +212,10 @@ def get_new_hp_logs():
 
 # %%
 def upload_langfuse(command_log, response_log, dialogue_log, tactics_log, techniques_log, honeypot_log, logger):
-    
+    """
+    Uploads various logs to Langfuse for tracking and analysis.
+    Not currently used, files stored in another place.
+    """
     logger.generation(
         name="Offensive LLM Commands",
         input=json.dumps(command_log, indent=2),

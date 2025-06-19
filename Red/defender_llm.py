@@ -24,15 +24,22 @@ command_messages = [
 ]
 
 def run_command(command: str, ssh, simulate_execution=simulate_command_line):
+    """
+        Run a command on the Kali Linux machine over SSH or simulate its execution with an LLM.
+    """
     command_response = ""
+    
     # Run command on Kali over SSH
     if not simulate_execution:
         ssh.sendline(command)
         ssh.expect(pexpect.TIMEOUT, timeout=TIMEOUT)
         ssh.expect(r'.*')
         command_response = ssh.after.decode('utf-8', errors='replace').strip()
-    else:
-        # Simulate command execution
+        
+        return command_response
+
+    # Simulate command execution
+    if simulate_execution:
         command_messages.append({
             'role': 'user',
             'content': f'Run the command: {command}'
@@ -50,7 +57,7 @@ def run_command(command: str, ssh, simulate_execution=simulate_command_line):
             'role': 'assistant',
             'content': command_text
         })
-        return command_text
+        
+    return command_text
     
     # return shell output in non-simulated or if simulate_execution is False
-    return command_response

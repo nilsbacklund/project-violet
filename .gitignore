@@ -5,6 +5,8 @@ logs
 unused_code.md
 Blue/RagData/vulns_DB.json
 Blue/RagData/vulns_embeddings_e5.npy
-BeelzebubServices
+BeelzebubServices/*
 .DS_Store
 Honeypot/configurations/services/
+
+!BeelzebubServices/config_00.json

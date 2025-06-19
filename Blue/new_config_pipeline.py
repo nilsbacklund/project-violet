@@ -45,6 +45,14 @@ def load_json(path):
     """
     Load a JSON file from the given path and return its contents as a Python object.
     """
+    # check if file exists
+    if not path.exists():
+        raise FileNotFoundError(f"Path {path} does not exist.")
+
+    # check if file is json
+    if not path.suffix == '.json':
+        raise ValueError(f"Path {path} is not a JSON file.")
+
     with open(path, 'r') as f:
         return json.load(f)
 
@@ -55,6 +63,7 @@ def get_attack_patterns_for_config(config_id, attack_patterns):
     for session in attack_patterns:
         if session.get('config_id') == config_id:
             return session.get('patterns', [])
+    
     return []
 
 def query_openai(prompt: str, model: str = None, temperature: float = 0.7) -> str:

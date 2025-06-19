@@ -8,12 +8,12 @@ services:
     ports:
       - "3022:3022"  # SSH from host -> Kali
     networks:
-      honeynet:
+      innet:
         ipv4_address: 172.20.0.2
 
-  beelzebub:
+  blue_lagoon:
     build: .
-    container_name: beelzebub
+    container_name: blue_lagoon
     restart: always
     ports:
       - "8081:8081"
@@ -24,11 +24,11 @@ services:
     volumes:
       - "./configurations:/configurations"
     networks:
-      honeynet:
+      innet:
         ipv4_address: 172.20.0.3
 
 networks:
-  honeynet:
+  innet:
     driver: bridge
     ipam:
       config:

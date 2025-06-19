@@ -1,5 +1,5 @@
 __pycache__
-logs
+logs/*
 .env
 .venv
 unused_code.md
@@ -10,3 +10,4 @@ BeelzebubServices/*
 Honeypot/configurations/services/
 
 !BeelzebubServices/config_00.json
+!logs/honeypot_command_extractor.py

@@ -78,15 +78,34 @@ class DataLogObject():
 
 class LabledCommandObject():
     """Object to hold a command with its associated MITRE ATT&CK tactic and technique."""
-    def __init__(self, command: str, tactic: str, technique: str):
+    def __init__(self, command: str, tactic: str, technique: str, protocol: str = None, 
+                 source_ip: str = None, source_port: str = None, description: str = None,
+                 http_method: str = None, request_uri: str = None, datetime: str = None,
+                 event_id: str = None):
         self.command = command
         self.tactic = tactic
         self.technique = technique
+        self.protocol = protocol
+        self.source_ip = source_ip
+        self.source_port = source_port
+        self.description = description
+        self.http_method = http_method
+        self.request_uri = request_uri
+        self.datetime = datetime
+        self.event_id = event_id
 
     def to_dict(self):
         return {
             'command': self.command,
             'tactic': self.tactic,
-            'technique': self.technique
+            'technique': self.technique,
+            'protocol': self.protocol,
+            'source_ip': self.source_ip,
+            'source_port': self.source_port,
+            'description': self.description,
+            'http_method': self.http_method,
+            'request_uri': self.request_uri,
+            'datetime': self.datetime,
+            'event_id': self.event_id
         }
     

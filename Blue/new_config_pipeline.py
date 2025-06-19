@@ -15,6 +15,8 @@ import sys
 # Add parent directory to sys.path to allow imports from project root
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from config import print_output, llm_model_config
+from Blue.attack_pattern_check import attack_methods_checker
+
 
 # Load environment variables (for OpenAI API key)
 load_dotenv()
@@ -330,6 +332,11 @@ def generate_new_honeypot_config():
     config = clean_and_finalize_config(config)
     if not validate_config(config, schema_path):
         print("Config is invalid. Not saving.")
+        return
+    
+    is_novel = attack_methods_checker(config)
+    if not is_novel:
+        print("Config is too similar to previous attack patterns. Regenerating or aborting.")
         return
 
     config_id = config.get('id', None)

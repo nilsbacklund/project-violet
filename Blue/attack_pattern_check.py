@@ -1,32 +1,39 @@
+import os
 import json
 import re
-import os
 import openai
+from pathlib import Path
 
+# Set up base directory and important paths
+BASE_DIR = Path(__file__).resolve().parent
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+LOGS_PATH = BASE_DIR.parent / "logs"
 
+# Query the OpenAI LLM with a prompt and return the response as a string
 def query_openai(prompt: str, model: str = "gpt-4o-mini", temperature: float = 0.7) -> str:
-    openai_client = openai.OpenAI(api_key=OPENAI_API_KEY)
-    response = openai_client.chat.completions.create(
-        model=model,
-        messages=[{"role": "user", "content": prompt}],
-        temperature=temperature,
-        stream=False,
-    )
-    return response.choices[0].message.content.strip()
+    try:
+        openai_client = openai.OpenAI(api_key=OPENAI_API_KEY)
+        response = openai_client.chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": prompt}],
+            temperature=temperature,
+            stream=False,
+        )
+        return response.choices[0].message.content.strip()
+    except Exception as e:
+        print(f"OpenAI API call failed: {e}")
+        return ""
 
+# Query the LLM for an ordered sequence of MITRE tactics and techniques for a given config
 def query_attack_patterns(config, model="gpt-4o-mini"):
-    """
-    Given a honeypot config, ask the OpenAI LLM what MITRE ATT&CK Tactics and Techniques might be observed.
-    """
     prompt = (
-        "Given the following honeypot configuration, list the most likely MITRE ATT&CK Tactics and Techniques "
-        "that attackers might use against it. "
-        "Output only a JSON array of objects, each with 'tactic', 'technique', and 'technique_id'.\n\n"
+        "Given the following honeypot configuration, predict a likely sequence of MITRE ATT&CK tactics and techniques "
+        "that an attacker would use against this setup. "
+        "Output only a JSON array, in order, where each element is an object with 'tactic' and 'technique'.\n\n"
         f"CONFIGURATION:\n{json.dumps(config, indent=2)}"
     )
     llm_output = query_openai(prompt, model=model)
-    # Extract the first [...] block
+    # Extract the first JSON array from the LLM output
     match = re.search(r'(\[.*\])', llm_output, re.DOTALL)
     if match:
         llm_output = match.group(1)
@@ -37,58 +44,48 @@ def query_attack_patterns(config, model="gpt-4o-mini"):
         return []
     return patterns
 
-def load_previous_attack_patterns(path="data/attack_patterns.json"):
-    """
-    Loads previous attack patterns from a JSON file.
-    Each entry should be a dict with 'tactic', 'technique', 'technique_id'.
-    """
+# Extract the ordered sequence of (tactic, technique) pairs from LLM output
+def extract_ordered_tactic_technique_sequence(patterns):
     try:
-        with open(path, "r", encoding="utf8") as f:
-            return json.load(f)
-    except Exception:
-        return []
+        return tuple((p['tactic'], p['technique']) for p in patterns if p.get('tactic') and p.get('technique'))
+    except Exception as e:
+        print(f"Failed to extract tactic/technique sequence: {e}")
+        return tuple()
 
-def is_novel_attack_pattern(new_patterns, previous_patterns):
-    """
-    Returns True if any new tactic/technique is not in previous_patterns.
-    """
-    prev_set = {(p['tactic'], p['technique_id']) for p in previous_patterns}
-    for p in new_patterns:
-        if (p['tactic'], p['technique_id']) not in prev_set:
-            return True
-    return False
+# Load all previous ordered sequences of (tactic, technique) pairs from log files
+def load_all_previous_sequences(logs_path=LOGS_PATH):
+    all_sequences = set()
+    for log_file in Path(logs_path).glob("full_logs_*.json"):
+        try:
+            with open(log_file, "r", encoding="utf8") as f:
+                sessions = json.load(f)
+        except Exception as e:
+            print(f"Failed to load or parse {log_file}: {e}")
+            continue
+        for session in sessions:
+            sequence = []
+            for entry in session:
+                try:
+                    mitre = entry.get("mitre_attack_method", {})
+                    tactic = mitre.get("tactic_used")
+                    technique = mitre.get("technique_used")
+                    if tactic and technique:
+                        sequence.append((tactic, technique))
+                except Exception as e:
+                    print(f"Failed to extract entry in {log_file}: {e}")
+            if sequence:
+                all_sequences.add(tuple(sequence))
+    return all_sequences
 
-def check_attack_patterns(config, llm_query_func=query_attack_patterns, attack_patterns_path="data/attack_patterns.json"):
-    new_patterns = query_attack_patterns(config, llm_query_func)
-    previous_patterns = load_previous_attack_patterns(attack_patterns_path)
-    if is_novel_attack_pattern(new_patterns, previous_patterns):
-        print("Novel attack patterns detected! Proceeding with deployment.")
-        # Optionally: append new patterns to your DB here
-        return True
-    else:
-        print("All attack patterns have been seen before. Please regenerate the honeypot config.")
+# Main checker: compares the new config's predicted attack sequence to all previous ones
+def attack_methods_checker(config, logs_path=LOGS_PATH):
+    print("[1] Querying LLM for MITRE attack patterns...")
+    new_patterns = query_attack_patterns(config)
+    print("Predicted attack patterns:", new_patterns)
+    new_sequence = extract_ordered_tactic_technique_sequence(new_patterns)
+    previous_sequences = load_all_previous_sequences(logs_path)
+    if new_sequence in previous_sequences:
+        print("Exact attack sequence already observed. Please regenerate.")
         return False
-
-# Example usage:
-# config = ... # your generated honeypot config as a dict
-# check_attack_patterns(config)
-
-if __name__ == "__main__":
-    # Load the generated config mock data
-    with open("data/generated_config_response.json", "r", encoding="utf8") as f:
-        generated_config = json.load(f)
-
-    # For this test, let's check each service config individually
-        print(f"\n--- Checking service configs ---")
-        
-        previous_patterns = []
-        for session in load_previous_attack_patterns():
-            previous_patterns.extend(session.get("patterns", []))
-        # Query the attack patterns (mocked)
-        new_patterns = query_attack_patterns(generated_config)        
-        print("Predicted attack patterns:", new_patterns)
-        # Check for novelty
-        if is_novel_attack_pattern(new_patterns, previous_patterns):
-            print("Novel attack patterns detected! Proceeding with deployment.")
-        else:
-            print("All attack patterns have been seen before. Please regenerate the honeypot config.")
+    print("Attack sequence is novel. Proceeding.")
+    return True

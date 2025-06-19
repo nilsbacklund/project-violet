@@ -32,7 +32,7 @@ def run_command(command: str, ssh, simulate_execution=simulate_command_line):
     # Run command on Kali over SSH
     if not simulate_execution:
         ssh.sendline(command)
-        ssh.expect(pexpect.TIMEOUT, timeout=TIMEOUT)
+        ssh.expect([pexpect.TIMEOUT, pexpect.EOF], timeout=TIMEOUT)
         ssh.expect(r'.*')
         command_response = ssh.after.decode('utf-8', errors='replace').strip()
         

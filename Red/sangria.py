@@ -65,7 +65,7 @@ def run_single_attack(max_itterations, save_logs):
             data_log.mitre_attack_method = mitre_method_used
 
             if tool_response['name'] == "terminate":
-                continue
+                break
 
         mitre_method_used_list.append(mitre_method_used)
 

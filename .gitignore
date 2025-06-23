@@ -7,7 +7,7 @@ Blue/RagData/vulns_DB.json
 Blue/RagData/vulns_embeddings_e5.npy
 BeelzebubServices/*
 .DS_Store
-Honeypot/configurations/services/
+Blue_Lagoon/configurations/services/
 
 !BeelzebubServices/config_00.json
 !logs/honeypot_command_extractor.py

@@ -20,12 +20,12 @@ def main():
             set_honeypot_config(honeypot_config)
             start_dockers()
 
-        full_logs = run_attacks(n_attacks=attacks_per_configuration, save_logs=save_logs)
+        # Run attacks and save logs
+        full_logs = run_attacks(attacks_per_configuration, save_logs, config_id)
         if not full_logs:
             continue
 
         
-        save_logs_to_file(full_logs, config_id, save_logs)
         save_config_as_file(honeypot_config)
 
         # lables = format_logs_to_lables(full_logs, config_id)

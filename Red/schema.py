@@ -31,6 +31,13 @@ def start_ssh():
     ssh.before.decode('utf-8').strip()
     return ssh
 
+def response(model_host, model_name, messages, tools):
+    if model_host == 'openai':
+        return response_openai(messages, tools, model=model_name)
+    elif model_host == 'ollama':
+        return response_ollama(messages, tools, model=model_name)
+    else:
+        raise ValueError(f"Unsupported model host: {model_host}")
 
 def response_openai(messages: list, tools, model: str = 'gpt-4o-mini'):
     response = openai_client.chat.completions.create(
@@ -43,6 +50,9 @@ def response_openai(messages: list, tools, model: str = 'gpt-4o-mini'):
     content = choice.message.content
     function_call = choice.message.function_call
 
+    prompt_tokens = response.usage.prompt_tokens
+    completion_tokens = response.usage.completion_tokens
+
     # extract name & args safely (in case no call was made)
     fn_name = function_call.name if function_call else None
     fn_args = json.loads(function_call.arguments) if function_call else None
@@ -53,6 +63,8 @@ def response_openai(messages: list, tools, model: str = 'gpt-4o-mini'):
         function=fn_name,
         arguments=fn_args
     )
+    resp_obj.prompt_tokens = prompt_tokens
+    resp_obj.completion_tokens = completion_tokens
 
     return resp_obj
 
@@ -165,15 +177,6 @@ def response_ollama_workaround(messages, model="llama2"):
             refusal       = None,
         ),
     )
-    
-def response(model_host, model_name, messages, tools):
-    if model_host == 'openai':
-        return response_openai(messages, tools, model=model_name)
-    elif model_host == 'ollama':
-        return response_ollama(messages, tools, model=model_name)
-    else:
-        raise ValueError(f"Unsupported model host: {model_host}")
-
 
 # %%
 last_checked = datetime.datetime.utcnow().isoformat()

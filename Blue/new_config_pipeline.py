@@ -373,20 +373,32 @@ def generate_new_honeypot_config():
     config_prompt = build_config_prompt(schema_path, top5_vulns)
     print("\nPrompt sent to LLM for config generation:\n")
     print(config_prompt[:1000], "...")
-    config = generate_config_with_llm(config_prompt)
-    config = clean_and_finalize_config(config)
-    if not validate_config(config, schema_path):
-        print("Config is invalid. Not saving.")
-        return
     
-    is_novel = attack_methods_checker(config)
-    if not is_novel:
-        print("Config is too similar to previous attack patterns. Regenerating or aborting.")
-        return
+    for attempts in range(3):
+        try:
+            config = generate_config_with_llm(config_prompt)
+            config = clean_and_finalize_config(config)
+            if not validate_config(config, schema_path):
+                print("Config is invalid. Not saving.")
+                continue
+            
+            is_novel = attack_methods_checker(config)
+            if not is_novel:
+                print("Config is too similar to previous attack patterns. Regenerating or aborting.")
+                continue
 
-    config_id = config.get('id', None)
-    print("\nConfig Object saved with id:", config_id)
-    return config_id, config
+            config_id = config.get('id', None)
+            print("\nConfig Object saved with id:", config_id)
+            return config_id, config
 
+        except Exception as e:
+            print(f"Error generating config: {e}")
+            if attempts == 2:
+                print("Failed to generate config after 3 attempts. Aborting.")
+                return None, None
+            
+    print("Failed to generate config after 3 attempts. Aborting.")
+    return None, None
+            
 if __name__ == "__main__":
     generate_new_honeypot_config()

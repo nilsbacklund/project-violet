@@ -146,7 +146,7 @@ def terminate_tool(args):
     tool_response = {
         "role": "function",
         "name": "terminate",
-        "content": success
+        "content": str(success)
     }
     return tool_response
 

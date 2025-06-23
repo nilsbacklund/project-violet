@@ -9,16 +9,16 @@ def main():
     config_id = "00"
     honeypot_config = get_honeypot_config(id=config_id)
     set_honeypot_config(honeypot_config)
-    #start_dockers()
+    start_dockers()
 
     for i in range(n_configurations):
         print(f"Configuration Iteration {i + 1} / {n_configurations}")
         
         if i != 0:
-            #stop_dockers()
+            stop_dockers()
             config_id, honeypot_config = generate_new_honeypot_config()
             set_honeypot_config(honeypot_config)
-            #start_dockers()
+            start_dockers()
 
         full_logs = run_attacks(n_attacks=attacks_per_configuration, save_logs=save_logs)
         if not full_logs:

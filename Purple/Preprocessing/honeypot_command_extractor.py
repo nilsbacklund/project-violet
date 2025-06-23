@@ -2,6 +2,29 @@
 import json
 import os
 from Red.model import DataLogObject, LabledCommandObject
+from sentence_transformers import SentenceTransformer, util
+
+def word_similarity(model, query, embeded_canidates):
+    """
+    Calculate the similarity of a word to a list of words using SentenceTransformer.
+    Returns the most similar word from the list.
+    """
+    
+    # Encode the input word and the list of words
+    word_embedding = model.encode(query, convert_to_tensor=True)
+    
+    # Compute cosine similarities
+    similarities = util.pytorch_cos_sim(word_embedding, embeded_canidates)[0]
+    
+    # Get the index of the most similar word
+    most_similar_index = similarities.argmax().item()
+
+
+    if similarities[most_similar_index].item() < 0.5:
+        print(f"Warning: Low similarity ({similarities[most_similar_index].item()}) for '{query}'")
+        return "Other"
+    
+    return most_similar_index
 
 def extract_honeypot_commands(full_logs, session_id):
     """
@@ -10,6 +33,18 @@ def extract_honeypot_commands(full_logs, session_id):
     """
     
     labeled_commands = []
+
+    # moved embeddings outside the loop to avoid recomputing them for each log entry
+    avilable_mitre_tactics = [
+        "Reconnaissance", "Resource Development", "Initial Access",
+        "Execution", "Persistence", "Privilege Escalation", "Defense Evasion",
+        "Credential Access", "Discovery", "Lateral Movement", "Collection",
+        "Command and Control", "Exfiltration", "Impact"
+    ]
+    # for word embedding
+    model = SentenceTransformer('all-MiniLM-L6-v2')
+    canidates_embedded = model.encode(avilable_mitre_tactics, convert_to_tensor=True)
+
     
     for attack_session in full_logs:
         for log_entry in attack_session:
@@ -27,6 +62,8 @@ def extract_honeypot_commands(full_logs, session_id):
             mitre_info = log_dict.get('mitre_attack_method', {})
             if isinstance(mitre_info, dict):
                 tactic = mitre_info.get('tactic_used')
+                tactic_index = word_similarity(model, tactic, canidates_embedded) if tactic else "Other"
+                tactic = avilable_mitre_tactics[tactic_index] if isinstance(tactic_index, int) else "Other"
                 technique = mitre_info.get('technique_used')
             else:
                 tactic = getattr(mitre_info, 'tactic_used', None)

@@ -61,6 +61,7 @@ class DataLogObject():
     """Object to hold the data log for each iteration of the attack."""
     def __init__(self, itteration):
         self.itteration = itteration
+        self.attack_success = False
         self.llm_response = None
         self.tool_response = None
         self.mitre_attack_method = MitreMethodUsed()

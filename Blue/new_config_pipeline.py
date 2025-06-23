@@ -29,7 +29,8 @@ BASE_DIR = Path(__file__).resolve().parent
 service_configs_path = BASE_DIR.parent / 'BeelzebubServices'
 attack_patterns_path = BASE_DIR.parent / 'logs'
 vulns_db_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'vulns_DB.json'
-vulns_embeddings_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'vulns_embeddings_e5.npy'
+#vulns_embeddings_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'vulns_embeddings_e5.npy'
+vulns_embeddings_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'vulns_embeddings_bge_m3.npy'
 schema_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'services_schema.json'
 
 # Handle print output based on config setting

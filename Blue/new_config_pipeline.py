@@ -26,7 +26,7 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 BASE_DIR = Path(__file__).resolve().parent
 
 service_configs_path = BASE_DIR.parent / 'BeelzebubServices'
-attack_patterns_path = BASE_DIR.parent / 'AttackPatterns' / 'attack_patterns.json'
+attack_patterns_path = BASE_DIR.parent / 'logs'
 vulns_db_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'vulns_DB.json'
 vulns_embeddings_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'vulns_embeddings_e5.npy'
 schema_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'services_schema.json'
@@ -67,6 +67,50 @@ def get_attack_patterns_for_config(config_id, attack_patterns):
             return session.get('patterns', [])
     
     return []
+
+def extract_attack_patterns_from_labels(session_id):
+    """
+    Extract attack patterns (tactics and techniques) from labeled command logs.
+    
+    Args:
+        session_id: The session ID to look for in the labels directory
+        
+    Returns:
+        dict: Attack patterns with session info, or None if file doesn't exist
+    """
+    labels_file = attack_patterns_path /'labels'/ f'labels_{session_id}.json'
+    
+    # Check if the labels file exists
+    if not labels_file.exists():
+        print(f"Labels file {labels_file} does not exist. Skipping attack pattern extraction for session {session_id}.")
+        return None
+    
+    try:
+        with open(labels_file, 'r') as f:
+            labeled_commands = json.load(f)
+        
+        # Extract unique attack patterns
+        attack_patterns = []
+        
+        for command_data in labeled_commands:
+            tactic = command_data.get('tactic')
+            technique = command_data.get('technique')
+            
+            # Skip if tactic or technique is missing or "Unknown"
+            if not tactic or not technique or tactic == "Unknown" or technique == "Unknown":
+                continue
+            
+            attack_patterns.append({
+                    'tactic': tactic,
+                    'technique': technique 
+                    })
+         
+        return attack_patterns
+    
+    except Exception as e:
+        print(f"Error extracting attack patterns from {labels_file}: {e}")
+        return None
+
 
 def query_openai(prompt: str, model: str = None, temperature: float = 0.7) -> str:
     """
@@ -130,7 +174,7 @@ def set_honeypot_config(config):
 
 # Pipeline Functions
 
-def sample_previous_configs(services_dir, attack_patterns, sample_size=5):
+def sample_previous_configs(services_dir, sample_size=5):
     """
     Randomly sample up to sample_size previous honeypot config files from the given directory.
     Extract relevant information for each sampled config for use in LLM prompting.
@@ -150,7 +194,7 @@ def sample_previous_configs(services_dir, attack_patterns, sample_size=5):
     config_attack_info = []
     for config in sampled_configs:
         config_id = config['id']
-        attacks = get_attack_patterns_for_config(config_id, attack_patterns)
+        attacks = extract_attack_patterns_from_labels(config_id)
         cve_tags = [
             cve
             for svc in config.get('services', [])
@@ -182,7 +226,9 @@ def build_llm_prompt(config_attack_info):
 
     """
     for entry in config_attack_info:
-        llm_prompt += f"Config ID: {entry['config_id']}\nDescription: {entry['description']}\nServices: {[s['description'] for s in entry['services']]}\nAttacks: {[a['technique'] for a in entry['attacks']]}\n\n"
+        attacks_list = entry['attacks'] if entry['attacks'] is not None else []
+        attack_patterns = [f"{a['tactic']} -> {a['technique']}" for a in attacks_list]
+        llm_prompt += f"Config ID: {entry['config_id']}\nDescription: {entry['description']}\nServices: {[s['description'] for s in entry['services']]}\nAttacks: {attack_patterns}\n\n"
     llm_prompt += "Now generate a specific user query that will retrieve exactly 5 novel and diverse vulnerabilities:\nUser query: "
     return llm_prompt
 
@@ -303,9 +349,8 @@ def generate_new_honeypot_config():
     - Cleans, validates, and saves the config
     Returns the config ID and config object.
     """
-    attack_patterns = load_json(attack_patterns_path)
     vulns_db = load_json(vulns_db_path)
-    config_attack_info = sample_previous_configs(service_configs_path, attack_patterns)
+    config_attack_info = sample_previous_configs(service_configs_path)
     llm_prompt = build_llm_prompt(config_attack_info)
     print(llm_prompt)
     user_query = query_openai(llm_prompt)

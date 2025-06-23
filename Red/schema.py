@@ -185,7 +185,7 @@ def get_new_hp_logs():
     global last_checked
 
     process = subprocess.Popen(
-        ["sudo", "docker", "logs", "beelzebub", "--since", last_checked],
+        ["sudo", "docker", "logs", "blue_lagoon", "--since", last_checked],
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         text=True,

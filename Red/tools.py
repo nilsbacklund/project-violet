@@ -141,7 +141,7 @@ def terminate_tool(args):
     if not isinstance(success, bool):
         raise ValueError("Tool call 'terminate' requires a boolean 'success' argument.")
     
-    terminate_response = "Sangris feels like it has completed its task and is now terminating the session."
+    terminate_response = "Sangria feels like it has completed its task and is now terminating the session."
     print(terminate_response)
     tool_response = {
         "role": "function",

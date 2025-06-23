@@ -21,9 +21,9 @@ import os
 tools = sangria_config.tools
 messages = sangria_config.messages
 mitre_method_used_list = []
-max_itterations = 25
+max_itterations = 7
 
-def run_single_attack(max_itterations, save_logs):
+def run_single_attack(max_itterations, save_logs, messages):
     '''
         Main loop for running a single attack session.
         This function will let the LLM respond to the user, call tools, and log the responses.
@@ -66,7 +66,9 @@ def run_single_attack(max_itterations, save_logs):
 
             if tool_response['name'] == "terminate":
                 print(f"The attack was {'successfull' if tool_response['content'] else 'unsucsessfull'} after {i + 1} iterations.")
-                data_log.attack_success = tool_response['content']
+
+                if tool_response['content'] == "True":
+                    data_log.attack_success = True
                 break
 
         mitre_method_used_list.append(mitre_method_used)
@@ -98,8 +100,11 @@ def run_attacks(n_attacks, save_logs):
     all_logs = []
 
     for i in range(n_attacks):
+        messages = sangria_config.messages.copy()  # Reset messages for each attack
+        print(len(messages))
+
         print(f"Running attack session {i + 1} / {n_attacks}")
-        logs = run_single_attack(max_itterations, save_logs)
+        logs = run_single_attack(max_itterations, save_logs, messages)
         all_logs.append(logs)
 
     return all_logs
@@ -134,7 +139,7 @@ def save_logs_to_file(all_logs, session_id, save_logs=True):
 
 # %%
 
-all_logs = run_attacks(2, save_logs=True)
+# all_logs = run_attacks(2, save_logs=True)
 # save_logs_to_file(all_logs, 'test_id', save_logs_flag=True)
 
 

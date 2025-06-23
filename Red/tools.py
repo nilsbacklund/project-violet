@@ -132,14 +132,21 @@ def terminate_tool(args):
     Handle the 'terminate' tool call.
     This function does not require any arguments and simply returns a termination message.
     """
-    if args:
-        warnings.warn("Tool call 'terminate' does not require any arguments. Ignoring provided arguments.")
+    if not args:
+        warnings.warn("Tool call 'terminate' received no arguments, proceeding with default termination response.")
+    if 'success' not in args:
+        warnings.warn("Tool call 'terminate' missing 'success' key; assuming success by default.")
+        args['success'] = False
+    success = args.get('success', False)
+    if not isinstance(success, bool):
+        raise ValueError("Tool call 'terminate' requires a boolean 'success' argument.")
+    
     terminate_response = "Sangris feels like it has completed its task and is now terminating the session."
     print(terminate_response)
     tool_response = {
         "role": "function",
         "name": "terminate",
-        "content": terminate_response
+        "content": success
     }
     return tool_response
 

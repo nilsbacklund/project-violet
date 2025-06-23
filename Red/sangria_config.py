@@ -91,11 +91,16 @@ tools = [
     {
         "type": "function",
         "name": "terminate",
-        "description": "Terminate the operation if the system is a honeypot or if you do not want to proceed.",
+        "description": "Terminate the operation if the system is a honeypot or if you do not want to proceed. The operation will be terminated immediately.",
         "parameters": {
             "type": "object",
-            "properties": {},
-            "required": []
+            "properties": {
+                "success": {
+                    "type": "boolean",
+                    "description": "Whether the attack was successful or not."
+                }
+            },
+            "required": ['success']
         }
     }
 ]

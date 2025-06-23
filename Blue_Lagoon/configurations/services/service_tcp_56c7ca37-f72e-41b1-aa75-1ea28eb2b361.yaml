@@ -1,9 +1,0 @@
-address: :6000
-apiVersion: v1
-banner: Connecting to vulnerable TCP service.
-cve_description: Critical SQL injection vulnerability in the Farmacia application.
-cve_tags:
-- CVE-2024-11998
-deadlineTimeoutSeconds: 90
-description: Honeypot simulating a service vulnerable to SQL injection.
-protocol: tcp

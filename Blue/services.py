@@ -1,4 +1,4 @@
-from typing import Tuple, List, Optional
+from typing import Tuple, List, Optional, Literal
 from abc import ABC
 
 # All this file does is specify the structure of the Beelzebub service configuration files
@@ -64,13 +64,13 @@ class CommandSSH:
     """
     regex: str
     handler: str
-    plugin: Optional[str]
+    plugin: Optional[Literal["LLMHoneypot"]]
 
     def __init__(
         self,
         regex: str,
         handler: str,
-        plugin: Optional[str]
+        plugin: Optional[Literal["LLMHoneypot"]]
     ):
         """Initialize an SSH command with matching, response, and optional plugin."""
         self.regex = regex

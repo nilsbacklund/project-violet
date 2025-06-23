@@ -34,3 +34,4 @@ def clean_and_finalize_config(config):
         else:
             service.pop("plugin", None)
     return config
+    

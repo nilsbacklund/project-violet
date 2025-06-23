@@ -65,6 +65,8 @@ def run_single_attack(max_itterations, save_logs):
             data_log.mitre_attack_method = mitre_method_used
 
             if tool_response['name'] == "terminate":
+                print(f"The attack was {'successfull' if tool_response['content'] else 'unsucsessfull'} after {i + 1} iterations.")
+                data_log.attack_success = tool_response['content']
                 break
 
         mitre_method_used_list.append(mitre_method_used)
@@ -132,6 +134,8 @@ def save_logs_to_file(all_logs, session_id, save_logs=True):
 
 # %%
 
-# all_logs = run_attacks(2, save_logs=True)
+all_logs = run_attacks(2, save_logs=True)
 # save_logs_to_file(all_logs, 'test_id', save_logs_flag=True)
 
+
+# %%

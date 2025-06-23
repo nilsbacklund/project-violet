@@ -139,7 +139,7 @@ def save_logs_to_file(all_logs, session_id, save_logs=True):
 
 # %%
 
-all_logs = run_attacks(2, save_logs=True)
+# all_logs = run_attacks(2, save_logs=True)
 # save_logs_to_file(all_logs, 'test_id', save_logs_flag=True)
 
 

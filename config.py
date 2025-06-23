@@ -9,7 +9,7 @@ save_configuration = True
 print_output = True
 
 
-attacks_per_configuration = 1
-n_configurations = 3
+attacks_per_configuration = 25
+n_configurations = 1
 
 # %%

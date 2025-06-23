@@ -35,6 +35,8 @@ def run_command(command: str, ssh, simulate_execution=simulate_command_line):
         ssh.expect([pexpect.TIMEOUT, pexpect.EOF], timeout=TIMEOUT)
         ssh.expect(r'.*')
         command_response = ssh.after.decode('utf-8', errors='replace').strip()
+        if len(command_response) > 10000:
+            command_response = command_response[-10000:]
         
         return command_response
 

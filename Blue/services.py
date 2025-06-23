@@ -170,23 +170,27 @@ class ServiceTCP(Service):
         protocol (str): Always 'tcp' for TCP services.
         banner (str): Text banner sent to clients upon connection.
         deadlineTimeoutSeconds (int): Timeout in seconds before closing the connection.
+        plugin (Optional[LLMPlugin]): Optional LLM plugin for dynamic TCP interaction.
     """
     protocol: str = "tcp"
     banner: str
     deadlineTimeoutSeconds: int
+    plugin: Optional[LLMPlugin]
 
     def __init__(
         self,
         address: str,
         description: str,
         banner: str,
-        deadlineTimeoutSeconds: int
+        deadlineTimeoutSeconds: int,
+        plugin: Optional[LLMPlugin]
     ):
         """Initialize the TCP service with its address, banner, and timeout settings."""
         self.address = address
         self.description = description
         self.banner = banner
         self.deadlineTimeoutSeconds = deadlineTimeoutSeconds
+        self.plugin = plugin
 
 class Services:
     """

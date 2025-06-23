@@ -282,6 +282,13 @@
         "deadlineTimeoutSeconds": {
           "type": "integer",
           "description": "Timeout in seconds before closing the connection."
+        },
+        "plugin": {
+          "oneOf": [
+            { "$ref": "#/definitions/LLMPlugin" },
+            { "type": "null" }
+          ],
+          "description": "Optional LLM plugin for dynamic TCP interaction."
         }
       },
       "required": [

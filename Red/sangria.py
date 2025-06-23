@@ -101,7 +101,6 @@ def run_attacks(n_attacks, save_logs):
 
     for i in range(n_attacks):
         messages = sangria_config.messages.copy()  # Reset messages for each attack
-        print(len(messages))
 
         print(f"Running attack session {i + 1} / {n_attacks}")
         logs = run_single_attack(max_itterations, save_logs, messages)

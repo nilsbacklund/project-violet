@@ -29,6 +29,10 @@ def run_single_attack(max_itterations, save_logs, messages):
         This function will let the LLM respond to the user, call tools, and log the responses.
         The goal is to let it run a series of commands to a console and log the responses.
     '''
+    total_prompt_tokens = 0
+    total_completion_tokens = 0
+    estimate_cashed_tokens = 0
+
     # start SSH connection to Kali Linux
     if not config.simulate_command_line:
         ssh = start_ssh()
@@ -38,12 +42,18 @@ def run_single_attack(max_itterations, save_logs, messages):
     full_logs = []
     
     for i in range(max_itterations):
+        n_itterations = i
         print(f'Iteration {i+1} / {max_itterations}')
 
         data_log = DataLogObject(i)
 
         # get response from OpenAI
         assistant_response = response(sangria_config.model_host, config.llm_model_sangria, messages, tools)
+
+        total_prompt_tokens = assistant_response.prompt_tokens # they only get cashed onece, so last itteration is enough
+        total_completion_tokens += assistant_response.completion_tokens # accumulate completion tokens
+        print(f"Prompt tokens: {assistant_response.prompt_tokens}, Completion tokens: {assistant_response.completion_tokens}")
+        
         data_log.llm_response = assistant_response
 
         tool_response = None
@@ -90,7 +100,18 @@ def run_single_attack(max_itterations, save_logs, messages):
         if save_logs:
             full_logs.append(data_log)
 
-    return full_logs
+    estimate_cashed_tokens = (n_itterations + 1) * total_prompt_tokens / 2
+    print(f"Total prompt tokens: {total_prompt_tokens}")
+    print(f"Total completion tokens: {total_completion_tokens}")
+    print(f"Estimated cashed tokens: {estimate_cashed_tokens}")
+
+    tokens_used = {
+        "prompt_tokens": total_prompt_tokens,
+        "completion_tokens": total_completion_tokens,
+        "estimate_cashed_tokens": estimate_cashed_tokens
+    }
+
+    return full_logs, tokens_used
 
 def run_attacks(n_attacks, save_logs, config_id):
     '''
@@ -98,17 +119,54 @@ def run_attacks(n_attacks, save_logs, config_id):
         Each session will run a attack and log the responses.
     '''
     all_logs = []
+    tokens_used_list = []
 
     for i in range(n_attacks):
         messages = sangria_config.messages.copy()  # Reset messages for each attack
 
         print(f"Running attack session {i + 1} / {n_attacks}")
-        logs = run_single_attack(max_itterations, save_logs, messages)
+        logs, tokens_used = run_single_attack(max_itterations, save_logs, messages)
         all_logs.append(logs)
+        tokens_used_list.append(tokens_used)
 
         append_logs_to_file(logs, config_id, save_logs)
+        save_tokens_used_to_file(tokens_used, config_id, save_logs)
 
     return all_logs
+
+def save_tokens_used_to_file(tokens_used_list, session_id, save_logs=True):
+    '''
+        Save the tokens used to a file, will be appended if file already exists.
+        The file will be saved in the logs/tokens_used directory.
+        The file will be named tokens_used_<session_id>.json
+    '''
+
+    if not save_logs:
+        print("Saving tokens used is disabled.")
+        return
+    
+    print(f"Saving tokens used to file for session {session_id}...")
+    
+    # Create the logs directory if it doesn't exist
+    os.makedirs('logs', exist_ok=True)
+    os.makedirs('logs/tokens_used', exist_ok=True)
+    
+    path = f'logs/tokens_used/tokens_used_{session_id}.json'
+    
+    # Load existing data if the file exists
+    if os.path.exists(path):
+        with open(path, 'r') as f:
+            existing_data = json.load(f)
+    else:
+        existing_data = []
+
+    # Append new tokens used to existing data
+    existing_data.append(tokens_used_list)
+
+    with open(path, 'w') as f:
+        json.dump(existing_data, f, indent=4)
+
+    print("File written:", os.path.exists(path), "Size:", os.path.getsize(path))
 
 def append_logs_to_file(logs, session_id, save_logs=True):
     '''

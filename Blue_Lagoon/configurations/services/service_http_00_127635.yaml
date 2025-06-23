@@ -1,0 +1,32 @@
+address: :80
+apiVersion: v1
+commands:
+- handler: "<html>\n  <header>\n    <title>Wordpress 6 test page</title>\n  </header>\n\
+    \  <body>\n    <h1>Hello from Wordpress</h1>\n  </body>\n</html>"
+  headers:
+  - 'Content-Type: text/html'
+  - 'Server: Apache/2.4.53 (Debian)'
+  - 'X-Powered-By: PHP/7.4.29'
+  regex: ^(/index.php|/index.html|/)$
+  statusCode: 200
+- handler: ''
+  headers: []
+  regex: ^.*$
+  statusCode: 200
+cve_description: Path traversal and privileged file disclosure vulnerabilities in
+  WordPress 6.0 allowing attackers to read sensitive files like wp-config.php and
+  backup archives.
+cve_tags:
+- CVE-2024-29234
+- CVE-2021-41773
+description: WordPress 6.0
+plugin:
+  llmModel: gpt-4o-mini
+  llmProvider: openai
+  openAISecretKey: placeholder
+  prompt: You will act as an unsecure HTTP Server running a WordPress 6.0 installation.
+    The server has misconfigurations and may leak sensitive files like backup archives,
+    wp-config.php, or error logs. You must respond to HTTP requests with plausible
+    HTML or PHP error messages. Do not provide explanations or metadata unless explicitly
+    requested.
+protocol: http

@@ -21,7 +21,7 @@ import os
 tools = sangria_config.tools
 messages = sangria_config.messages
 mitre_method_used_list = []
-max_itterations = 4
+max_itterations = 50
 
 def run_single_attack(max_itterations, save_logs, messages):
     '''

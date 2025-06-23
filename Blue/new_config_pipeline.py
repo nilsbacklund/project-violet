@@ -12,6 +12,7 @@ import jsonschema
 import uuid
 from dotenv import load_dotenv
 import sys
+import time
 # Add parent directory to sys.path to allow imports from project root
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from config import print_output, llm_model_config
@@ -156,7 +157,7 @@ def set_honeypot_config(config):
     Each file is named using the config ID and the service name.
     Before saving, clear the directory to avoid leftover files from previous runs.
     """
-    target_dir = BASE_DIR.parent / "Honeypot" / "configurations" / "services"
+    target_dir = BASE_DIR.parent / "Blue_Lagoon" / "configurations" / "services"
     target_dir.mkdir(parents=True, exist_ok=True)
     # Remove old service files to avoid stale configs
     for file in target_dir.iterdir():
@@ -166,7 +167,7 @@ def set_honeypot_config(config):
     config_id = config.get('id', 'unknown')
     for service in services:
         service_name = service.get('protocol', 'unnamed_service')
-        filename = f"service_{service_name}_{config_id}.yaml"
+        filename = f"service_{service_name}_{config_id}_{str(time.time())[12:]}.yaml"
         target_path = target_dir / filename
         with open(target_path, "w") as f:
             yaml.dump(service, f)

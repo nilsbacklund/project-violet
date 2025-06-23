@@ -1,0 +1,32 @@
+=== MITRE ATT&CK Tactics Evaluation Summary ===
+
+Micro Precision: 0.844
+Micro Recall:    0.844
+Micro F1:       0.844
+
+Macro Precision: 0.694
+Macro Recall:    0.792
+Macro F1:       0.724
+
+Per-Tactic Metrics:
+  command and control   Precision: 0.00  Recall: 0.00  F1: 0.00
+  credential access     Precision: 0.00  Recall: 0.00  F1: 0.00
+  defense evasion       Precision: 0.00  Recall: 0.00  F1: 0.00
+  discovery             Precision: 0.00  Recall: 0.00  F1: 0.00
+  execution             Precision: 0.00  Recall: 0.00  F1: 0.00
+  exfiltration          Precision: 0.00  Recall: 0.00  F1: 0.00
+  harmless              Precision: 0.00  Recall: 0.00  F1: 0.00
+  impact                Precision: 0.00  Recall: 0.00  F1: 0.00
+  initial access        Precision: 0.00  Recall: 0.00  F1: 0.00
+  obfuscation           Precision: 0.00  Recall: 0.00  F1: 0.00
+  other                 Precision: 0.00  Recall: 0.00  F1: 0.00
+  persistence           Precision: 0.00  Recall: 0.00  F1: 0.00
+  privilege escalation  Precision: 0.00  Recall: 0.00  F1: 0.00
+
+Exact match sessions: 39 / 359 (10.86%)
+
+Explanation:
+- Micro metrics: Treat every label equally, dominated by common tactics.
+- Macro metrics: Treat every tactic equally, so rare tactics matter more.
+- Per-tactic: Shows which tactics are missed or predicted well.
+- Exact match: Fraction of sessions where all tactics are predicted exactly.

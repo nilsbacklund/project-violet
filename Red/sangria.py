@@ -21,9 +21,9 @@ import os
 tools = sangria_config.tools
 messages = sangria_config.messages
 mitre_method_used_list = []
-max_itterations = 25
+max_itterations = 4
 
-def run_single_attack(max_itterations, save_logs):
+def run_single_attack(max_itterations, save_logs, messages):
     '''
         Main loop for running a single attack session.
         This function will let the LLM respond to the user, call tools, and log the responses.
@@ -66,7 +66,9 @@ def run_single_attack(max_itterations, save_logs):
 
             if tool_response['name'] == "terminate":
                 print(f"The attack was {'successfull' if tool_response['content'] else 'unsucsessfull'} after {i + 1} iterations.")
-                data_log.attack_success = tool_response['content']
+
+                if tool_response['content'] == "True":
+                    data_log.attack_success = True
                 break
 
         mitre_method_used_list.append(mitre_method_used)
@@ -90,7 +92,7 @@ def run_single_attack(max_itterations, save_logs):
 
     return full_logs
 
-def run_attacks(n_attacks, save_logs):
+def run_attacks(n_attacks, save_logs, config_id):
     '''
         Run multiple attack sessions.
         Each session will run a attack and log the responses.
@@ -98,16 +100,54 @@ def run_attacks(n_attacks, save_logs):
     all_logs = []
 
     for i in range(n_attacks):
+        messages = sangria_config.messages.copy()  # Reset messages for each attack
+
         print(f"Running attack session {i + 1} / {n_attacks}")
-        logs = run_single_attack(max_itterations, save_logs)
+        logs = run_single_attack(max_itterations, save_logs, messages)
         all_logs.append(logs)
 
+        append_logs_to_file(logs, config_id, save_logs)
+
     return all_logs
+
+def append_logs_to_file(logs, session_id, save_logs=True):
+    '''
+        Append the logs to a file, will be created if file does not exist.
+        The file will be saved in the logs/full_logs directory.
+        The file will be named full_logs_<session_id>.json
+    '''
+
+    if not save_logs:
+        print("Saving logs is disabled.")
+        return
+    
+    print(f"Appending logs to file for session {session_id}...")
+    
+    # Create the logs directory if it doesn't exist
+    os.makedirs('logs', exist_ok=True)
+    os.makedirs('logs/full_logs', exist_ok=True)
+    
+    path = f'logs/full_logs/full_logs_{session_id}.json'
+    
+    # Load existing data if the file exists
+    if os.path.exists(path):
+        with open(path, 'r') as f:
+            existing_data = json.load(f)
+    else:
+        existing_data = []
+
+    # Append new logs to existing data
+    existing_data.append([log.to_dict() for log in logs])
+
+    with open(path, 'w') as f:
+        json.dump(existing_data, f, indent=4)
+
+    print("File written:", os.path.exists(path), "Size:", os.path.getsize(path))
 
 
 def save_logs_to_file(all_logs, session_id, save_logs=True):
     '''
-        Save the logs to a file.
+        Save the logs to a file, will be appended if file already exists.
         The file will be saved in the logs/full_logs directory.
         The file will be named full_logs_<session_id>.json
     '''
@@ -134,7 +174,7 @@ def save_logs_to_file(all_logs, session_id, save_logs=True):
 
 # %%
 
-all_logs = run_attacks(2, save_logs=True)
+# all_logs = run_attacks(2, save_logs=True)
 # save_logs_to_file(all_logs, 'test_id', save_logs_flag=True)
 
 

@@ -25,7 +25,7 @@ openai_client = openai.OpenAI()
 
 def start_ssh():
     ssh = pexpect.spawn('ssh -p 3022 root@localhost')
-    ssh.expect('password: ', timeout=2)
+    ssh.expect("root@localhost's password: ")
     ssh.sendline('toor')
     ssh.expect(pexpect.TIMEOUT, timeout=1)
     ssh.before.decode('utf-8').strip()
@@ -185,7 +185,7 @@ def get_new_hp_logs():
     global last_checked
 
     process = subprocess.Popen(
-        ["sudo", "docker", "logs", "beelzebub", "--since", last_checked],
+        ["sudo", "docker", "logs", "blue_lagoon", "--since", last_checked],
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         text=True,

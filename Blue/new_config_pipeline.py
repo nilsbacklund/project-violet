@@ -6,17 +6,15 @@ import os
 import numpy as np
 from sentence_transformers import SentenceTransformer
 import yaml
-from datetime import datetime, timezone
-import re
 import jsonschema
-import uuid
 from dotenv import load_dotenv
 import sys
+from config import print_output, llm_model_config
+
 # Add parent directory to sys.path to allow imports from project root
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from config import print_output, llm_model_config
 from Blue.attack_pattern_check import attack_methods_checker
-
+from Blue.utils import extract_json, cosine_similarity, clean_and_finalize_config
 
 # Load environment variables (for OpenAI API key)
 load_dotenv()
@@ -83,21 +81,6 @@ def query_openai(prompt: str, model: str = None, temperature: float = 0.7) -> st
         stream=False,
     )
     return response.choices[0].message.content.strip()
-
-def cosine_similarity(a, b):
-    """
-    Compute the cosine similarity between two vectors a and b.
-    """
-    a = np.array(a)
-    b = np.array(b)
-    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
-
-def extract_json(text):
-    """
-    Extract a JSON object from a string using regex. Returns the JSON string or the original text if not found.
-    """
-    match = re.search(r'({[\s\S]+})', text)
-    return match.group(1) if match else text.strip()
 
 def get_honeypot_config(id):
     """
@@ -244,23 +227,6 @@ def generate_config_with_llm(config_prompt):
         config = json.loads(json_str)
     except Exception:
         config = yaml.safe_load(json_str)
-    return config
-
-def clean_and_finalize_config(config):
-    """
-    Clean up and finalize the generated config: remove schema/title, assign a new UUID, timestamp, and fix service fields.
-    """
-    config.pop("$schema", None)
-    config.pop("title", None)
-    config["id"] = str(uuid.uuid4())
-    config["timestamp"] = datetime.now(timezone.utc).isoformat()
-    for service in config.get("services", []):
-        service.pop("id", None)
-        if service.get("protocol") in ["http", "ssh"]:
-            if "plugin" not in service:
-                service["plugin"] = None
-        else:
-            service.pop("plugin", None)
     return config
 
 def validate_config(config, schema_path):

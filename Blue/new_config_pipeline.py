@@ -6,18 +6,16 @@ import os
 import numpy as np
 from sentence_transformers import SentenceTransformer
 import yaml
-from datetime import datetime, timezone
-import re
 import jsonschema
-import uuid
 from dotenv import load_dotenv
 import sys
 import time
+from config import print_output, llm_model_config
+
 # Add parent directory to sys.path to allow imports from project root
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from config import print_output, llm_model_config
 from Blue.attack_pattern_check import attack_methods_checker
-
+from Blue.utils import extract_json, cosine_similarity, clean_and_finalize_config
 
 # Load environment variables (for OpenAI API key)
 load_dotenv()
@@ -57,7 +55,7 @@ def load_json(path):
     if not path.suffix == '.json':
         raise ValueError(f"Path {path} is not a JSON file.")
 
-    with open(path, 'r') as f:
+    with open(path, 'r', encoding="utf8") as f:
         return json.load(f)
 
 def get_attack_patterns_for_config(config_id, attack_patterns):
@@ -88,7 +86,7 @@ def extract_attack_patterns_from_labels(session_id):
         return None
     
     try:
-        with open(labels_file, 'r') as f:
+        with open(labels_file, 'r', encoding="utf8") as f:
             labeled_commands = json.load(f)
         
         # Extract unique attack patterns
@@ -130,21 +128,6 @@ def query_openai(prompt: str, model: str = None, temperature: float = 0.7) -> st
     )
     return response.choices[0].message.content.strip()
 
-def cosine_similarity(a, b):
-    """
-    Compute the cosine similarity between two vectors a and b.
-    """
-    a = np.array(a)
-    b = np.array(b)
-    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
-
-def extract_json(text):
-    """
-    Extract a JSON object from a string using regex. Returns the JSON string or the original text if not found.
-    """
-    match = re.search(r'({[\s\S]+})', text)
-    return match.group(1) if match else text.strip()
-
 def get_honeypot_config(id):
     """
     Load a honeypot config by its ID from the BeelzebubServices directory.
@@ -170,7 +153,7 @@ def set_honeypot_config(config):
         service_name = service.get('protocol', 'unnamed_service')
         filename = f"service_{service_name}_{config_id}_{str(time.time())[12:]}.yaml"
         target_path = target_dir / filename
-        with open(target_path, "w") as f:
+        with open(target_path, "w", encoding="utf8") as f:
             yaml.dump(service, f)
         print(f"Service config written to {target_path}")
 
@@ -191,7 +174,7 @@ def sample_previous_configs(services_dir, sample_size=5):
         sampled_files = random.sample(json_files, sample_size)
     sampled_configs = []
     for file in sampled_files:
-        with open(file, "r") as f:
+        with open(file, "r", encoding="utf8") as f:
             sampled_configs.append(json.load(f))
     config_attack_info = []
     for config in sampled_configs:
@@ -294,23 +277,6 @@ def generate_config_with_llm(config_prompt):
         config = yaml.safe_load(json_str)
     return config
 
-def clean_and_finalize_config(config):
-    """
-    Clean up and finalize the generated config: remove schema/title, assign a new UUID, timestamp, and fix service fields.
-    """
-    config.pop("$schema", None)
-    config.pop("title", None)
-    config["id"] = str(uuid.uuid4())
-    config["timestamp"] = datetime.now(timezone.utc).isoformat()
-    for service in config.get("services", []):
-        service.pop("id", None)
-        if service.get("protocol") in ["http", "ssh"]:
-            if "plugin" not in service:
-                service["plugin"] = None
-        else:
-            service.pop("plugin", None)
-    return config
-
 def validate_config(config, schema_path):
     """
     Validate the generated config against the provided JSON schema.
@@ -335,7 +301,7 @@ def save_config_as_file(config):
     config_id = config.get('id', 'unknown')
     filename = f"config_{config_id}.json"
     filepath = output_dir / filename
-    with open(filepath, "w") as f:
+    with open(filepath, "w", encoding="utf8") as f:
         json.dump(config, f, indent=2)
     print(f"Config saved to {filepath}")
 
@@ -403,4 +369,4 @@ def generate_new_honeypot_config():
     return None, None
             
 if __name__ == "__main__":
-    generate_new_honeypot_config()
+    config_id, config = generate_new_honeypot_config()

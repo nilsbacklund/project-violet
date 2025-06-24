@@ -100,8 +100,11 @@
           "description": "Text or action to respond with when the regex matches."
         },
         "plugin": {
-          "type": ["string", "null"],
-          "description": "Optional name of a plugin to process the command (e.g., 'LLMHoneypot')."
+          "oneOf": [
+            { "type": "null" },
+            { "type": "string", "enum": ["LLMHoneypot"] }
+          ],
+          "description": "Optional name of a plugin to process the command (null or 'LLMHoneypot')."
         }
       },
       "required": ["regex", "handler"],
@@ -282,6 +285,13 @@
         "deadlineTimeoutSeconds": {
           "type": "integer",
           "description": "Timeout in seconds before closing the connection."
+        },
+        "plugin": {
+          "oneOf": [
+            { "$ref": "#/definitions/LLMPlugin" },
+            { "type": "null" }
+          ],
+          "description": "Optional LLM plugin for dynamic TCP interaction."
         }
       },
       "required": [

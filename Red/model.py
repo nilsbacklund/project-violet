@@ -31,6 +31,9 @@ class ResponseObject:
         self.message = message
         self.function = function
         self.arguments = arguments
+        self.prompt_tokens = 0
+        self.completion_tokens = 0
+        self.cached_tokens = 0
 
     def __repr__(self):
         return f"ResponseObject(message={self.message}, function={self.function}, arguments={self.arguments})"

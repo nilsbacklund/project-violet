@@ -12,7 +12,6 @@ import config
 from Red.defender_llm import run_command
 from Red.tools import handle_tool_call
 from Red.model import MitreMethodUsed, DataLogObject
-from langfuse_sdk import Langfuse
 from config import max_session_length
 from Blue_Lagoon.honeypot_tools import start_dockers, stop_dockers
 

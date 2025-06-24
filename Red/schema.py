@@ -52,6 +52,7 @@ def response_openai(messages: list, tools, model: str = 'gpt-4o-mini'):
 
     prompt_tokens = response.usage.prompt_tokens
     completion_tokens = response.usage.completion_tokens
+    cached_tokens = response.usage.prompt_tokens_details.cached_tokens if response.usage and response.usage.prompt_tokens_details else 0
 
     # extract name & args safely (in case no call was made)
     fn_name = function_call.name if function_call else None
@@ -65,6 +66,7 @@ def response_openai(messages: list, tools, model: str = 'gpt-4o-mini'):
     )
     resp_obj.prompt_tokens = prompt_tokens
     resp_obj.completion_tokens = completion_tokens
+    resp_obj.cached_tokens = cached_tokens
 
     return resp_obj
 

@@ -31,7 +31,7 @@ def run_single_attack(max_itterations, save_logs, messages):
     '''
     total_prompt_tokens = 0
     total_completion_tokens = 0
-    estimate_cashed_tokens = 0
+    total_cached_tokens = 0
 
     # start SSH connection to Kali Linux
     if not config.simulate_command_line:
@@ -50,9 +50,10 @@ def run_single_attack(max_itterations, save_logs, messages):
         # get response from OpenAI
         assistant_response = response(sangria_config.model_host, config.llm_model_sangria, messages, tools)
 
-        total_prompt_tokens = assistant_response.prompt_tokens # they only get cashed onece, so last itteration is enough
-        total_completion_tokens += assistant_response.completion_tokens # accumulate completion tokens
-        print(f"Prompt tokens: {assistant_response.prompt_tokens}, Completion tokens: {assistant_response.completion_tokens}")
+        total_prompt_tokens += assistant_response.prompt_tokens - assistant_response.cached_tokens 
+        total_completion_tokens += assistant_response.completion_tokens
+        total_cached_tokens += assistant_response.cached_tokens
+        print(f"Prompt tokens: {assistant_response.prompt_tokens}, Completion tokens: {assistant_response.completion_tokens}, Cached tokens: {assistant_response.cached_tokens}")
         
         data_log.llm_response = assistant_response
 
@@ -100,15 +101,14 @@ def run_single_attack(max_itterations, save_logs, messages):
         if save_logs:
             full_logs.append(data_log)
 
-    estimate_cashed_tokens = (n_itterations + 1) * total_prompt_tokens / 2
     print(f"Total prompt tokens: {total_prompt_tokens}")
     print(f"Total completion tokens: {total_completion_tokens}")
-    print(f"Estimated cashed tokens: {estimate_cashed_tokens}")
+    print(f"Total cashed tokens: {total_cached_tokens}")
 
     tokens_used = {
         "prompt_tokens": total_prompt_tokens,
         "completion_tokens": total_completion_tokens,
-        "estimate_cashed_tokens": estimate_cashed_tokens
+        "cached_tokens": total_cached_tokens
     }
 
     return full_logs, tokens_used

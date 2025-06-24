@@ -65,11 +65,11 @@ def main():
     critique_prompt = (
         "You are a security‐expert reviewer.  "
         "I will show you a honeypot configuration in JSON; **do not** re‐emit or re‐write the config.  "
-        "Only point out, as concisely as possible, where it violates any of the requirements below:\n\n"
-        "- At least 5 distinct services (HTTP, SSH, TCP)\n"
-        "- Atleast half of the services need to be LLM‐powered\n"
-        "- Well‐defined vulnerabilities for attackers\n"
-        "If the requirements are approved, you can provide tips for improvement (do not suggest to add commands to TCP services).\n\n"
+        "Only point out, as concisely as possible, where it violates any of the requirements below (always mention what the requirements are):\n\n"
+        "1. At least 2 of each service type (HTTP, SSH, TCP)\n"
+        "2. Atleast half of each service type need to be LLM‐powered\n"
+        "3. Well‐defined vulnerabilities for attackers\n"
+        "(Do not suggest or MENTION to add commands to TCP services. The TCP service should have no commands. Do not mention this!).\n\n"
         f"Configuration schema that must be followed: {schema_text}\n"
     )
 

@@ -13,6 +13,7 @@ from Red.defender_llm import run_command
 from Red.tools import handle_tool_call
 from Red.model import MitreMethodUsed, DataLogObject
 from langfuse_sdk import Langfuse
+from config import max_session_length
 
 import os
 
@@ -23,7 +24,7 @@ messages = sangria_config.messages
 mitre_method_used_list = []
 max_itterations = 5
 
-def run_single_attack(max_itterations, save_logs, messages):
+def run_single_attack(save_logs, messages):
     '''
         Main loop for running a single attack session.
         This function will let the LLM respond to the user, call tools, and log the responses.
@@ -41,9 +42,8 @@ def run_single_attack(max_itterations, save_logs, messages):
 
     full_logs = []
     
-    for i in range(max_itterations):
-        n_itterations = i
-        print(f'Iteration {i+1} / {max_itterations}')
+    for i in range(max_session_length):
+        print(f'Iteration {i+1} / {max_session_length}')
 
         data_log = DataLogObject(i)
 
@@ -125,7 +125,7 @@ def run_attacks(n_attacks, save_logs, config_id):
         messages = sangria_config.messages.copy()  # Reset messages for each attack
 
         print(f"Running attack session {i + 1} / {n_attacks}")
-        logs, tokens_used = run_single_attack(max_itterations, save_logs, messages)
+        logs, tokens_used = run_single_attack(save_logs, messages)
         all_logs.append(logs)
         tokens_used_list.append(tokens_used)
 

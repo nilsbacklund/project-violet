@@ -62,8 +62,8 @@ class MitreMethodUsed():
 
 class DataLogObject():
     """Object to hold the data log for each iteration of the attack."""
-    def __init__(self, itteration):
-        self.itteration = itteration
+    def __init__(self, iteration):
+        self.iteration = iteration
         self.attack_success = False
         self.llm_response = None
         self.tool_response = None
@@ -71,7 +71,7 @@ class DataLogObject():
     
     def to_dict(self):
         return {
-            'itteration': self.itteration,
+            'iteration': self.iteration,
             'llm_response': self.llm_response.to_dict() if self.llm_response else None,
             'tool_response': self.tool_response,
             'beelzebub_response': self.beelzebub_response

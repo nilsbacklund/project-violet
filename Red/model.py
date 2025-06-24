@@ -67,7 +67,6 @@ class DataLogObject():
         self.attack_success = False
         self.llm_response = None
         self.tool_response = None
-        self.mitre_attack_method = MitreMethodUsed()
         self.beelzebub_response = []
     
     def to_dict(self):
@@ -75,7 +74,6 @@ class DataLogObject():
             'iteration': self.iteration,
             'llm_response': self.llm_response.to_dict() if self.llm_response else None,
             'tool_response': self.tool_response,
-            'mitre_attack_method': self.mitre_attack_method.to_dict() if self.mitre_attack_method else None,
             'beelzebub_response': self.beelzebub_response
         }
 

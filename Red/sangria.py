@@ -23,6 +23,7 @@ import os
 tools = sangria_config.tools
 messages = sangria_config.messages
 mitre_method_used_list = []
+max_itterations = 5
 
 def run_single_attack(save_logs, messages):
     '''
@@ -73,7 +74,7 @@ def run_single_attack(save_logs, messages):
             messages.append(tool_response)
             
             data_log.tool_response = tool_response['content']
-            data_log.mitre_attack_method = mitre_method_used
+            # data_log.mitre_attack_method = mitre_method_used
 
             if tool_response['name'] == "terminate":
                 print(f"The attack was {'successfull' if tool_response['content'] else 'unsucsessfull'} after {i + 1} iterations.")

@@ -1,10 +1,12 @@
 # %%
-import json
+import sys
 import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
+import json
 from Red.model import DataLogObject, LabledCommandObject
 from sentence_transformers import SentenceTransformer, util
 
-log_id = '00'  # Example log ID, can be changed as needed
+log_path = 'logs/full_logs/2025-06-24T15:05:54/hp_config_1/attack_1.json'
 
 def word_similarity(model, query, embeded_canidates):
     """
@@ -28,7 +30,7 @@ def word_similarity(model, query, embeded_canidates):
     
     return most_similar_index
 
-def extract_honeypot_commands(full_logs, session_id):
+def extract_honeypot_commands(full_logs):
     """
     Extract commands from honeypot logs and associate them with MITRE ATT&CK tactics and techniques.
     This function processes the beelzebub_response entries to find actual commands executed on the honeypot.
@@ -138,15 +140,15 @@ def extract_honeypot_commands(full_logs, session_id):
                     labeled_command.user = event.get('User', '')
                     labeled_command.event_id = event.get('ID', '')
 
-                command = event.get('Command', '').strip()
-                command = command.replace('\r\n', '\\n').replace('\r', '\\r').replace('\n', '\\n')                    
-                labeled_command.command = event.get('Command', '') # can be removed to put together full commands
-                labeled_commands.append(labeled_command)
+                    command = event.get('Command', '').strip()
+                    command = command.replace('\r\n', '\\n').replace('\r', '\\r').replace('\n', '\\n')                    
+                    labeled_command.command = event.get('Command', '') # can be removed to put together full commands
+                    labeled_commands.append(labeled_command)
     
     return labeled_commands
 
 
-def save_honeypot_labels(labeled_commands, session_id):
+def save_honeypot_labels(labeled_commands):
     """
     Save the labeled commands to a JSON file.
     """
@@ -175,7 +177,7 @@ def save_honeypot_labels(labeled_commands, session_id):
         
         commands_data.append(cmd_dict)
     
-    output_file = f'logs/labels/labels_{session_id}.json'
+    output_file = f'{log_path}_labels.json'
     
     with open(output_file, 'w') as f:
         json.dump(commands_data, f, indent=4)
@@ -186,19 +188,18 @@ def save_honeypot_labels(labeled_commands, session_id):
     return output_file
 
 
-def process_test_logs(log_id):
+def process_test_logs():
     """
     Process the test logs and create labeled commands.
     """
     try:
-        with open(f'logs/full_logs/full_logs_{log_id}.json', 'r') as f:
+        with open(log_path, 'r') as f:
             full_logs = json.load(f)
         
         # Extract commands
-        labeled_commands = extract_honeypot_commands(full_logs, log_id)
-        
+        labeled_commands = extract_honeypot_commands(full_logs)
         # Save to file
-        output_file = save_honeypot_labels(labeled_commands, log_id)
+        output_file = save_honeypot_labels(labeled_commands)
         
         # Print summary
         print("\n=== COMMAND EXTRACTION SUMMARY ===")
@@ -229,7 +230,7 @@ def process_test_logs(log_id):
         return labeled_commands, output_file
         
     except FileNotFoundError:
-        print(f"Error: logs/full_logs/full_logs_{log_id}.json not found")
+        print(f"Error: {log_path} not found")
         return [], None
     except Exception as e:
         print(f"Error processing logs: {e}")
@@ -237,6 +238,6 @@ def process_test_logs(log_id):
 
 
 if __name__ == "__main__":
-    process_test_logs(log_id)
+    process_test_logs()
 
 # %%

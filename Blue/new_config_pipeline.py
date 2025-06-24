@@ -222,7 +222,7 @@ def retrieve_top_vulns(user_query, vulns_db, embeddings_path, top_n=5):
     Given a user query, embed it and compute cosine similarity to all vulnerability embeddings.
     Return the top_n most similar vulnerabilities from the database.
     """
-    MODEL_NAME = 'intfloat/e5-large-v2'
+    MODEL_NAME = "BAAI/bge-m3"
     model = SentenceTransformer(MODEL_NAME)
     vulns_embeddings = np.load(embeddings_path)
     query_embedding = model.encode([user_query])[0]

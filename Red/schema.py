@@ -23,23 +23,34 @@ load_dotenv()
 openai.api_key = os.getenv('OPENAI_API_KEY')
 openai_client = openai.OpenAI()
 
+# openai_client = openai.OpenAI(
+#     base_url="http://localhost:11434/v1",
+#     api_key="ollama",
+# )
+
 def start_ssh():
     ssh = pexpect.spawn('ssh -p 3022 root@localhost')
     ssh.expect("root@localhost's password: ")
     ssh.sendline('toor')
     ssh.expect(pexpect.TIMEOUT, timeout=1)
     ssh.before.decode('utf-8').strip()
+
+    # Real ghetto to put here but just want it to run after the hp has spun up
+    global last_checked
+    last_checked = datetime.datetime.now(datetime.UTC).isoformat()
+
     return ssh
 
 def response(model_host, model_name, messages, tools):
     if model_host == 'openai':
         return response_openai(messages, tools, model=model_name)
     elif model_host == 'ollama':
+        return response_openai(messages, tools, model=model_name, model_host=model_host)
         return response_ollama(messages, tools, model=model_name)
     else:
         raise ValueError(f"Unsupported model host: {model_host}")
 
-def response_openai(messages: list, tools, model: str = 'gpt-4o-mini'):
+def response_openai(messages: list, tools, model: str = 'gpt-4o-mini', model_host: str = 'openai'):
     response = openai_client.chat.completions.create(
         model=model,
         messages=messages,
@@ -74,6 +85,7 @@ def response_openai(messages: list, tools, model: str = 'gpt-4o-mini'):
 
 # %%
 def response_ollama(messages: list, tools, model: str):
+    print(f"Using model: {model}")
     responde_to_user_tool = {
         "name": "respond_to_user",
         "description": "Responds to the user with a message.",
@@ -91,12 +103,13 @@ def response_ollama(messages: list, tools, model: str):
 
     tools.append(responde_to_user_tool)
 
+    print("running ollama.chat")
     resp = ollama.chat(
         model=model,
         messages=messages,
-        tools=tools,
         stream=False
     )
+    print(resp)
 
     # create response object of message
     content = resp.message.content if resp.message.content else None
@@ -181,7 +194,7 @@ def response_ollama_workaround(messages, model="llama2"):
     )
 
 # %%
-last_checked = datetime.datetime.utcnow().isoformat()
+last_checked = datetime.datetime.now(datetime.UTC).isoformat()
 def get_new_hp_logs():
     """
     Fetch new logs from the Beelzebub container since the last check.
@@ -196,7 +209,7 @@ def get_new_hp_logs():
         text=True,
         bufsize=1
     )
-    last_checked = datetime.datetime.utcnow().isoformat()
+    last_checked = datetime.datetime.now(datetime.UTC).isoformat()
 
     log_output = process.stdout.read().strip()
     if log_output:

@@ -1,8 +1,12 @@
 # %%
-import json
+import sys
 import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
+import json
 from Red.model import DataLogObject, LabledCommandObject
 from sentence_transformers import SentenceTransformer, util
+
+log_path = 'logs/full_logs/2025-06-24T15:05:54/hp_config_1/attack_1.json'
 
 def word_similarity(model, query, embeded_canidates):
     """
@@ -26,7 +30,7 @@ def word_similarity(model, query, embeded_canidates):
     
     return most_similar_index
 
-def extract_honeypot_commands(full_logs, session_id):
+def extract_honeypot_commands(full_logs):
     """
     Extract commands from honeypot logs and associate them with MITRE ATT&CK tactics and techniques.
     This function processes the beelzebub_response entries to find actual commands executed on the honeypot.
@@ -58,16 +62,18 @@ def extract_honeypot_commands(full_logs, session_id):
             if not log_dict.get('beelzebub_response'):
                 continue
             
-            # Get MITRE information from the log entry
-            mitre_info = log_dict.get('mitre_attack_method', {})
-            if isinstance(mitre_info, dict):
-                tactic = mitre_info.get('tactic_used')
-                tactic_index = word_similarity(model, tactic, canidates_embedded) if tactic else "Other"
-                tactic = avilable_mitre_tactics[tactic_index] if isinstance(tactic_index, int) else "Other"
-                technique = mitre_info.get('technique_used')
-            else:
-                tactic = getattr(mitre_info, 'tactic_used', None)
-                technique = getattr(mitre_info, 'technique_used', None)
+            llm_response = log_dict.get('llm_response', {})
+            if not llm_response or not isinstance(llm_response, dict):
+                continue
+            llm_response_arguments = llm_response.get('arguments', {})
+            if not llm_response_arguments or not isinstance(llm_response_arguments, dict):
+                continue
+
+            tactic = llm_response_arguments.get('tactic_used', None)
+            tactic_index = word_similarity(model, tactic, canidates_embedded) if tactic else "Other"
+            tactic = avilable_mitre_tactics[tactic_index] if isinstance(tactic_index, int) else "Other"
+
+            technique = llm_response_arguments.get('technique_used', None)
             
             # Process each beelzebub response, Claud created this
             for response in log_dict['beelzebub_response']:
@@ -134,15 +140,15 @@ def extract_honeypot_commands(full_logs, session_id):
                     labeled_command.user = event.get('User', '')
                     labeled_command.event_id = event.get('ID', '')
 
-                command = event.get('Command', '').strip()
-                command = command.replace('\r\n', '\\n').replace('\r', '\\r').replace('\n', '\\n')                    
-                labeled_command.command = event.get('Command', '') # can be removed to put together full commands
-                labeled_commands.append(labeled_command)
+                    command = event.get('Command', '').strip()
+                    command = command.replace('\r\n', '\\n').replace('\r', '\\r').replace('\n', '\\n')                    
+                    labeled_command.command = event.get('Command', '') # can be removed to put together full commands
+                    labeled_commands.append(labeled_command)
     
     return labeled_commands
 
 
-def save_honeypot_labels(labeled_commands, session_id):
+def save_honeypot_labels(labeled_commands):
     """
     Save the labeled commands to a JSON file.
     """
@@ -171,7 +177,7 @@ def save_honeypot_labels(labeled_commands, session_id):
         
         commands_data.append(cmd_dict)
     
-    output_file = f'logs/labels/labels_{session_id}.json'
+    output_file = f'{log_path}_labels.json'
     
     with open(output_file, 'w') as f:
         json.dump(commands_data, f, indent=4)
@@ -187,14 +193,13 @@ def process_test_logs():
     Process the test logs and create labeled commands.
     """
     try:
-        with open('logs/full_logs/full_logs_test.json', 'r') as f:
+        with open(log_path, 'r') as f:
             full_logs = json.load(f)
         
         # Extract commands
-        labeled_commands = extract_honeypot_commands(full_logs, 'test')
-        
+        labeled_commands = extract_honeypot_commands(full_logs)
         # Save to file
-        output_file = save_honeypot_labels(labeled_commands, 'test')
+        output_file = save_honeypot_labels(labeled_commands)
         
         # Print summary
         print("\n=== COMMAND EXTRACTION SUMMARY ===")
@@ -225,7 +230,7 @@ def process_test_logs():
         return labeled_commands, output_file
         
     except FileNotFoundError:
-        print("Error: logs/full_logs/full_logs_test.json not found")
+        print(f"Error: {log_path} not found")
         return [], None
     except Exception as e:
         print(f"Error processing logs: {e}")

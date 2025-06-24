@@ -17,7 +17,7 @@ class LLMModel(str, Enum):
     GPT_4_1_MINI = "gpt-4.1-mini"
     O4_MINI = "o4-mini"
     OLLAMA_LLAMA32_3b = "llama3.2:3b"
-    OLLAMA_DEEPSEEK_R1_1b = "deepseek-r1:1.5b"
+    OLLAMA_DEEPSEEK_R1_5b = "deepseek-r1:1.5b"
 
 class LLMConfig:
     """Configuration for the LLM host and model."""
@@ -62,20 +62,18 @@ class MitreMethodUsed():
 
 class DataLogObject():
     """Object to hold the data log for each iteration of the attack."""
-    def __init__(self, itteration):
-        self.itteration = itteration
+    def __init__(self, iteration):
+        self.iteration = iteration
         self.attack_success = False
         self.llm_response = None
         self.tool_response = None
-        self.mitre_attack_method = MitreMethodUsed()
         self.beelzebub_response = []
     
     def to_dict(self):
         return {
-            'itteration': self.itteration,
+            'iteration': self.iteration,
             'llm_response': self.llm_response.to_dict() if self.llm_response else None,
             'tool_response': self.tool_response,
-            'mitre_attack_method': self.mitre_attack_method.to_dict() if self.mitre_attack_method else None,
             'beelzebub_response': self.beelzebub_response
         }
 

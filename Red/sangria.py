@@ -12,7 +12,8 @@ import config
 from Red.defender_llm import run_command
 from Red.tools import handle_tool_call
 from Red.model import MitreMethodUsed, DataLogObject
-from langfuse_sdk import Langfuse
+from config import max_session_length
+from Blue_Lagoon.honeypot_tools import start_dockers, stop_dockers
 
 import os
 
@@ -21,9 +22,9 @@ import os
 tools = sangria_config.tools
 messages = sangria_config.messages
 mitre_method_used_list = []
-max_itterations = 50
+max_itterations = 5
 
-def run_single_attack(max_itterations, save_logs, messages):
+def run_single_attack(save_logs, messages):
     '''
         Main loop for running a single attack session.
         This function will let the LLM respond to the user, call tools, and log the responses.
@@ -41,13 +42,12 @@ def run_single_attack(max_itterations, save_logs, messages):
 
     full_logs = []
     
-    for i in range(max_itterations):
-        n_itterations = i
-        print(f'Iteration {i+1} / {max_itterations}')
+    for i in range(max_session_length):
+        print(f'Iteration {i+1} / {max_session_length}')
 
         data_log = DataLogObject(i)
 
-        # get response from OpenAI
+        # get response from LLM
         assistant_response = response(sangria_config.model_host, config.llm_model_sangria, messages, tools)
 
         total_prompt_tokens += assistant_response.prompt_tokens - assistant_response.cached_tokens 
@@ -73,7 +73,7 @@ def run_single_attack(max_itterations, save_logs, messages):
             messages.append(tool_response)
             
             data_log.tool_response = tool_response['content']
-            data_log.mitre_attack_method = mitre_method_used
+            # data_log.mitre_attack_method = mitre_method_used
 
             if tool_response['name'] == "terminate":
                 print(f"The attack was {'successfull' if tool_response['content'] else 'unsucsessfull'} after {i + 1} iterations.")
@@ -113,7 +113,7 @@ def run_single_attack(max_itterations, save_logs, messages):
 
     return full_logs, tokens_used
 
-def run_attacks(n_attacks, save_logs, config_id):
+def run_attacks(n_attacks, save_logs, log_path):
     '''
         Run multiple attack sessions.
         Each session will run a attack and log the responses.
@@ -122,15 +122,17 @@ def run_attacks(n_attacks, save_logs, config_id):
     tokens_used_list = []
 
     for i in range(n_attacks):
+        
         messages = sangria_config.messages.copy()  # Reset messages for each attack
-
+        start_dockers()
         print(f"Running attack session {i + 1} / {n_attacks}")
-        logs, tokens_used = run_single_attack(max_itterations, save_logs, messages)
+        logs, tokens_used = run_single_attack(save_logs, messages)
         all_logs.append(logs)
         tokens_used_list.append(tokens_used)
 
-        append_logs_to_file(logs, config_id, save_logs)
-        save_tokens_used_to_file(tokens_used, config_id, save_logs)
+        append_logs_to_file(logs, log_path + f"attack_{i+1}", save_logs)
+        save_tokens_used_to_file(tokens_used, log_path + f"tokens_used_{i+1}", save_logs)
+        stop_dockers()
 
     return all_logs
 
@@ -147,11 +149,7 @@ def save_tokens_used_to_file(tokens_used_list, session_id, save_logs=True):
     
     print(f"Saving tokens used to file for session {session_id}...")
     
-    # Create the logs directory if it doesn't exist
-    os.makedirs('logs', exist_ok=True)
-    os.makedirs('logs/tokens_used', exist_ok=True)
-    
-    path = f'logs/tokens_used/tokens_used_{session_id}.json'
+    path = f'{session_id}.json'
     
     # Load existing data if the file exists
     if os.path.exists(path):
@@ -185,7 +183,7 @@ def append_logs_to_file(logs, session_id, save_logs=True):
     os.makedirs('logs', exist_ok=True)
     os.makedirs('logs/full_logs', exist_ok=True)
     
-    path = f'logs/full_logs/full_logs_{session_id}.json'
+    path = f'{session_id}.json'
     
     # Load existing data if the file exists
     if os.path.exists(path):

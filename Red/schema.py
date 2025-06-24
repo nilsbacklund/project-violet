@@ -1,6 +1,6 @@
 # %%
 
-import ollama
+#import ollama
 import requests
 import openai
 import os

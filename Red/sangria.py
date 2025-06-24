@@ -47,7 +47,7 @@ def run_single_attack(save_logs, messages):
 
         data_log = DataLogObject(i)
 
-        # get response from OpenAI
+        # get response from LLM
         assistant_response = response(sangria_config.model_host, config.llm_model_sangria, messages, tools)
 
         total_prompt_tokens += assistant_response.prompt_tokens - assistant_response.cached_tokens 

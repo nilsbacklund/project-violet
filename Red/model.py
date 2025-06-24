@@ -17,7 +17,7 @@ class LLMModel(str, Enum):
     GPT_4_1_MINI = "gpt-4.1-mini"
     O4_MINI = "o4-mini"
     OLLAMA_LLAMA32_3b = "llama3.2:3b"
-    OLLAMA_DEEPSEEK_R1_1b = "deepseek-r1:1.5b"
+    OLLAMA_DEEPSEEK_R1_5b = "deepseek-r1:1.5b"
 
 class LLMConfig:
     """Configuration for the LLM host and model."""

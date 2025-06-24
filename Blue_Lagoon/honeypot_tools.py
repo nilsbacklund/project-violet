@@ -1,20 +1,24 @@
 import subprocess
+from config import honeypot
+
+def init_docker():
+    subprocess.run(["sudo", "docker", "stop", "kali3"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run(["sudo", "docker", "rm", "kali3"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run(["sudo", "docker", "stop", "cow"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run(["sudo", "docker", "rm", "cow"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run(["sudo", "docker", "stop", "blue_lagoon"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run(["sudo", "docker", "rm", "blue_lagoon"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run(["sudo", "docker", "network", "rm", "blue_lagoon_innet"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
 
 def start_dockers():
-    try:
-        print("Starting Docker containers...")
-        subprocess.run(["sudo", "docker-compose","-f", "Blue_Lagoon/docker-compose.yml", "build"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        subprocess.run(["sudo", "docker-compose", "-f", "Blue_Lagoon/docker-compose.yml","up", "-d"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    print("Starting Docker containers...")
+    subprocess.run(["sudo", "docker-compose","-f", f"Blue_Lagoon/docker-compose-{honeypot}.yml", "build"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run(["sudo", "docker-compose", "-f", f"Blue_Lagoon/docker-compose-{honeypot}.yml","up", "-d"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    print("Docker containers started")
 
-        print("Docker containers started")
-    except subprocess.CalledProcessError as e:
-        print(f"An error occurred in starting docker containers: {e}")
 
 def stop_dockers():
-    try:
-        print("Stopping Docker containers...")
-        subprocess.run(["sudo", "docker-compose", "-f", "Blue_Lagoon/docker-compose.yml","down"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-
-        print("Docker containers stopped")
-    except subprocess.CalledProcessError as e:
-        print(f"An error occurred in stopping docker containers: {e}")
+    print("Stopping Docker containers...")
+    subprocess.run(["sudo", "docker-compose", "-f", f"Blue_Lagoon/docker-compose-{honeypot}.yml","down"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    print("Docker containers stopped")

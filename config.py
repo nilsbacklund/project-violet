@@ -7,9 +7,8 @@ simulate_command_line = False
 save_logs = True
 save_configuration = True
 print_output = True
-
-
 attacks_per_configuration = 25
 n_configurations = 1
+honeypot = "beelzebub" # beelzebub / cowrie
 
 # %%

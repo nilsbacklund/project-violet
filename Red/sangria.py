@@ -14,6 +14,7 @@ from Red.tools import handle_tool_call
 from Red.model import MitreMethodUsed, DataLogObject
 from langfuse_sdk import Langfuse
 from config import max_session_length
+from Blue_Lagoon.honeypot_tools import start_dockers, stop_dockers
 
 import os
 
@@ -112,7 +113,7 @@ def run_single_attack(save_logs, messages):
 
     return full_logs, tokens_used
 
-def run_attacks(n_attacks, save_logs, config_id):
+def run_attacks(n_attacks, save_logs, log_path):
     '''
         Run multiple attack sessions.
         Each session will run a attack and log the responses.
@@ -121,15 +122,17 @@ def run_attacks(n_attacks, save_logs, config_id):
     tokens_used_list = []
 
     for i in range(n_attacks):
+        
         messages = sangria_config.messages.copy()  # Reset messages for each attack
-
+        start_dockers()
         print(f"Running attack session {i + 1} / {n_attacks}")
         logs, tokens_used = run_single_attack(save_logs, messages)
         all_logs.append(logs)
         tokens_used_list.append(tokens_used)
 
-        append_logs_to_file(logs, config_id, save_logs)
-        save_tokens_used_to_file(tokens_used, config_id, save_logs)
+        append_logs_to_file(logs, log_path + f"attack_{i+1}", save_logs)
+        save_tokens_used_to_file(tokens_used, log_path + f"tokens_used_{i+1}", save_logs)
+        stop_dockers()
 
     return all_logs
 
@@ -146,11 +149,7 @@ def save_tokens_used_to_file(tokens_used_list, session_id, save_logs=True):
     
     print(f"Saving tokens used to file for session {session_id}...")
     
-    # Create the logs directory if it doesn't exist
-    os.makedirs('logs', exist_ok=True)
-    os.makedirs('logs/tokens_used', exist_ok=True)
-    
-    path = f'logs/tokens_used/tokens_used_{session_id}.json'
+    path = f'{session_id}.json'
     
     # Load existing data if the file exists
     if os.path.exists(path):
@@ -184,7 +183,7 @@ def append_logs_to_file(logs, session_id, save_logs=True):
     os.makedirs('logs', exist_ok=True)
     os.makedirs('logs/full_logs', exist_ok=True)
     
-    path = f'logs/full_logs/full_logs_{session_id}.json'
+    path = f'{session_id}.json'
     
     # Load existing data if the file exists
     if os.path.exists(path):

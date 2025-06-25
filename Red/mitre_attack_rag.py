@@ -50,10 +50,9 @@ class MitreAttackRAG:
         self.model_name = "BAAI/bge-m3"
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         
-        # Setup paths and initialize model
+        # Setup paths
         Path(self.rag_data_dir).mkdir(parents=True, exist_ok=True)
         self._setup_embedding_paths()
-        self._initialize_model()
         
         # Data storage
         self.tactics: List[MitreEntry] = []
@@ -61,8 +60,12 @@ class MitreAttackRAG:
         self.tactic_embeddings: Optional[np.ndarray] = None
         self.technique_embeddings: Optional[np.ndarray] = None
         
-        # Load or create embeddings
-        self._load_or_create_embeddings()
+        # Model components (initialized only when needed)
+        self.tokenizer = None
+        self.model = None
+        
+        # Early check and load embeddings (model initialized only if needed)
+        self._smart_load_embeddings()
     
     def _setup_embedding_paths(self):
         """Setup file paths for cached embeddings"""
@@ -72,11 +75,18 @@ class MitreAttackRAG:
         self.techniques_data_path = os.path.join(self.rag_data_dir, "enterprise_techniques_data.pkl")
     
     def _initialize_model(self):
-        """Initialize the transformer model for embeddings"""
-        print(f"Initializing {self.model_name} on {self.device}...")
-        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
-        self.model = AutoModel.from_pretrained(self.model_name).to(self.device)
-        self.model.eval()
+        """Initialize the transformer model for embeddings (only when needed)"""
+        if self.tokenizer is None or self.model is None:
+            print(f"🔄 Initializing {self.model_name} on {self.device}...")
+            self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
+            self.model = AutoModel.from_pretrained(self.model_name).to(self.device)
+            self.model.eval()
+            print("✅ Model initialized successfully!")
+    
+    def _ensure_model_loaded(self):
+        """Ensure model is loaded before using it"""
+        if self.tokenizer is None or self.model is None:
+            self._initialize_model()
     
     def _average_pool(self, last_hidden_states, attention_mask):
         """Pool transformer output to single vector per document using average pooling"""
@@ -87,6 +97,9 @@ class MitreAttackRAG:
         """Create embeddings for a list of texts using batched processing"""
         if not texts:
             return np.array([])
+        
+        # Ensure model is loaded before creating embeddings
+        self._ensure_model_loaded()
         
         all_embeddings = []
         total_batches = (len(texts) + batch_size - 1) // batch_size
@@ -251,28 +264,33 @@ class MitreAttackRAG:
         mitre_lower = mitre_name.lower()
         return llm_lower in mitre_lower or mitre_lower in llm_lower
     
-    # Cache management
-    def _load_or_create_embeddings(self):
-        """Load embeddings from cache or create new ones if needed"""
-        if self._should_use_cached_embeddings():
-            print("Loading enterprise attack embeddings from cache...")
-            self._load_embeddings_from_files()
+    # Smart cache management with early check
+    def _smart_load_embeddings(self):
+        """Smart loading: check cache first, only initialize model if needed"""
+        if self._has_valid_cache():
+            print("✅ Found valid cached embeddings - loading instantly (no model needed)!")
+            self._load_from_cache()
         else:
-            print("Creating new enterprise attack embeddings...")
+            print("❌ No valid cache found")
+            print("⚠️  Need to create embeddings - this will take several minutes...")
+            print("🔄 Initializing model and processing MITRE data...")
+            self._initialize_model()
             self._load_mitre_data()
             self._create_embeddings()
-            self._save_embeddings_to_files()
+            self._save_to_cache()
     
-    def _should_use_cached_embeddings(self) -> bool:
-        """Check if we should use cached embeddings or create new ones"""
+    def _has_valid_cache(self) -> bool:
+        """Check if valid cached embeddings exist"""
         required_files = [
             self.tactic_embeddings_path, self.technique_embeddings_path,
             self.tactics_data_path, self.techniques_data_path
         ]
         
+        # Check if all cache files exist
         if not all(os.path.exists(f) for f in required_files):
             return False
         
+        # Check if source file is newer than cache
         if os.path.exists(self.enterprise_attack_path):
             source_mtime = os.path.getmtime(self.enterprise_attack_path)
             cache_mtime = min(os.path.getmtime(f) for f in required_files)
@@ -280,20 +298,8 @@ class MitreAttackRAG:
         
         return True
     
-    def _save_embeddings_to_files(self):
-        """Save all embeddings and data to cache files"""
-        print("Saving embeddings to cache...")
-        with open(self.tactics_data_path, 'wb') as f:
-            pickle.dump(self.tactics, f)
-        with open(self.tactic_embeddings_path, 'wb') as f:
-            pickle.dump(self.tactic_embeddings, f)
-        with open(self.techniques_data_path, 'wb') as f:
-            pickle.dump(self.techniques, f)
-        with open(self.technique_embeddings_path, 'wb') as f:
-            pickle.dump(self.technique_embeddings, f)
-    
-    def _load_embeddings_from_files(self):
-        """Load all embeddings and data from cache files"""
+    def _load_from_cache(self):
+        """Load embeddings and data from cache files"""
         with open(self.tactics_data_path, 'rb') as f:
             self.tactics = pickle.load(f)
         with open(self.tactic_embeddings_path, 'rb') as f:
@@ -302,24 +308,46 @@ class MitreAttackRAG:
             self.techniques = pickle.load(f)
         with open(self.technique_embeddings_path, 'rb') as f:
             self.technique_embeddings = pickle.load(f)
-        print(f"Loaded from cache: {len(self.tactics)} tactics, {len(self.techniques)} techniques")
+        print(f"📊 Loaded: {len(self.tactics)} tactics, {len(self.techniques)} techniques")
+    
+    def _save_to_cache(self):
+        """Save embeddings and data to cache files"""
+        print("💾 Saving embeddings to cache...")
+        with open(self.tactics_data_path, 'wb') as f:
+            pickle.dump(self.tactics, f)
+        with open(self.tactic_embeddings_path, 'wb') as f:
+            pickle.dump(self.tactic_embeddings, f)
+        with open(self.techniques_data_path, 'wb') as f:
+            pickle.dump(self.techniques, f)
+        with open(self.technique_embeddings_path, 'wb') as f:
+            pickle.dump(self.technique_embeddings, f)
+        print("✅ Cache saved successfully!")
     
     # Utility functions
     def create_test_embeddings(self, max_tactics: int = 5, max_techniques: int = 20):
         """Create embeddings with a small subset for testing"""
-        print("Creating TEST embeddings (small subset)...")
+        print("🧪 Creating TEST embeddings (small subset)...")
+        
+        # Ensure model is loaded for test embedding creation
+        self._ensure_model_loaded()
+        
+        # Clear existing data and create subset
         self.tactics = []
         self.techniques = []
         self._load_mitre_data(max_tactics, max_techniques)
         self._create_embeddings()
-        print(f"Test embeddings created: {len(self.tactics)} tactics, {len(self.techniques)} techniques")
+        print(f"✅ Test embeddings ready: {len(self.tactics)} tactics, {len(self.techniques)} techniques")
     
     def clear_enterprise_embeddings(self):
         """Clear all cached embedding files"""
         files = [self.tactic_embeddings_path, self.technique_embeddings_path, 
                 self.tactics_data_path, self.techniques_data_path]
-        removed = sum(1 for f in files if os.path.exists(f) and not os.remove(f))
-        print(f"Cleared {removed} embedding files" if removed else "No embedding files found")
+        removed_count = 0
+        for f in files:
+            if os.path.exists(f):
+                os.remove(f)
+                removed_count += 1
+        print(f"🗑️  Cleared {removed_count} cache files" if removed_count else "No cache files found")
     
     def get_technique_by_id(self, external_id: str) -> Optional[MitreEntry]:
         """Get technique by external ID (e.g., T1055.011)"""

@@ -50,10 +50,9 @@ class MitreAttackRAG:
         self.model_name = "BAAI/bge-m3"
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         
-        # Setup paths and initialize model
+        # Setup paths
         Path(self.rag_data_dir).mkdir(parents=True, exist_ok=True)
         self._setup_embedding_paths()
-        self._initialize_model()
         
         # Data storage
         self.tactics: List[MitreEntry] = []
@@ -61,8 +60,12 @@ class MitreAttackRAG:
         self.tactic_embeddings: Optional[np.ndarray] = None
         self.technique_embeddings: Optional[np.ndarray] = None
         
-        # Load or create embeddings
-        self._load_or_create_embeddings()
+        # Model components (initialized only when needed)
+        self.tokenizer = None
+        self.model = None
+        
+        # Early check and load embeddings (model initialized only if needed)
+        self._smart_load_embeddings()
     
     def _setup_embedding_paths(self):
         """Setup file paths for cached embeddings"""
@@ -72,11 +75,18 @@ class MitreAttackRAG:
         self.techniques_data_path = os.path.join(self.rag_data_dir, "enterprise_techniques_data.pkl")
     
     def _initialize_model(self):
-        """Initialize the transformer model for embeddings"""
-        print(f"Initializing {self.model_name} on {self.device}...")
-        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
-        self.model = AutoModel.from_pretrained(self.model_name).to(self.device)
-        self.model.eval()
+        """Initialize the transformer model for embeddings (only when needed)"""
+        if self.tokenizer is None or self.model is None:
+            print(f"Initializing {self.model_name} on {self.device}...")
+            self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
+            self.model = AutoModel.from_pretrained(self.model_name).to(self.device)
+            self.model.eval()
+            print("Model initialized successfully!")
+    
+    def _ensure_model_loaded(self):
+        """Ensure model is loaded before using it"""
+        if self.tokenizer is None or self.model is None:
+            self._initialize_model()
     
     def _average_pool(self, last_hidden_states, attention_mask):
         """Pool transformer output to single vector per document using average pooling"""
@@ -88,9 +98,12 @@ class MitreAttackRAG:
         if not texts:
             return np.array([])
         
+        # Ensure model is loaded before creating embeddings
+        self._ensure_model_loaded()
+        
         all_embeddings = []
         total_batches = (len(texts) + batch_size - 1) // batch_size
-        print(f"Creating embeddings for {len(texts)} texts in {total_batches} batches...")
+        #print(f"Creating embeddings for {len(texts)} texts in {total_batches} batches...")
         
         for i in range(0, len(texts), batch_size):
             batch_texts = texts[i:i+batch_size]
@@ -108,7 +121,7 @@ class MitreAttackRAG:
             all_embeddings.append(embeddings.cpu().numpy())
         
         result = np.vstack(all_embeddings) if all_embeddings else np.array([])
-        print(f"Completed embedding creation: {result.shape}")
+        # print(f"Completed embedding creation: {result.shape}")
         return result
     
     def _load_mitre_data(self, max_tactics: int = None, max_techniques: int = None):
@@ -251,28 +264,33 @@ class MitreAttackRAG:
         mitre_lower = mitre_name.lower()
         return llm_lower in mitre_lower or mitre_lower in llm_lower
     
-    # Cache management
-    def _load_or_create_embeddings(self):
-        """Load embeddings from cache or create new ones if needed"""
-        if self._should_use_cached_embeddings():
-            print("Loading enterprise attack embeddings from cache...")
-            self._load_embeddings_from_files()
+    # Smart cache management with early check
+    def _smart_load_embeddings(self):
+        """Smart loading: check cache first, only initialize model if needed"""
+        if self._has_valid_cache():
+            print("Found valid cached embeddings - loading instantly (no model needed)!")
+            self._load_from_cache()
         else:
-            print("Creating new enterprise attack embeddings...")
+            print("No valid cache found")
+            print("Need to create embeddings...")
+            print("Initializing model and processing MITRE data...")
+            self._initialize_model()
             self._load_mitre_data()
             self._create_embeddings()
-            self._save_embeddings_to_files()
+            self._save_to_cache()
     
-    def _should_use_cached_embeddings(self) -> bool:
-        """Check if we should use cached embeddings or create new ones"""
+    def _has_valid_cache(self) -> bool:
+        """Check if valid cached embeddings exist"""
         required_files = [
             self.tactic_embeddings_path, self.technique_embeddings_path,
             self.tactics_data_path, self.techniques_data_path
         ]
         
+        # Check if all cache files exist
         if not all(os.path.exists(f) for f in required_files):
             return False
         
+        # Check if source file is newer than cache
         if os.path.exists(self.enterprise_attack_path):
             source_mtime = os.path.getmtime(self.enterprise_attack_path)
             cache_mtime = min(os.path.getmtime(f) for f in required_files)
@@ -280,8 +298,20 @@ class MitreAttackRAG:
         
         return True
     
-    def _save_embeddings_to_files(self):
-        """Save all embeddings and data to cache files"""
+    def _load_from_cache(self):
+        """Load embeddings and data from cache files"""
+        with open(self.tactics_data_path, 'rb') as f:
+            self.tactics = pickle.load(f)
+        with open(self.tactic_embeddings_path, 'rb') as f:
+            self.tactic_embeddings = pickle.load(f)
+        with open(self.techniques_data_path, 'rb') as f:
+            self.techniques = pickle.load(f)
+        with open(self.technique_embeddings_path, 'rb') as f:
+            self.technique_embeddings = pickle.load(f)
+        print(f"Loaded: {len(self.tactics)} tactics, {len(self.techniques)} techniques")
+    
+    def _save_to_cache(self):
+        """Save embeddings and data to cache files"""
         print("Saving embeddings to cache...")
         with open(self.tactics_data_path, 'wb') as f:
             pickle.dump(self.tactics, f)
@@ -291,46 +321,13 @@ class MitreAttackRAG:
             pickle.dump(self.techniques, f)
         with open(self.technique_embeddings_path, 'wb') as f:
             pickle.dump(self.technique_embeddings, f)
-    
-    def _load_embeddings_from_files(self):
-        """Load all embeddings and data from cache files"""
-        with open(self.tactics_data_path, 'rb') as f:
-            self.tactics = pickle.load(f)
-        with open(self.tactic_embeddings_path, 'rb') as f:
-            self.tactic_embeddings = pickle.load(f)
-        with open(self.techniques_data_path, 'rb') as f:
-            self.techniques = pickle.load(f)
-        with open(self.technique_embeddings_path, 'rb') as f:
-            self.technique_embeddings = pickle.load(f)
-        print(f"Loaded from cache: {len(self.tactics)} tactics, {len(self.techniques)} techniques")
-    
-    # Utility functions
-    def create_test_embeddings(self, max_tactics: int = 5, max_techniques: int = 20):
-        """Create embeddings with a small subset for testing"""
-        print("Creating TEST embeddings (small subset)...")
-        self.tactics = []
-        self.techniques = []
-        self._load_mitre_data(max_tactics, max_techniques)
-        self._create_embeddings()
-        print(f"Test embeddings created: {len(self.tactics)} tactics, {len(self.techniques)} techniques")
-    
-    def clear_enterprise_embeddings(self):
-        """Clear all cached embedding files"""
-        files = [self.tactic_embeddings_path, self.technique_embeddings_path, 
-                self.tactics_data_path, self.techniques_data_path]
-        removed = sum(1 for f in files if os.path.exists(f) and not os.remove(f))
-        print(f"Cleared {removed} embedding files" if removed else "No embedding files found")
-    
-    def get_technique_by_id(self, external_id: str) -> Optional[MitreEntry]:
-        """Get technique by external ID (e.g., T1055.011)"""
-        return next((t for t in self.techniques if t.external_id == external_id), None)
+        print("Cache saved successfully!")
 
 
 # Convenience functions
 def create_mitre_rag() -> MitreAttackRAG:
     """Create and return a MitreAttackRAG instance"""
     return MitreAttackRAG()
-
 
 def parse_log_file_for_rag_analysis(log_file_path: str, session_index: int = 0) -> List[Dict]:
     """Parse log file to extract LLM thinking process and MITRE labels for RAG analysis"""
@@ -369,27 +366,58 @@ def parse_log_file_for_rag_analysis(log_file_path: str, session_index: int = 0) 
         print(f"Error parsing log file: {e}")
         return []
 
-
 def _extract_thinking_process(iteration: Dict) -> Optional[str]:
-    """Extract thinking process from an iteration's LLM response"""
-    if (iteration.get('llm_response') and iteration['llm_response'].get('message')):
-        return iteration['llm_response']['message']
-    return None
-
+    """Extract thinking process from an iteration's LLM response message"""
+    try:
+        llm_response = iteration.get('llm_response', {})
+        message = llm_response.get('message')
+        
+        if message and isinstance(message, str) and len(message.strip()) > 0:
+            return message.strip()
+        
+        return None
+    except Exception as e:
+        print(f"Error extracting thinking process: {e}")
+        return None
 
 def _extract_mitre_labels(iteration: Dict) -> Tuple[Optional[str], Optional[str]]:
-    """Extract tactic and technique labels from an iteration's MITRE attack method"""
-    mitre_method = iteration.get('mitre_attack_method', {})
-    
-    tactic = mitre_method.get('tactic_used')
-    technique_raw = mitre_method.get('technique_used')
-    
-    # Clean up technique formatting
-    technique = None
-    if technique_raw:
-        technique = technique_raw.split(':', 1)[1].strip() if ':' in technique_raw else technique_raw
-    
-    return tactic, technique
+    """Extract tactic and technique labels from an iteration's LLM response arguments"""
+    try:
+        if not iteration:
+            return None, None
+            
+        llm_response = iteration.get('llm_response', {})
+        arguments = llm_response.get('arguments', {})
+        
+        if not arguments:
+            return None, None
+        
+        tactic_raw = arguments.get('tactic_used')
+        technique_raw = arguments.get('technique_used')
+        
+        # Clean up tactic (remove TA code prefix)
+        tactic = None
+        if tactic_raw:
+            tactic_str = str(tactic_raw).strip()
+            if ':' in tactic_str:
+                tactic = tactic_str.split(':', 1)[1].strip()  # Take part after ':'
+            else:
+                tactic = tactic_str
+        
+        # Clean up technique (remove T code prefix and sub-technique)
+        technique = None
+        if technique_raw:
+            technique_str = str(technique_raw).strip()
+            if ':' in technique_str:
+                technique = technique_str.split(':', 1)[1].strip()  # Take part after ':'
+            else:
+                technique = technique_str
+        
+        return tactic, technique
+        
+    except Exception as e:
+        print(f" Error extracting MITRE labels: {e}")
+        return None, None
 
 def analyze_log_session_with_rag(log_file_path: str, session_index: int = 0, 
                                 rag_system: Optional['MitreAttackRAG'] = None) -> Dict:
@@ -461,143 +489,75 @@ def analyze_log_session_with_rag(log_file_path: str, session_index: int = 0,
     return analysis_results
 
 
-def print_rag_analysis_summary(analysis_results: Dict):
-    """Print a formatted summary of RAG analysis results"""
-    if 'error' in analysis_results:
-        print(f"Error: {analysis_results['error']}")
-        return
+def analyze_session_and_save(session_id: int = 0, 
+                           log_file_name: str = "attack_1.json",
+                           experiment_path: str = None,
+                           config_name: str = "hp_config_1") -> str:
+    """
+    Simple function to analyze a session and save results
     
-    summary = analysis_results['summary']
-    total = analysis_results['total_entries']
+    Args:
+        session_id: Session index to analyze (default: 0)
+        log_file_name: Name of the log file (default: "attack_1.json") 
+        experiment_path: Experiment directory name (auto-detects latest if None)
+        config_name: Config subfolder name (default: "hp_config_1")
     
-    print(f"\n{'='*60}")
-    print(f"RAG ANALYSIS SUMMARY - Session {analysis_results['session_index']}")
-    print(f"{'='*60}")
-    print(f"Total entries: {total}")
-    print(f"Tactic matches: {summary['tactic_matches']}/{total} ({summary['tactic_matches']/total*100:.1f}%)")
-    print(f"Technique matches: {summary['technique_matches']}/{total} ({summary['technique_matches']/total*100:.1f}%)")
-    print(f"High confidence tactics (>0.8): {summary['high_confidence_tactics']}/{total}")
-    print(f"High confidence techniques (>0.8): {summary['high_confidence_techniques']}/{total}")
-    print(f"Average tactic confidence: {summary['avg_tactic_confidence']:.3f}")
-    print(f"Average technique confidence: {summary['avg_technique_confidence']:.3f}")
-    
-    print(f"\nDETAILED RESULTS:")
-    for entry in analysis_results['entries']:
-        rag = entry['rag_validation']
-        tactic_status = "✅" if rag['tactic_match'] else "❌"
-        technique_status = "✅" if rag['technique_match'] else "❌"
-        
-        print(f"\nIteration {entry['iteration_pair']}:")
-        print(f"  LLM: {entry['llm_labels']['tactic']} / {entry['llm_labels']['technique']}")
-        print(f"  Tactic {tactic_status}: {rag['tactic_confidence']:.3f}")
-        print(f"  Technique {technique_status}: {rag['technique_confidence']:.3f}")
-        if not rag['tactic_match'] and rag['recommended_tactic']:
-            print(f"    RAG suggests tactic: {rag['recommended_tactic']}")
-        if not rag['technique_match'] and rag['recommended_technique']:
-            print(f"    RAG suggests technique: {rag['recommended_technique']}")
-
-
-def analyze_session_and_save(session_id: int, log_file_name: str = "attack_1.json") -> str:
-    """Main function to analyze a specific session and save results"""
-    print(f"=== MITRE ATT&CK RAG Analysis for Session {session_id} ===\n")
-    
-    # Setup paths
+    Returns:
+        Path to the saved analysis file
+    """
+    # Auto-detect paths relative to script location
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(script_dir)
-    log_file_path = os.path.join(project_root, "logs", "full_logs", "2025-06-24T13:37:01","hp_config_1", log_file_name)
-    analysis_dir = os.path.join(project_root, "logs", "label_analysis")
-    os.makedirs(analysis_dir, exist_ok=True)
+    logs_base = os.path.join(project_root, "logs", "full_logs")
     
-    # Validate inputs
-    if not os.path.exists(log_file_path):
-        raise FileNotFoundError(f"Log file not found: {log_file_path}")
+    # Auto-detect latest experiment if not specified
+    if experiment_path is None:
+        experiments = [d for d in os.listdir(logs_base) 
+                      if os.path.isdir(os.path.join(logs_base, d))]
+        experiments.sort(reverse=True)  # Latest first
+        experiment_path = experiments[0] if experiments else None
+        
+        if not experiment_path:
+            raise ValueError("No experiment directories found")
+        print(f"Auto-detected latest experiment: {experiment_path}")
     
-    with open(log_file_path, 'r', encoding='utf-8') as f:
-        log_data = json.load(f)
+    # Build paths
+    log_file_path = os.path.join(logs_base, experiment_path, config_name, log_file_name)
+    output_dir = os.path.join(project_root, "logs", "label_analysis", experiment_path, config_name)
+    os.makedirs(output_dir, exist_ok=True)
     
-    if session_id >= len(log_data):
-        raise ValueError(f"Session {session_id} not found. Available: 0-{len(log_data)-1}")
+    output_file = f"{log_file_name.replace('.json', '_analysis.json')}"
+    output_path = os.path.join(output_dir, output_file)
     
-    print(f"Analyzing session {session_id} from {log_file_name}")
+    print(f"Analyzing: {experiment_path}/{config_name}/{log_file_name} (Session {session_id})")
     
-    # Initialize and run analysis
-    rag = create_mitre_rag()
-    rag_data = parse_log_file_for_rag_analysis(log_file_path, session_id)
+    # Initialize RAG system and analyze
+    rag_system = MitreAttackRAG()
+    results = analyze_log_session_with_rag(log_file_path, session_id, rag_system)
     
-    if not rag_data:
-        print("No valid data found")
-        return None
-    
-    # Track statistics
-    analysis_results = {
-        "session_id": session_id,
-        "log_file": log_file_name,
-        "analysis_timestamp": os.popen('date').read().strip(),
-        "total_entries": len(rag_data),
-        "entries": [],
-        "summary": {}
+    # Save results
+    output_data = {
+        'metadata': {
+            'log_file': log_file_name,
+            'experiment_path': experiment_path,
+            'config_name': config_name,
+            'session_id': session_id,
+        },
+        'results': results
     }
     
-    tactic_matches = technique_matches = 0
-    tactic_confidences = technique_confidences = []
+    with open(output_path, 'w', encoding='utf-8') as f:
+        json.dump(output_data, f, indent=2, ensure_ascii=False)
     
-    # Process each entry
-    for i, entry in enumerate(rag_data):
-        rag_results = rag.compare_llm_thinking_with_mitre(
-            entry['thinking_process'], entry['llm_tactic'], entry['llm_technique']
-        )
-        
-        tactic_val = rag_results['rag_analysis']['tactic_validation']
-        technique_val = rag_results['rag_analysis']['technique_validation']
-        
-        if tactic_val['match_found']:
-            tactic_matches += 1
-        if technique_val['match_found']:
-            technique_matches += 1
-        
-        tactic_confidences.append(tactic_val['confidence'])
-        technique_confidences.append(technique_val['confidence'])
-        
-        analysis_results["entries"].append({
-            "entry_index": i,
-            "iteration_pair": entry['iteration_pair'],
-            "llm_tactic": entry['llm_tactic'],
-            "llm_technique": entry['llm_technique'],
-            "thinking_process": entry['thinking_process'],
-            "tactic_validation": tactic_val,
-            "technique_validation": technique_val,
-            "tactic_match": tactic_val['match_found'],
-            "technique_match": technique_val['match_found']
-        })
-    
-    # Calculate summary
-    total_entries = len(rag_data)
-    analysis_results["summary"] = {
-        "total_entries": total_entries,
-        "tactic_matches": tactic_matches,
-        "technique_matches": technique_matches,
-        "tactic_match_rate": tactic_matches / total_entries if total_entries > 0 else 0,
-        "technique_match_rate": technique_matches / total_entries if total_entries > 0 else 0,
-        "average_tactic_confidence": sum(tactic_confidences) / len(tactic_confidences) if tactic_confidences else 0,
-        "average_technique_confidence": sum(technique_confidences) / len(technique_confidences) if technique_confidences else 0
-    }
-    
-    # Print and save results
-    print(f"\nSUMMARY:")
-    print(f"  Entries: {total_entries}")
-    print(f"  Tactic matches: {tactic_matches}/{total_entries} ({tactic_matches/total_entries*100:.1f}%)")
-    print(f"  Technique matches: {technique_matches}/{total_entries} ({technique_matches/total_entries*100:.1f}%)")
-    
-    results_path = os.path.join(analysis_dir, f"rag_analysis_session_{session_id}.json")
-    with open(results_path, 'w', encoding='utf-8') as f:
-        json.dump(analysis_results, f, indent=2, ensure_ascii=False)
-    
-    print(f"\n✅ Analysis saved to: {results_path}")
-    return results_path
+    print(f"Analysis complete! Results saved to: {output_path}")
+    return output_path
 
-# Example usage
 if __name__ == "__main__":
     try:
-        analyze_session_and_save(session_id=0)
+        analyze_session_and_save(
+            session_id=0,
+            log_file_name="attack_1.json", 
+            experiment_path="2025-06-25T08:53:44"
+        )    
     except Exception as e:
         print(f"Error: {e}")

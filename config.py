@@ -11,7 +11,7 @@ save_configuration = True
 print_output = True
 n_configurations = 1
 attacks_per_configuration = 25
-max_session_length = 2
+max_session_length = 50
 
 honeypot = "beelzebub" # beelzebub / cowrie
 

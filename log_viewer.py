@@ -9,7 +9,7 @@ from rich.box import ROUNDED
 console = Console()
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent
 experiments_path = BASE_DIR / "logs"
 
 if __name__ == "__main__":

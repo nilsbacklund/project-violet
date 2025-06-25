@@ -36,7 +36,7 @@ class MitreAttackRAG:
         self.enterprise_attack_path = os.path.join(self.rag_data_dir, "enterprise-attack.json")
         
         # Model setup
-        self.model_name = 'intfloat/e5-large-v2'
+        self.model_name = "BAAI/bge-m3"
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         
         # Initialize
@@ -245,7 +245,7 @@ def parse_log_file(log_file_path: str, session_index: int = 0) -> List[Dict]:
         return []
 
 
-def analyze_session_and_save(session_id: int, log_file_name: str = "full_logs_00.json") -> str:
+def analyze_session_and_save(session_id: int, log_file_name: str = "attack_1.json") -> str:
     """
     Main function: Analyze a session and save results to logs/label_analysis/
     
@@ -261,7 +261,7 @@ def analyze_session_and_save(session_id: int, log_file_name: str = "full_logs_00
     # Setup paths
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(script_dir)
-    log_file_path = os.path.join(project_root, "logs", "full_logs", log_file_name)
+    log_file_path = os.path.join(project_root, "logs", "full_logs", "2025-06-24T13:37:01","hp_config_1", log_file_name)
     analysis_dir = os.path.join(project_root, "logs", "label_analysis")
     os.makedirs(analysis_dir, exist_ok=True)
     

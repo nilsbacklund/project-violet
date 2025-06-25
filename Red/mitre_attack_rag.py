@@ -497,14 +497,14 @@ def print_rag_analysis_summary(analysis_results: Dict):
             print(f"    RAG suggests technique: {rag['recommended_technique']}")
 
 
-def analyze_session_and_save(session_id: int, log_file_name: str = "full_logs_00.json") -> str:
+def analyze_session_and_save(session_id: int, log_file_name: str = "attack_1.json") -> str:
     """Main function to analyze a specific session and save results"""
     print(f"=== MITRE ATT&CK RAG Analysis for Session {session_id} ===\n")
     
     # Setup paths
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(script_dir)
-    log_file_path = os.path.join(project_root, "logs", "full_logs", log_file_name)
+    log_file_path = os.path.join(project_root, "logs", "full_logs", "2025-06-24T13:37:01","hp_config_1", log_file_name)
     analysis_dir = os.path.join(project_root, "logs", "label_analysis")
     os.makedirs(analysis_dir, exist_ok=True)
     

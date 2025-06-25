@@ -94,7 +94,7 @@ def run_single_attack(save_logs, messages):
                 print(f"Mitre Method Used: {mitre_method_used if mitre_method_used else 'No Mitre Method Used'}")
                 print("-" * 50)
         
-        if save_logs:
+        if config.simulate_command_line:
             beelzebub_logs = get_new_hp_logs()
             data_log.beelzebub_response = beelzebub_logs
 
@@ -126,7 +126,7 @@ def run_attacks(n_attacks, save_logs, log_path):
         messages = sangria_config.messages.copy()  # Reset messages for each attack
         if not config.simulate_command_line:
             start_dockers()
-            
+
         print(f"Running attack session {i + 1} / {n_attacks}")
         logs, tokens_used = run_single_attack(save_logs, messages)
         all_logs.append(logs)

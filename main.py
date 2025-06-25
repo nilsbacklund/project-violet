@@ -16,8 +16,7 @@ def main():
 
     honeypot_config = get_honeypot_config(id="00")
     set_honeypot_config(honeypot_config)
-    if not simulate_command_line:
-        init_docker()
+    init_docker()
 
     for i in range(n_configurations):
         print(f"Configuration Iteration {i + 1} / {n_configurations}")

@@ -10,12 +10,13 @@ console = Console()
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-experiments_path = BASE_DIR / "logs" / "full_logs"
+experiments_path = BASE_DIR / "logs"
 
 if __name__ == "__main__":
+    experiments = list(filter(lambda name: name.startswith("experiment"), os.listdir(experiments_path)))
     experiment_choice = questionary.select(
         "Pick an experiment folder:",
-        choices=os.listdir(experiments_path)
+        choices=experiments
     ).ask()
 
     configs_path = experiments_path / experiment_choice
@@ -24,7 +25,7 @@ if __name__ == "__main__":
         choices=os.listdir(configs_path)
     ).ask()
 
-    attacks_path = configs_path / config_choice
+    attacks_path = configs_path / config_choice / "full_logs"
     attack_choice = questionary.select(
         "Pick an attack JSON file:",
         choices=os.listdir(attacks_path)
@@ -92,7 +93,7 @@ if __name__ == "__main__":
                     expand=True
                 )
             )
-            
+
         # Tool response
         panels.append(
             Panel(

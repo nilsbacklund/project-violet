@@ -13,14 +13,15 @@ BASE_DIR = Path(__file__).resolve().parent
 experiments_path = BASE_DIR / "logs"
 
 if __name__ == "__main__":
-    experiments = list(sorted(filter(lambda name: name.startswith("experiment"), os.listdir(experiments_path))))
+    experiments = list(sorted(filter(lambda name: name.startswith("experiment"), os.listdir(experiments_path)), reverse=True))
     experiment_choice = questionary.select(
         "Pick an experiment folder:",
         choices=experiments
     ).ask()
 
     configs_path = experiments_path / experiment_choice
-    configs = list(sorted(filter(lambda name: name.startswith("hp_config"), os.listdir(configs_path))))
+    configs = list(sorted(filter(lambda name: name.startswith("hp_config"), os.listdir(configs_path)),
+        key=lambda config_file: int(config_file.split("_")[-1])))
     config_choice = questionary.select(
         "Pick a configuration folder:",
         choices=configs

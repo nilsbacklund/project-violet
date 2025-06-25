@@ -2,8 +2,8 @@ version: "3.9"
 
 services:
   kali:
-    image: bloatedkali3
-    container_name: kali3
+    image: bloatedkali4
+    container_name: kali4
     privileged: true
     ports:
       - "3022:3022"  # SSH from host -> Kali

@@ -1,7 +1,7 @@
-import os
-import openai
 from dotenv import load_dotenv
 from pathlib import Path
+import os
+import openai
 import pandas as pd
 import json
 import re
@@ -42,8 +42,7 @@ def extract_labels(text: str) -> str | None:
         raise ValueError("No output <labels>...</labels> found!")
     
     last_content = all_matches[-1]
-    # convert from Python-literal string to actual object
-    return ast.literal_eval(last_content)
+    return last_content
 
 def main():
     # Simple read (auto‐detects engine: 'pyarrow' or 'fastparquet')
@@ -61,58 +60,57 @@ Your task: Analyze a session and classify it by MITRE ATT&CK tactics.
 There are seven tactics: Execution, Persistence, Discovery, Impact, Defense Evasion, Harmless and Other.
 These tactics are tied to sequences of individual commands which are separated by the token <sep>
 
-You will predict the labels of the sessions enclosed in the tags <sessions></sessions>.
+You will predict the labels of the session enclosed in the tags <session></session>.
 You must do some text based analysis before your final prediction.
 Your predicted labels at the end must be enclosed in the tags <labels></labels>.
 
 Training examples:
 {json.dumps(train_list, indent=2, ensure_ascii=False)}
 """
-    batch_size = 8
-    number_of_batches = math.ceil(len(test_list) / batch_size)
-    for i in range(number_of_batches):
-        print(f"Processing test batch: {i + 1} / {number_of_batches}")
-        rows = test_list[i*batch_size:(i+1)*batch_size]
-        sessions = list(map(lambda row: { "session" : row["session_expanded"] }, rows))
+    for i, row in enumerate(test_list):
+        print(f"Processing test session: {i + 1} / {len(test_list)}")
+        session = row["session_expanded"]
+        true_labels = row["labels"]
         rows_prompt = prompt + f"""
 
 You will predict the labels of the session enclosed in the tags <session></session>.
 
-<sessions>
-{json.dumps(sessions, indent=4)}
-</sessions>
+<session>
+{session}
+</session>
 
 You must do some text based analysis before your final prediction.
-Your predicted labels at the end should be output as a single Python list that must be enclosed in the tags <labels></labels>.
+Your predicted labels at the end should be output as a single string (with tactics separated by - ) that must be enclosed in the tags <labels></labels>.
 Example output:
-<labels>["Execution - Execution - Discovery - Discovery - Discovery, "Other - Other", "Persistence - Persistence - Execution"]</labels>
+<labels>Execution - Execution - Discovery - Discovery - Discovery - Other - Other - Persistence - Persistence - Execution</labels>
 """
         message, usage = query_openai(rows_prompt)
-        print(message)
         predicted_labels = extract_labels(message)
 
+        # print("\t(Debug) Message:", message)
+        print("\tPredicted labels:", predicted_labels)
+        print("\tTrue labels:", true_labels)
+        
         print(f"\tPrompt tokens:     {usage.prompt_tokens}")
         print(f"\tCompletion tokens: {usage.completion_tokens}")
-        print(f"\tTotal tokens:      {usage.total_tokens}\n")
+        print(f"\tTotal tokens:      {usage.total_tokens}")
         input_token_cost = usage.prompt_tokens / 1_000_000 * 0.4
         output_token_cost = usage.completion_tokens / 1_000_000 * 1.6
         print(f"\tCost: ${input_token_cost + output_token_cost}")
-        
-        test_predicted_labels.extend(predicted_labels)
-        print(len(predicted_labels))
-        print(len(test_predicted_labels))
+        test_predicted_labels.append(predicted_labels)
+        print(f"(Debug) Number of predicted labels: {len(test_predicted_labels)}")
+        print()
 
-    print(test_predicted_labels)
-    print(type(test_predicted_labels))
-    print(len(test_predicted_labels))
     df_test_predictions = df_test.copy()
     df_test_predictions["labels_predicted"] = test_predicted_labels
 
-    print(df_test_predictions)
-
-    # Save the updated test set as a parquet file
-    output_file = data_path / "sample_test_corpus_predictions.parquet"
-    df_test_predictions.to_parquet(output_file, index=False)
+    output_file = data_path / "sample_test_corpus_predictions.json"
+    df_test_predictions.to_json(
+        output_file,
+        orient="records",    # list of dicts, one per row
+        indent=4,            # pretty-print with 2-space indentation
+        force_ascii=False    # allow Unicode if any
+    )
     print(f"Saved predictions to {output_file}")
 
 if __name__ == "__main__":

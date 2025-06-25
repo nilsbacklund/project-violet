@@ -3,8 +3,7 @@ import sys, os, json
 import questionary
 from rich.panel import Panel
 from rich.columns import Columns
-from rich.console import Console
-from rich.rule import Rule
+from rich.console import Console, Group
 from rich.box import ROUNDED
 
 console = Console()
@@ -36,53 +35,86 @@ if __name__ == "__main__":
         attack_logs = json.load(f)[0]
     
     for iteration in attack_logs:
-        console.print(Rule())  # visual separator
+        # Collect individual panels
+        panels = []
 
-        message       = iteration["llm_response"]["message"]
+        i = iteration["iteration"]
+        message = iteration["llm_response"]["message"]
         function_type = iteration["llm_response"]["function"]
-        arguments     = iteration["llm_response"]["arguments"]
-        response      = str(iteration["tool_response"])
+        arguments = iteration["llm_response"]["arguments"]
+        response = str(iteration.get("tool_response", "")) or "<no output>"
 
+        # Attacker Thoughts
         if message:
-            console.print(
-                Panel(message, title="Attacker thoughts", border_style="green", box=ROUNDED)
+            panels.append(
+                Panel(
+                    message,
+                    title="Attacker thoughts",
+                    border_style="green",
+                    box=ROUNDED,
+                    expand=True
+                )
             )
 
-        match function_type:
-            case "run_command":
-                cmd = arguments["command"]
-                tactic = arguments["tactic_used"]
-                technique = arguments["technique_used"]
-                # Build two panels
-                panel_cmd = Panel(
-                    f"$ {cmd}",
-                    title="Run Command",
-                    border_style="red",
+        # Function-specific panels
+        if function_type == "run_command":
+            cmd = arguments["command"]
+            tactic = arguments["tactic_used"]
+            technique = arguments["technique_used"]
+            panel_cmd = Panel(
+                f"$ {cmd}",
+                title="Run Command",
+                border_style="red",
+                box=ROUNDED,
+                expand=True
+            )
+            panel_meta = Panel(
+                f"[bold]Tactic[/bold]: {tactic}\n[bold]Technique[/bold]: {technique}",
+                title="MITRE ATT&CK",
+                border_style="yellow",
+                box=ROUNDED,
+                expand=True
+            )
+            # add side-by-side
+            panels.append(Columns([panel_cmd, panel_meta], expand=True, equal=True))
+
+            if response.startswith(cmd):
+                response = response[len(cmd):].strip()
+
+        elif function_type == "web_search_tool":
+            query = arguments["query"]
+            panels.append(
+                Panel(
+                    query,
+                    title="Web search query",
+                    border_style="magenta",
                     box=ROUNDED,
                     expand=True
                 )
-                panel_meta = Panel(
-                    f"[bold]Tactic[/bold]: {tactic}\n[bold]Technique[/bold]: {technique}",
-                    title="MITRE ATT&CK",
-                    border_style="yellow",
-                    box=ROUNDED,
-                    expand=True
-                )
+            )
+            
+        # Tool response
+        panels.append(
+            Panel(
+                response,
+                title="Tool response output",
+                border_style="blue",
+                box=ROUNDED,
+                expand=True
+            )
+        )
 
-                # Print them side by side
-                console.print(Columns([panel_cmd, panel_meta], expand=True, equal=True))
+        # Wrap all panels into a parent panel
+        group = Group(*panels)
+        console.print(
+            Panel(
+                group,
+                title=f"Iteration {i}",
+                border_style="white",
+                box=ROUNDED,
+                expand=True
+            )
+        )
 
-                if response.startswith(cmd):
-                    response = response[len(cmd):].strip()
-                console.print(
-                    Panel(response or "[dim]<no output>[/dim]",
-                          title="Tool response output", border_style="blue", box=ROUNDED)
-                )
-            case None:
-                pass
-            case _:
-                raise Exception("Unknown function type!")
-
-        # ←— pause here until Enter is pressed
         console.print("[dim]Press [bold]Enter[/bold] to continue…[/dim]", end="")
         input()

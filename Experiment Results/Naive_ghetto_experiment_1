@@ -1,0 +1,10 @@
+Mean and std of the session length using 3 different honeypots.
+
+25 runs done using each.
+No significant results at all as expected.
+
+Beelzebub is the default Beelzebub config, Cowrie has the default Cowrie config and Beelzebub_lite is Beelzebub with only the LLM powered ssh service
+
+Beelzebub, Mean Iterations: 19.44959443800695, Standard Deviation: 13.434600067662808
+Cowrie, Mean Iterations: 17.221364221364222, Standard Deviation: 11.90405257200125
+Beelzebub_lite, Mean Iterations: 16.696644295302015, Standard Deviation: 12.094562626035094

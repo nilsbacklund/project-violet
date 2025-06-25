@@ -20,9 +20,10 @@ if __name__ == "__main__":
     ).ask()
 
     configs_path = experiments_path / experiment_choice
+    configs = list(filter(lambda name: name.startswith("hp_config"), os.listdir(configs_path)))
     config_choice = questionary.select(
         "Pick a configuration folder:",
-        choices=os.listdir(configs_path)
+        choices=configs
     ).ask()
 
     attacks_path = configs_path / config_choice / "full_logs"

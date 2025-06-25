@@ -124,7 +124,9 @@ def run_attacks(n_attacks, save_logs, log_path):
     for i in range(n_attacks):
         
         messages = sangria_config.messages.copy()  # Reset messages for each attack
-        start_dockers()
+        if not config.simulate_command_line:
+            start_dockers()
+            
         print(f"Running attack session {i + 1} / {n_attacks}")
         logs, tokens_used = run_single_attack(save_logs, messages)
         all_logs.append(logs)
@@ -132,7 +134,9 @@ def run_attacks(n_attacks, save_logs, log_path):
 
         append_logs_to_file(logs, log_path + f"attack_{i+1}", save_logs)
         save_tokens_used_to_file(tokens_used, log_path + f"tokens_used_{i+1}", save_logs)
-        stop_dockers()
+
+        if not config.simulate_command_line:
+            stop_dockers()
 
     return all_logs
 

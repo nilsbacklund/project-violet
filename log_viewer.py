@@ -13,23 +13,24 @@ BASE_DIR = Path(__file__).resolve().parent
 experiments_path = BASE_DIR / "logs"
 
 if __name__ == "__main__":
-    experiments = list(filter(lambda name: name.startswith("experiment"), os.listdir(experiments_path)))
+    experiments = list(sorted(filter(lambda name: name.startswith("experiment"), os.listdir(experiments_path))))
     experiment_choice = questionary.select(
         "Pick an experiment folder:",
         choices=experiments
     ).ask()
 
     configs_path = experiments_path / experiment_choice
-    configs = list(filter(lambda name: name.startswith("hp_config"), os.listdir(configs_path)))
+    configs = list(sorted(filter(lambda name: name.startswith("hp_config"), os.listdir(configs_path))))
     config_choice = questionary.select(
         "Pick a configuration folder:",
         choices=configs
     ).ask()
 
     attacks_path = configs_path / config_choice / "full_logs"
+    attacks = list(sorted(os.listdir(attacks_path)))
     attack_choice = questionary.select(
         "Pick an attack JSON file:",
-        choices=os.listdir(attacks_path)
+        choices=attacks
     ).ask()
     
     file_path = attacks_path / attack_choice

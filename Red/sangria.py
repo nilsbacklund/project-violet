@@ -4,6 +4,7 @@ import sys
 import os
 from Red.schema import response, start_ssh, get_new_hp_logs
 import Red.sangria_config as sangria_config
+from Utils import save_json_to_file, append_json_to_file
 
 # Add parent directory to path to import config
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -22,7 +23,6 @@ import os
 tools = sangria_config.tools
 messages = sangria_config.messages
 mitre_method_used_list = []
-max_itterations = 5
 
 def run_single_attack(save_logs, messages):
     '''
@@ -94,7 +94,7 @@ def run_single_attack(save_logs, messages):
                 print(f"Mitre Method Used: {mitre_method_used if mitre_method_used else 'No Mitre Method Used'}")
                 print("-" * 50)
         
-        if save_logs:
+        if config.simulate_command_line:
             beelzebub_logs = get_new_hp_logs()
             data_log.beelzebub_response = beelzebub_logs
 
@@ -118,119 +118,29 @@ def run_attacks(n_attacks, save_logs, log_path):
         Run multiple attack sessions.
         Each session will run a attack and log the responses.
     '''
-    all_logs = []
     tokens_used_list = []
 
     for i in range(n_attacks):
         
         messages = sangria_config.messages.copy()  # Reset messages for each attack
+
         if not config.simulate_command_line:
             start_dockers()
-            
+
         print(f"Running attack session {i + 1} / {n_attacks}")
         logs, tokens_used = run_single_attack(save_logs, messages)
-        all_logs.append(logs)
         tokens_used_list.append(tokens_used)
 
-        append_logs_to_file(logs, log_path + f"attack_{i+1}", save_logs)
-        save_tokens_used_to_file(tokens_used, log_path + f"tokens_used_{i+1}", save_logs)
+
+        # create path if not exists
+        os.makedirs(log_path + "full_logs", exist_ok=True)
+        logs = [log.to_dict() for log in logs]
+        save_json_to_file(logs, log_path + f"full_logs/attack_{i+1}.json", save_logs)
+        append_json_to_file(tokens_used, log_path + f"tokens_used.json", save_logs)
 
         if not config.simulate_command_line:
             stop_dockers()
 
-    return all_logs
-
-def save_tokens_used_to_file(tokens_used_list, session_id, save_logs=True):
-    '''
-        Save the tokens used to a file, will be appended if file already exists.
-        The file will be saved in the logs/tokens_used directory.
-        The file will be named tokens_used_<session_id>.json
-    '''
-
-    if not save_logs:
-        print("Saving tokens used is disabled.")
-        return
-    
-    print(f"Saving tokens used to file for session {session_id}...")
-    
-    path = f'{session_id}.json'
-    
-    # Load existing data if the file exists
-    if os.path.exists(path):
-        with open(path, 'r') as f:
-            existing_data = json.load(f)
-    else:
-        existing_data = []
-
-    # Append new tokens used to existing data
-    existing_data.append(tokens_used_list)
-
-    with open(path, 'w') as f:
-        json.dump(existing_data, f, indent=4)
-
-    print("File written:", os.path.exists(path), "Size:", os.path.getsize(path))
-
-def append_logs_to_file(logs, session_id, save_logs=True):
-    '''
-        Append the logs to a file, will be created if file does not exist.
-        The file will be saved in the logs/full_logs directory.
-        The file will be named full_logs_<session_id>.json
-    '''
-
-    if not save_logs:
-        print("Saving logs is disabled.")
-        return
-    
-    print(f"Appending logs to file for session {session_id}...")
-    
-    # Create the logs directory if it doesn't exist
-    os.makedirs('logs', exist_ok=True)
-    os.makedirs('logs/full_logs', exist_ok=True)
-    
-    path = f'{session_id}.json'
-    
-    # Load existing data if the file exists
-    if os.path.exists(path):
-        with open(path, 'r') as f:
-            existing_data = json.load(f)
-    else:
-        existing_data = []
-
-    # Append new logs to existing data
-    existing_data.append([log.to_dict() for log in logs])
-
-    with open(path, 'w') as f:
-        json.dump(existing_data, f, indent=4)
-
-    print("File written:", os.path.exists(path), "Size:", os.path.getsize(path))
-
-
-def save_logs_to_file(all_logs, session_id, save_logs=True):
-    '''
-        Save the logs to a file, will be appended if file already exists.
-        The file will be saved in the logs/full_logs directory.
-        The file will be named full_logs_<session_id>.json
-    '''
-
-    if not save_logs:
-        print("Saving logs is disabled.")
-        return
-    
-    print(f"Saving logs to file for session {session_id}...")
-    # print([[log.to_dict() for log in session_log] for session_log in all_logs])
-    # Create the logs directory if it doesn't exist
-    
-    os.makedirs('logs', exist_ok=True)
-    os.makedirs('logs/full_logs', exist_ok=True)
-    path = f'logs/full_logs/full_logs_{session_id}.json'
-    data = [[log.to_dict() for log in session_log] for session_log in all_logs]
-
-    with open(path, 'w') as f:
-        json.dump(data, f, indent=4)
-
-    print("File written:", os.path.exists(path), "Size:", os.path.getsize(path))
-
-    print(f"\nMessages saved to logs/full_logs/full_logs_{str(session_id)}.json")
 
 # %%
 

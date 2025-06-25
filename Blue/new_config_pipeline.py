@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 import sys
 import time
 from config import print_output, llm_model_config
+from Utils import load_json
 
 # Add parent directory to sys.path to allow imports from project root
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -42,21 +43,6 @@ if not print_output:
     print = silent_print
 else:
     print = _builtin_print
-
-def load_json(path):
-    """
-    Load a JSON file from the given path and return its contents as a Python object.
-    """
-    # check if file exists
-    if not path.exists():
-        raise FileNotFoundError(f"Path {path} does not exist.")
-
-    # check if file is json
-    if not path.suffix == '.json':
-        raise ValueError(f"Path {path} is not a JSON file.")
-
-    with open(path, 'r', encoding="utf8") as f:
-        return json.load(f)
 
 def get_attack_patterns_for_config(config_id, attack_patterns):
     """
@@ -291,7 +277,7 @@ def validate_config(config, schema_path):
         print("Config validation error:", e)
         return False
 
-def save_config_as_file(config):
+def save_config_as_file(config, path):
     """
     Save the generated config as a JSON file in the BeelzebubServices directory, named by its ID.
     """

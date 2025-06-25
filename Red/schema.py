@@ -15,6 +15,7 @@ if platform.system() != 'Windows':
 
 import subprocess
 import datetime
+import time
 
 import json
 
@@ -51,35 +52,40 @@ def response(model_host, model_name, messages, tools):
         raise ValueError(f"Unsupported model host: {model_host}")
 
 def response_openai(messages: list, tools, model: str = 'gpt-4o-mini', model_host: str = 'openai'):
-    response = openai_client.chat.completions.create(
-        model=model,
-        messages=messages,
-        functions=tools,
-    )
+    try:
+        response = openai_client.chat.completions.create(
+            model=model,
+            messages=messages,
+            functions=tools,
+        )
 
-    choice = response.choices[0]
-    content = choice.message.content
-    function_call = choice.message.function_call
+        choice = response.choices[0]
+        content = choice.message.content
+        function_call = choice.message.function_call
 
-    prompt_tokens = response.usage.prompt_tokens
-    completion_tokens = response.usage.completion_tokens
-    cached_tokens = response.usage.prompt_tokens_details.cached_tokens if response.usage and response.usage.prompt_tokens_details else 0
+        prompt_tokens = response.usage.prompt_tokens
+        completion_tokens = response.usage.completion_tokens
+        cached_tokens = response.usage.prompt_tokens_details.cached_tokens if response.usage and response.usage.prompt_tokens_details else 0
 
-    # extract name & args safely (in case no call was made)
-    fn_name = function_call.name if function_call else None
-    fn_args = json.loads(function_call.arguments) if function_call else None
+        # extract name & args safely (in case no call was made)
+        fn_name = function_call.name if function_call else None
+        fn_args = json.loads(function_call.arguments) if function_call else None
 
-    # use a different var name so we don't shadow the class
-    resp_obj = ResponseObject(
-        message=content,
-        function=fn_name,
-        arguments=fn_args
-    )
-    resp_obj.prompt_tokens = prompt_tokens
-    resp_obj.completion_tokens = completion_tokens
-    resp_obj.cached_tokens = cached_tokens
+        # use a different var name so we don't shadow the class
+        resp_obj = ResponseObject(
+            message=content,
+            function=fn_name,
+            arguments=fn_args
+        )
+        resp_obj.prompt_tokens = prompt_tokens
+        resp_obj.completion_tokens = completion_tokens
+        resp_obj.cached_tokens = cached_tokens
 
-    return resp_obj
+        return resp_obj
+    except openai.RateLimitError:
+        print("OpenAI API limit reached, waiting 5 seconds...")
+        time.sleep(5)
+        response_openai(messages, tools, model)
 
 # rep_openai = response_openai(messages=[{"role": "user", "content": "Can you see my current directory using your tool/function_call run_command?"}], tools=tools, model="gpt-4o-mini")
 

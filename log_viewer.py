@@ -34,7 +34,7 @@ if __name__ == "__main__":
     
     file_path = attacks_path / attack_choice
     with open(file_path, "r", encoding="utf8") as f:
-        attack_logs = json.load(f)[0]
+        attack_logs = json.load(f)
     
     for iteration in attack_logs:
         # Collect individual panels
@@ -44,7 +44,7 @@ if __name__ == "__main__":
         message = iteration["llm_response"]["message"]
         function_type = iteration["llm_response"]["function"]
         arguments = iteration["llm_response"]["arguments"]
-        response = str(iteration.get("tool_response", "")) or "<no output>"
+        response = iteration["tool_response"]
 
         # Attacker Thoughts
         if message:
@@ -96,15 +96,16 @@ if __name__ == "__main__":
             )
 
         # Tool response
-        panels.append(
-            Panel(
-                response,
-                title="Tool response output",
-                border_style="blue",
-                box=ROUNDED,
-                expand=True
+        if response:
+            panels.append(
+                Panel(
+                    response,
+                    title="Tool response output",
+                    border_style="blue",
+                    box=ROUNDED,
+                    expand=True
+                )
             )
-        )
 
         # Wrap all panels into a parent panel
         group = Group(*panels)

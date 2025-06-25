@@ -28,7 +28,7 @@ if __name__ == "__main__":
     ).ask()
 
     attacks_path = configs_path / config_choice / "full_logs"
-    attacks = list(sorted(os.listdir(attacks_path)))
+    attacks = list(sorted(os.listdir(attacks_path), key=lambda attack_file: int(attack_file.split("_")[-1][:-5])))
     attack_choice = questionary.select(
         "Pick an attack JSON file:",
         choices=attacks

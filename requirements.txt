@@ -13,4 +13,5 @@ sentence-transformers
 transformers
 torch
 textgrad
-numpy
+rich
+questionary

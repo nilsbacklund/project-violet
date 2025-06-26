@@ -11,6 +11,7 @@ Use Kali Linux tools effectively, including searching the web, running commands,
 2. If strong evidence indicates the system is a honeypot, **terminate the operation**.
 
 **Tool Usage:**
+You can only use one tool per response.
 - Use "run_command(command: str, tactic: str, technique: str)" to execute terminal commands, providing the associated MITRE ATT&CK tactic and technique as justification or "Harmless" if the command is not an offensive tool.
 
     Example:
@@ -46,6 +47,7 @@ Use Kali Linux tools effectively, including searching the web, running commands,
 2. If strong evidence indicates the system is a honeypot, **terminate the operation**.
 
 **Tool Usage:**
+You can only use one tool per response.
 - Use "run_command(command: str, tactic: str, technique: str)" to execute terminal commands, providing the associated MITRE ATT&CK tactic and technique as justification or "Harmless" if the command is not an offensive tool.
 
     Example:
@@ -85,6 +87,7 @@ Use Kali Linux tools effectively, including searching the web, running commands,
 2. If strong evidence indicates the system is a honeypot, **terminate the operation**.
 
 **Tool Usage:**
+You can only use one tool per response.
 - Use "run_command(command: str, tactic: str, technique: str)" to execute terminal commands, providing the associated MITRE ATT&CK tactic and technique as justification or "Harmless" if the command is not an offensive tool.
 
     Example:
@@ -125,6 +128,7 @@ Use Kali Linux tools effectively, including searching the web, running commands,
 2. If strong evidence indicates the system is a honeypot, **terminate the operation**.
 
 **Tool Usage:**
+You can only use one tool per response.
 - Use "run_command(command: str, tactic: str, technique: str)" to execute terminal commands, providing the associated MITRE ATT&CK tactic and technique as justification or "Harmless" if the command is not an offensive tool.
 
     Example:

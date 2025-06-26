@@ -5,8 +5,14 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'
 import json
 from Red.model import DataLogObject, LabledCommandObject
 from sentence_transformers import SentenceTransformer, util
+from Utils import save_json_to_file
 
-log_path = 'logs/full_logs/2025-06-24T15:05:54/hp_config_1/attack_1.json'
+log_path = 'logs/experiment_2025-06-25T13:11:47/hp_config_1/full_logs/attack_3.json'
+
+experiment_name = 'experiment_2025-06-25T13:11:47'
+config_number = 1
+attack_nr = 3
+# log_path = f'logs/{experiment_name}/hp_config_{config_number}/full_logs/attack_{attack_nr}.json'
 
 def word_similarity(model, query, embeded_canidates):
     """
@@ -25,7 +31,7 @@ def word_similarity(model, query, embeded_canidates):
 
 
     if similarities[most_similar_index].item() < 0.5:
-        print(f"Warning: Low similarity ({similarities[most_similar_index].item()}) for '{query}'")
+        print(f"Warning: Low similarfity ({similarities[most_similar_index].item()}) for '{query}'")
         return "Other"
     
     return most_similar_index
@@ -50,100 +56,99 @@ def extract_honeypot_commands(full_logs):
     canidates_embedded = model.encode(avilable_mitre_tactics, convert_to_tensor=True)
 
     
-    for attack_session in full_logs:
-        for log_entry in attack_session:
-            # Handle both dict and object formats
-            if isinstance(log_entry, dict):
-                log_dict = log_entry
-            else:
-                log_dict = log_entry.__dict__
-            
-            # Skip entries without beelzebub responses
-            if not log_dict.get('beelzebub_response'):
+    for log_entry in full_logs:
+        # Handle both dict and object formats
+        if isinstance(log_entry, dict):
+            log_dict = log_entry
+        else:
+            log_dict = log_entry.__dict__
+        
+        # Skip entries without beelzebub responses
+        if not log_dict.get('beelzebub_response'):
+            continue
+        
+        llm_response = log_dict.get('llm_response', {})
+        if not llm_response or not isinstance(llm_response, dict):
+            continue
+        llm_response_arguments = llm_response.get('arguments', {})
+        if not llm_response_arguments or not isinstance(llm_response_arguments, dict):
+            continue
+
+        tactic = llm_response_arguments.get('tactic_used', None)
+        tactic_index = word_similarity(model, tactic, canidates_embedded) if tactic else "Other"
+        tactic = avilable_mitre_tactics[tactic_index] if isinstance(tactic_index, int) else "Other"
+
+        technique = llm_response_arguments.get('technique_used', None)
+        
+        # Process each beelzebub response, Claud created this
+        for response in log_dict['beelzebub_response']:
+            if not isinstance(response, dict) or 'event' not in response:
                 continue
             
-            llm_response = log_dict.get('llm_response', {})
-            if not llm_response or not isinstance(llm_response, dict):
-                continue
-            llm_response_arguments = llm_response.get('arguments', {})
-            if not llm_response_arguments or not isinstance(llm_response_arguments, dict):
-                continue
-
-            tactic = llm_response_arguments.get('tactic_used', None)
-            tactic_index = word_similarity(model, tactic, canidates_embedded) if tactic else "Other"
-            tactic = avilable_mitre_tactics[tactic_index] if isinstance(tactic_index, int) else "Other"
-
-            technique = llm_response_arguments.get('technique_used', None)
+            event = response['event']
             
-            # Process each beelzebub response, Claud created this
-            for response in log_dict['beelzebub_response']:
-                if not isinstance(response, dict) or 'event' not in response:
-                    continue
-                
-                event = response['event']
-                
-                # Extract different types of commands based on protocol
-                command = None
-                protocol = event.get('Protocol', '')
-                
-                if protocol == 'SSH':
-                    # For SSH, look for actual commands in the Command field
-                    # SSH login attempts are stored in Password field
-                    ssh_command = event.get('Command', '').strip()
-                    if ssh_command and ssh_command not in ['', '\r\n\r\n']:
-                        command = ssh_command
-                    # Also capture SSH login attempts as commands
-                    elif event.get('User') and event.get('Password'):
-                        # This is a login attempt
-                        user = event.get('User')
-                        password_info = event.get('Password', '')
-                        command = f"ssh_login_attempt:{user}:{password_info}"
-                
-                elif protocol == 'HTTP':
-                    # For HTTP, combine method and URI
-                    method = event.get('HTTPMethod', '')
-                    uri = event.get('RequestURI', '')
-                    if method and uri:
-                        command = f"{method} {uri}"
-                    elif event.get('Command'):
-                        command = event.get('Command', '').strip()
-                
-                elif protocol == 'TCP':
-                    # For TCP, use the Command field
-                    tcp_command = event.get('Command', '').strip()
-                    if tcp_command:
-                        command = tcp_command
-                
-                # If we found a command, create a labeled command object
-                if command and command.strip():
-                    # Clean up the command
-                    command = command.replace('\r\n', '\\n').replace('\r', '\\r').replace('\n', '\\n')
-                    
-                    # Use default values if MITRE info is missing
-                    if not tactic or not technique:
-                        tactic = tactic or "Unknown"
-                        technique = technique or "Unknown"
-                    
-                    
-                    labeled_command = LabledCommandObject(
-                        command=command,
-                        tactic=tactic,
-                        technique=technique
-                    )
-                    
-                    # Add additional metadata
-                    labeled_command.protocol = event.get('Protocol', '') 
-                    labeled_command.timestamp = event.get('DateTime', '')
-                    labeled_command.source_ip = event.get('SourceIp', '')
-                    labeled_command.source_port = event.get('SourcePort', '')
-                    labeled_command.description = event.get('Description', '')
-                    labeled_command.user = event.get('User', '')
-                    labeled_command.event_id = event.get('ID', '')
-
+            # Extract different types of commands based on protocol
+            command = None
+            protocol = event.get('Protocol', '')
+            
+            if protocol == 'SSH':
+                # For SSH, look for actual commands in the Command field
+                # SSH login attempts are stored in Password field
+                ssh_command = event.get('Command', '').strip()
+                if ssh_command and ssh_command not in ['', '\r\n\r\n']:
+                    command = ssh_command
+                # Also capture SSH login attempts as commands
+                elif event.get('User') and event.get('Password'):
+                    # This is a login attempt
+                    user = event.get('User')
+                    password_info = event.get('Password', '')
+                    command = f"ssh_login_attempt:{user}:{password_info}"
+            
+            elif protocol == 'HTTP':
+                # For HTTP, combine method and URI
+                method = event.get('HTTPMethod', '')
+                uri = event.get('RequestURI', '')
+                if method and uri:
+                    command = f"{method} {uri}"
+                elif event.get('Command'):
                     command = event.get('Command', '').strip()
-                    command = command.replace('\r\n', '\\n').replace('\r', '\\r').replace('\n', '\\n')                    
-                    labeled_command.command = event.get('Command', '') # can be removed to put together full commands
-                    labeled_commands.append(labeled_command)
+            
+            elif protocol == 'TCP':
+                # For TCP, use the Command field
+                tcp_command = event.get('Command', '').strip()
+                if tcp_command:
+                    command = tcp_command
+            
+            # If we found a command, create a labeled command object
+            if command and command.strip():
+                # Clean up the command
+                command = command.replace('\r\n', '\\n').replace('\r', '\\r').replace('\n', '\\n')
+                
+                # Use default values if MITRE info is missing
+                if not tactic or not technique:
+                    tactic = tactic or "Unknown"
+                    technique = technique or "Unknown"
+                
+                
+                labeled_command = LabledCommandObject(
+                    command=command,
+                    tactic=tactic,
+                    technique=technique
+                )
+                
+                # Add additional metadata
+                labeled_command.protocol = event.get('Protocol', '') 
+                labeled_command.timestamp = event.get('DateTime', '')
+                labeled_command.source_ip = event.get('SourceIp', '')
+                labeled_command.source_port = event.get('SourcePort', '')
+                labeled_command.description = event.get('Description', '')
+                labeled_command.user = event.get('User', '')
+                labeled_command.event_id = event.get('ID', '')
+
+                command = event.get('Command', '').strip()
+                command = command.replace('\r\n', '\\n').replace('\r', '\\r').replace('\n', '\\n')                    
+                labeled_command.command = event.get('Command', '') # can be removed to put together full commands
+                labeled_commands.append(labeled_command)
     
     return labeled_commands
 
@@ -176,26 +181,28 @@ def save_honeypot_labels(labeled_commands):
             cmd_dict['event_id'] = cmd.event_id
         
         commands_data.append(cmd_dict)
-    
-    output_file = f'{log_path}_labels.json'
-    
+
+    output_file_path = f'logs/{experiment_name}/hp_config_{config_number}/labels'
+    output_file_name = f'label_{attack_nr}.json'
+
+    output_file = os.path.join(output_file_path, output_file_name)
+
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
+
+    save_json_to_file(commands_data, output_file, save_logs=True)
     with open(output_file, 'w') as f:
         json.dump(commands_data, f, indent=4)
-    
-    print(f"Honeypot labels saved to {output_file}")
-    print(f"Total commands extracted: {len(labeled_commands)}")
     
     return output_file
 
 
-def process_test_logs():
+def process_log():
     """
     Process the test logs and create labeled commands.
     """
     try:
         with open(log_path, 'r') as f:
             full_logs = json.load(f)
-        
         # Extract commands
         labeled_commands = extract_honeypot_commands(full_logs)
         # Save to file
@@ -238,6 +245,6 @@ def process_test_logs():
 
 
 if __name__ == "__main__":
-    process_test_logs()
+    process_log()
 
 # %%

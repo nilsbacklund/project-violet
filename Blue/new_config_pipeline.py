@@ -114,12 +114,14 @@ def query_openai(prompt: str, model: str = None, temperature: float = 0.7) -> st
     )
     return response.choices[0].message.content.strip()
 
-def get_honeypot_config(id):
+def get_honeypot_config(id="00", path=""):
     """
-    Load a honeypot config by its ID from the BeelzebubServices directory.
+    Load a honeypot config by its ID or path from dir.
     """
-    base_config_path = BASE_DIR.parent / 'BeelzebubServices' / f'config_{id}.json'
-    return load_json(base_config_path)
+    if id == "00" and not path:
+        path = BASE_DIR.parent / 'BeelzebubServices' / f'config_{id}.json'
+    
+    return load_json(path)
 
 def set_honeypot_config(config):
     """

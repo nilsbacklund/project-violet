@@ -5,6 +5,8 @@ import os
 from Red.schema import response, start_ssh, get_new_hp_logs
 import Red.sangria_config as sangria_config
 from Utils import save_json_to_file, append_json_to_file
+from Red.mitre_labeler import extract_mitre_labels
+
 
 # Add parent directory to path to import config
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -15,6 +17,12 @@ from Red.tools import handle_tool_call
 from Red.model import MitreMethodUsed, DataLogObject
 from config import max_session_length
 from Blue_Lagoon.honeypot_tools import start_dockers, stop_dockers
+from Blue.BAAI_bge import retrieve_vulns
+
+# Helper function 
+def get_relevant_vulns_for_step(step_description):
+    vulns = retrieve_vulns(step_description, top_k=5)
+    return vulns
 
 import os
 
@@ -49,6 +57,25 @@ def run_single_attack(save_logs, messages):
 
         # get response from LLM
         assistant_response = response(sangria_config.model_host, config.llm_model_sangria, messages, tools)
+        technique_name, tactic_name = extract_mitre_labels(assistant_response.message)
+        if technique_name:
+            print(f"Technique Detected: {technique_name}")
+        if tactic_name:
+            print(f"Tactic Detected: {tactic_name}")
+        data_log.technique_name = technique_name
+        data_log.tactic_name = tactic_name
+
+        if assistant_response.message:
+            relevant_vulns = get_relevant_vulns_for_step(assistant_response.message)
+            print("Relevant vulnerabilities for this step:")
+            for vuln in relevant_vulns:
+                if isinstance(vuln, dict):
+                    cve_id = vuln.get('cve', {}).get('CVE_data_meta', {}).get('ID', 'No CVE ID')
+                    desc_list = vuln.get('cve', {}).get('description', {}).get('description_data', [])
+                    desc = desc_list[0]['value'] if desc_list else ''
+                    print(f"- {cve_id}: {desc[:100]}...")
+                else:
+                    print(f"- {str(vuln)[:100]}...")
 
         total_prompt_tokens += assistant_response.prompt_tokens - assistant_response.cached_tokens 
         total_completion_tokens += assistant_response.completion_tokens
@@ -71,13 +98,11 @@ def run_single_attack(save_logs, messages):
         if assistant_response.function:
             tool_response, mitre_method_used = handle_tool_call(assistant_response, ssh)
             messages.append(tool_response)
-            
             data_log.tool_response = tool_response['content']
-            # data_log.mitre_attack_method = mitre_method_used
 
+            # Place the terminate check here:
             if tool_response['name'] == "terminate":
                 print(f"The attack was {'successfull' if tool_response['content'] else 'unsucsessfull'} after {i + 1} iterations.")
-
                 if tool_response['content'] == "True":
                     data_log.attack_success = True
                 break

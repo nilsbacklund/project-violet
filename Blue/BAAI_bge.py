@@ -26,3 +26,21 @@ print(f"Generated embeddings shape: {embeddings.shape}")
 # Save embeddings for later use
 np.save("Blue/RagData/vulns_embeddings_bge_m3.npy", embeddings)
 print("Embeddings saved.")
+
+#retrieval function
+def load_vulns_db():
+    with open("Blue/RagData/vulns_DB.json", "r", encoding="utf-8") as f:
+        data = json.load(f)
+        # Return the list of CVE items
+        return data["CVE_Items"]
+
+def load_embeddings():
+    return np.load("Blue/RagData/vulns_embeddings_bge_m3.npy")
+
+def retrieve_vulns(query, top_k=5):
+    vulns_db = load_vulns_db()
+    embeddings = load_embeddings()
+    query_emb = model.encode([query])
+    scores = np.dot(embeddings, query_emb.T).squeeze()
+    top_indices = np.argsort(scores)[::-1][:top_k]
+    return [vulns_db[i] for i in top_indices]

@@ -4,22 +4,17 @@ import Red.sangria_config as sangria_config
 import datetime
 import os
 import json
+from datetime import datetime
 
 def create_experiment_folder(save_logs=True, experiment_name=None):
     if not save_logs:
         print("Logs saving is disabled. No folder will be created.")
         return
     
-    timestamp = datetime.datetime.now().isoformat()[:-7]
-
-    folder_name = f"experiment_{timestamp}"
-    if experiment_name:
-        folder_name = f"{experiment_name}_{timestamp}"
-
-    # create the logs folder if it doesn't exist
-    path = "logs/" + folder_name
-
-    os.makedirs("logs", exist_ok=True)
+    if experiment_name is None:
+        # Replace colons with dashes in the timestamp
+        experiment_name = f"experiment_{datetime.now().isoformat().replace(':', '-')}"
+    path = f"logs/{experiment_name}"
     os.makedirs(path, exist_ok=True)
 
     metadata = create_metadata()
@@ -128,5 +123,4 @@ class MetaDataObject:
             "honeypot": self.honeypot,
             "system_prompt": self.system_prompt
         }
-    
-    
+

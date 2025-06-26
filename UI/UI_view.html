@@ -259,9 +259,9 @@
             <div class="subtitle">Replaying recorded attack session <span id="iteration-display" class="iteration-display">Iteration: 0/0</span></div>
         </div>
         <div class="control-panel">
-            <button id="start-btn" class="btn">Start Replay</button>
+            <button id="start-btn" class="btn">Start</button>
             <button id="auto-btn" class="btn">Auto Play</button>
-            <button id="next-btn" class="btn" disabled>Next Step</button>
+            <button id="next-btn" class="btn" disabled>Next Iteration</button>
             <button id="pause-btn" class="btn" disabled>Pause</button>
             <button id="clear-btn" class="btn danger">Clear</button>
         </div>
@@ -270,16 +270,16 @@
     <div class="main-container">
         <div class="left-panel">
             <div class="thinking-panel scrollbar">
-                <h3>Attacker Reasoning</h3>
+                <h3>🧠 Attacker Reasoning</h3>
                 <div id="thinking-content" class="thinking-content">
                     <div class="command-line">
-                        <span class="thinking-text">Click "Start Replay" to begin...</span>
+                        <span class="thinking-text">Click "Start" to begin...</span>
                     </div>
                 </div>
             </div>
 
             <div class="tool-panel scrollbar">
-                <h3>Tool Selection</h3>
+                <h3>⚒️ Tool Selection</h3>
                 <div id="tool-content" class="tool-content">
                     <div class="command-line">
                         <span class="tool-text">Waiting for tool selection...</span>
@@ -367,7 +367,7 @@
                 const thinkingText = iteration.llm_response.message;
                 thinkingContent.innerHTML = `<div class="command-line"><span class="thinking-text">${thinkingText.replace(/\n/g, '<br>')}</span></div>`;
             } else if (iteration.llm_response && !iteration.llm_response.message) {
-                thinkingContent.innerHTML = '<div class="command-line"><span class="thinking-text">Executing previous decision...</span></div>';
+                thinkingContent.innerHTML = '<div class="command-line"><span class="thinking-text">...</span></div>';
             }
 
             if (iteration.llm_response && iteration.llm_response.function) {
@@ -430,7 +430,7 @@
                 
                 if (detailedEvents.length > 0) {
                     defenderText += '<strong>Detected Events:</strong><br>';
-                    const eventsToShow = detailedEvents.slice(0, 5);
+                    const eventsToShow = detailedEvents.slice(0, 10);
                     
                     eventsToShow.forEach((event, index) => {
                         defenderText += `<br><strong>Event ${index + 1}:</strong><br>`;
@@ -471,8 +471,8 @@
                         }
                     });
                     
-                    if (detailedEvents.length > 5) {
-                        defenderText += `<br><em>... and ${detailedEvents.length - 5} more events</em><br>`;
+                    if (detailedEvents.length > 10) {
+                        defenderText += `<br><em>... and ${detailedEvents.length - 10} more events</em><br>`;
                     }
                 } else {
                     defenderText += '• No detailed event data available<br>';
@@ -504,7 +504,7 @@
             const autoBtn = document.getElementById('auto-btn');
             
             startBtn.disabled = true;
-            startBtn.textContent = 'Replaying...';
+            startBtn.textContent ='In Progress...';
             nextBtn.disabled = false;
             autoBtn.disabled = false;
 
@@ -613,7 +613,7 @@
                 updateIterationDisplay();
 
                 nextBtn.disabled = false;
-                nextBtn.textContent = 'Next Step';
+                nextBtn.textContent = 'Next Iteration';
 
                 if (currentIterationIndex >= attackData[0].length) {
                     completeReplay();
@@ -634,9 +634,9 @@
             const pauseBtn = document.getElementById('pause-btn');
             
             startBtn.disabled = false;
-            startBtn.textContent = 'Start Replay';
+            startBtn.textContent = 'Start';
             nextBtn.disabled = true;
-            nextBtn.textContent = 'Next Step';
+            nextBtn.textContent = 'Next Iteration';
             autoBtn.disabled = true;
             autoBtn.textContent = 'Auto Play';
             pauseBtn.disabled = true;

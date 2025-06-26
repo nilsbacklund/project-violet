@@ -13,7 +13,7 @@ import config
 from Red.defender_llm import run_command
 from Red.tools import handle_tool_call
 from Red.model import MitreMethodUsed, DataLogObject
-from config import max_session_length
+from config import max_session_length, simulate_command_line
 from Blue_Lagoon.honeypot_tools import start_dockers, stop_dockers
 
 import os
@@ -94,7 +94,7 @@ def run_single_attack(save_logs, messages):
                 print(f"Mitre Method Used: {mitre_method_used if mitre_method_used else 'No Mitre Method Used'}")
                 print("-" * 50)
         
-        if config.simulate_command_line:
+        if not config.simulate_command_line:
             beelzebub_logs = get_new_hp_logs()
             data_log.beelzebub_response = beelzebub_logs
 
@@ -131,12 +131,13 @@ def run_attacks(n_attacks, save_logs, log_path):
         logs, tokens_used = run_single_attack(save_logs, messages)
         tokens_used_list.append(tokens_used)
 
-
+        if save_logs and not simulate_command_line:
         # create path if not exists
-        os.makedirs(log_path + "full_logs", exist_ok=True)
-        logs = [log.to_dict() for log in logs]
-        save_json_to_file(logs, log_path + f"full_logs/attack_{i+1}.json", save_logs)
-        append_json_to_file(tokens_used, log_path + f"tokens_used.json", save_logs)
+            os.makedirs(log_path + "full_logs", exist_ok=True)
+            logs = [log.to_dict() for log in logs]
+        
+            save_json_to_file(logs, log_path + f"full_logs/attack_{i+1}.json")
+            append_json_to_file(tokens_used, log_path + f"tokens_used.json")
 
         if not config.simulate_command_line:
             stop_dockers()

@@ -1,7 +1,7 @@
 # %%
 import os
 print(os.getcwd())
-from config import attacks_per_configuration, save_logs, n_configurations, save_configuration, experiment_name
+from config import attacks_per_configuration, save_logs, n_configurations, save_configuration, experiment_name, simulate_command_line
 from Red.sangria import run_attacks
 from Red.log_formatter import format_logs_to_lables, save_labels
 from Blue.new_config_pipeline import generate_new_honeypot_config, save_config_as_file, get_honeypot_config, set_honeypot_config
@@ -28,8 +28,8 @@ def main():
             config_id, honeypot_config = generate_new_honeypot_config()
             set_honeypot_config(honeypot_config)
 
-        if save_configuration:
-            save_json_to_file(honeypot_config, f"{config_path}/honeypot_config.json", save_logs)
+        if save_configuration and not simulate_command_line:
+            save_json_to_file(honeypot_config, f"{config_path}/honeypot_config.json")
 
         # Run attacks and save logs
         run_attacks(attacks_per_configuration, save_logs, f"{config_path}/")

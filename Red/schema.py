@@ -15,8 +15,6 @@ if platform.system() != 'Windows':
 
 import subprocess
 import datetime
-import time
-
 import json
 
 load_dotenv()
@@ -46,22 +44,22 @@ def response(model_host, model_name, messages, tools):
     if model_host == 'openai':
         return response_openai(messages, tools, model=model_name)
     elif model_host == 'ollama':
-        return response_openai(messages, tools, model=model_name, model_host=model_host)
         return response_ollama(messages, tools, model=model_name)
     else:
         raise ValueError(f"Unsupported model host: {model_host}")
 
-def response_openai(messages: list, tools, model: str = 'gpt-4o-mini', model_host: str = 'openai'):
+def response_openai(messages: list, tools, model: str = 'o4-mini', model_host: str = 'openai'):
     try:
         response = openai_client.chat.completions.create(
             model=model,
             messages=messages,
-            functions=tools,
+            tools=tools,
         )
 
         choice = response.choices[0]
         content = choice.message.content
-        function_call = choice.message.function_call
+        tool_calls = choice.message.tool_calls
+        function_call = tool_calls[0].function if tool_calls else None
 
         prompt_tokens = response.usage.prompt_tokens
         completion_tokens = response.usage.completion_tokens
@@ -81,11 +79,13 @@ def response_openai(messages: list, tools, model: str = 'gpt-4o-mini', model_hos
         resp_obj.completion_tokens = completion_tokens
         resp_obj.cached_tokens = cached_tokens
 
-        return resp_obj
+        return resp_obj, choice.message
+    
     except openai.RateLimitError:
         print("OpenAI API limit reached, waiting 5 seconds...")
+        import time
         time.sleep(5)
-        response_openai(messages, tools, model)
+        return response_openai(messages, tools, model)
 
 # rep_openai = response_openai(messages=[{"role": "user", "content": "Can you see my current directory using your tool/function_call run_command?"}], tools=tools, model="gpt-4o-mini")
 
@@ -143,63 +143,6 @@ def response_ollama(messages: list, tools, model: str):
 
 # %%
 
-def _ns(**kw):
-    """Shortcut: turn a dict into an attribute-style object."""
-    return SimpleNamespace(**kw)
-
-def response_ollama_workaround(messages, model="llama2"):
-    """
-    One shot request to Ollama.
-    Returns an object whose shape mirrors
-    openai.types.chat.chat_completion.Choice.
-    """
-    resp = ollama.chat(model=model, messages=messages)          # Ollama response
-    text = resp["message"]["content"]
-
-    # Did the model emit a JSON blob that looks like a function call?
-    try:
-        call = json.loads(text)
-        
-        if isinstance(call, dict) and {"name", "arguments"} <= call.keys():
-            fn_call = _ns(
-                name       = call["name"],
-                arguments  = json.dumps(call["arguments"]),
-            )
-            # mirror OpenAI Choice
-            return _ns(
-                index          = 0,
-                finish_reason  = "function_call",
-                logprobs       = None,
-                tool_calls     = None,
-                annotations    = [],
-                message        = _ns(
-                    role          = "assistant",
-                    content       = None,          # OpenAI leaves content empty on function calls
-                    function_call = fn_call,
-                    audio         = None,
-                    refusal       = None,
-                ),
-            )
-    except json.JSONDecodeError:
-        pass
-
-    # ----- normal assistant text ----------------------------------------
-    return _ns(
-        index          = 0,
-        finish_reason  = "stop",
-        logprobs       = None,
-        tool_calls     = None,
-        annotations    = [],
-        message        = _ns(
-            role          = "assistant",
-            content       = text,
-            function_call = None,
-            audio         = None,
-            refusal       = None,
-        ),
-    )
-
-# %%
 last_checked = datetime.datetime.now(datetime.UTC).isoformat()
 def get_new_hp_logs():
     """

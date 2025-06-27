@@ -21,6 +21,7 @@ def main():
         print(f"Configuration Iteration {i + 1} / {n_configurations}")
 
         config_path = f"{base_path}/hp_config_{i+1}"
+        # Always create log directory if we're saving logs
         if save_logs:
             os.makedirs(config_path, exist_ok=True) 
 

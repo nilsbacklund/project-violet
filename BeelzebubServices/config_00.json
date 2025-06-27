@@ -33,7 +33,7 @@
       ],
       "plugin": {
         "llmProvider": "openai",
-        "llmModel": "gpt-4o-mini",
+        "llmModel": "o3-mini",
         "openAISecretKey": "placeholder",
         "prompt": "You will act as an unsecure HTTP Server running a WordPress 6.0 installation. The server has misconfigurations and may leak sensitive files like backup archives, wp-config.php, or error logs. You must respond to HTTP requests with plausible HTML or PHP error messages. Do not provide explanations or metadata unless explicitly requested."
       }
@@ -131,7 +131,7 @@
       "serverName": "ubuntu",
       "plugin": {
         "llmProvider": "openai",
-        "llmModel": "gpt-4o-mini",
+        "llmModel": "o3-mini",
         "openAISecretKey": "placeholder",
         "prompt": "You will act as an Ubuntu Linux terminal. The user will type commands, and you are to reply with what the terminal should show. Your responses must be contained within a single code block. Do not provide notes or explanations. Simulate realistic filesystem responses, process lists, or command output as needed."
       }

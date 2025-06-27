@@ -41,7 +41,7 @@ Session:
 
 Output:
 """
-    response = query_openai(prompt, "gpt-4o-mini", 0.1, 150)
+    response = query_openai(prompt, "o3-mini", 0.1, 150)
     return response
 
 # Example usage:

@@ -10,12 +10,12 @@ class LLMPlugin:
 
     Attributes:
         llmProvider (str): The LLM provider name (e.g., 'openai').
-        llmModel (str): The specific model to use (e.g., 'gpt-4o-mini').
+        llmModel (str): The specific model to use (e.g., 'o3-mini').
         openAISecretKey (str): API key for authentication with the LLM provider.
         prompt (str): Base prompt to initialize the LLM conversation.
     """
     llmProvider: str = "openai"
-    llmModel: str = "gpt-4o-mini"
+    llmModel: str = "o3-mini"
     openAISecretKey: str = "placeholder"
     prompt: str
 

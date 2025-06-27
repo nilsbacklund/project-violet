@@ -12,21 +12,29 @@ def handle_tool_call(response, ssh):
     """
     Handle the tool call from the LLM response.
     """
-    tool_name = response.function
-    args = response.arguments or {}
-    tool_response = None
     mitre_method = None
+    new_messages = []
 
-    if tool_name == "run_command":
-        tool_response, mitre_method = terminal_tool(args, ssh)
-    elif tool_name == "terminate":
-        tool_response = terminate_tool(args)
-    elif tool_name == "web_search_tool":
-        tool_response = handle_web_search_tool(args)
-    else:
-        raise ValueError(f"Unknown tool call: {tool_name}")
+    for call in response.tool_calls:
+        args = json.loads(call.function.arguments)
+
+        if call.function.name == "run_command":
+            resp, mitre_method = terminal_tool(args, ssh)
+        elif call.function.name == "terminate":
+            resp = terminate_tool(args)
+        elif call.function.name == "web_search_tool":
+            resp = handle_web_search_tool(args)
+        else:
+            raise ValueError(f"Unknown tool call: {call.function.name}")
     
-    return tool_response, mitre_method
+        new_messages.append({
+            "role": "tool",
+            "tool_call_id": call.id,
+            "name": call.function.name,
+            "content": str(resp) if resp is not None else "No response"  # Ensure content is never None
+        })
+    
+    return new_messages, mitre_method
 
 def search_and_scrape(query: str, num_results=4, max_chars=2500):
     """
@@ -72,17 +80,13 @@ def search_and_scrape(query: str, num_results=4, max_chars=2500):
             "content": content
         })
 
-    return {
-        "role": "function",
-        "name": "web_search_tool",
-        "content": json.dumps(results, indent=2)
-    }
+    return json.dumps(results, indent=4)
 
 
 # Needs SSH development
 
 def handle_web_search_tool(arguments):
-    return search_and_scrape(**arguments)
+    return search_and_scrape(**arguments, num_results=arguments.get("num_results", 4), max_chars=arguments.get("max_chars", 2500))
 
 def terminal_tool(args, ssh):
     """
@@ -112,11 +116,7 @@ def terminal_tool(args, ssh):
 
     command = args[command_key]
     command_response = run_command(command, ssh)
-    tool_response = {
-        "role": "function",
-        "name": "run_command",
-        "content": command_response
-    }
+    tool_response = command_response
 
     mitre_method = MitreMethodUsed()
 
@@ -143,12 +143,8 @@ def terminate_tool(args):
     
     terminate_response = "Sangria feels like it has completed its task and is now terminating the session."
     print(terminate_response)
-    tool_response = {
-        "role": "function",
-        "name": "terminate",
-        "content": str(success)
-    }
-    return tool_response
+
+    return str(success)
 
 
 # %%

@@ -49,7 +49,7 @@ def run_command(command: str, ssh, simulate_execution=simulate_command_line):
 
         # send to OpenAI and get back the assistant message
         raw_resp = openai_client.chat.completions.create(
-            model='gpt-4o-mini',
+            model='o3-mini',
             messages=command_messages
         )
         msg = raw_resp.choices[0].message

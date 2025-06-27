@@ -44,7 +44,7 @@
         },
         "llmModel": {
           "type": "string",
-          "const": "gpt-4o-mini",
+          "const": "o3-mini",
           "description": "The specific model to use."
         },
         "openAISecretKey": {

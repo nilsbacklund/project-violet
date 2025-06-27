@@ -10,7 +10,7 @@ OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 LOGS_PATH = BASE_DIR.parent / "logs"
 
 # Query the OpenAI LLM with a prompt and return the response as a string
-def query_openai(prompt: str, model: str = "gpt-4o-mini", temperature: float = 0.7) -> str:
+def query_openai(prompt: str, model: str = "o3-mini", temperature: float = 0.7) -> str:
     try:
         openai_client = openai.OpenAI(api_key=OPENAI_API_KEY)
         response = openai_client.chat.completions.create(
@@ -25,7 +25,7 @@ def query_openai(prompt: str, model: str = "gpt-4o-mini", temperature: float = 0
         return ""
 
 # Query the LLM for an ordered sequence of MITRE tactics and techniques for a given config
-def query_attack_patterns(config, model="gpt-4o-mini"):
+def query_attack_patterns(config, model="o3-mini"):
     prompt = (
         "Given the following honeypot configuration, predict a likely sequence of MITRE ATT&CK tactics and techniques "
         "that an attacker would use against this setup. "

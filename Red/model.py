@@ -7,15 +7,41 @@ class LLMHost(str, Enum):
     OLLAMA = "ollama"
     OLLAMA_NO_FC = "ollama_no_fc"
 
+# Model-specific notes and constraints
+# 
+# O3-MINI and O4-MINI Model Notes:
+# - These are newer reasoning models from OpenAI
+# - o3-mini: Improved reasoning capabilities with cost efficiency
+# - o4-mini: Latest generation with enhanced performance
+# - Both models support function calling and tool use
+# - May have different rate limits compared to GPT models
+# - Recommended for complex reasoning tasks like cybersecurity analysis
+#
+# Model Selection Guide:
+# - For cybersecurity attack simulation: O3_MINI (better reasoning)
+# - For configuration generation: O3_MINI (structured output)
+# - For command simulation: O3_MINI (logical command sequences)
+# - For cost-sensitive operations: O4_MINI (if more cost-effective)
+
 class LLMModel(str, Enum):
     """Enumeration LLM models."""
-    GPT_4_1_NANO = "gpt-4.1-nano"
-    GPT_4_1 = "gpt-4.1"
+    # Legacy OpenAI models
     GPT_3_5_TURBO = "gpt-3.5-turbo"
     GPT_4 = "gpt-4"
     GPT_4O_MINI = "gpt-4o-mini"
+    
+    # Current OpenAI models
+    GPT_4_1_NANO = "gpt-4.1-nano"
+    GPT_4_1 = "gpt-4.1"
     GPT_4_1_MINI = "gpt-4.1-mini"
+    
+    # New OpenAI o-series models
+    O1_PREVIEW = "o1-preview"
+    O1_MINI = "o1-mini" 
+    O3_MINI = "o3-mini"
     O4_MINI = "o4-mini"
+    
+    # Ollama models
     OLLAMA_LLAMA32_3b = "llama3.2:3b"
     OLLAMA_DEEPSEEK_R1_5b = "deepseek-r1:1.5b"
 
@@ -110,4 +136,3 @@ class LabledCommandObject():
             'datetime': self.datetime,
             'event_id': self.event_id
         }
-    

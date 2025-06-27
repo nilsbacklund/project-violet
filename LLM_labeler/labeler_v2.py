@@ -268,8 +268,8 @@ def build_llm_prompt(session_text: str) -> str:
 
 def classify_session(session_text):
     prompt = build_llm_prompt(session_text)
-    response = openai.ChatCompletion.create(
-        model="gpt-4o-mini",
+    response = openai.chat.completions.create(
+        model="o3-mini",
         messages=[
             {"role": "system", "content": "You are a cybersecurity analyst."},
             {"role": "user", "content": prompt}
@@ -277,7 +277,7 @@ def classify_session(session_text):
         temperature=0.2,
         max_tokens=400
     )
-    content = response['choices'][0]['message']['content']
+    content = response.choices[0].message.content
     try:
         result = json.loads(content)
         # Ensure all required fields are present

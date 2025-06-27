@@ -9,14 +9,29 @@ from typing import List, Dict, Any
 
 # Load API key
 load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
+OPENAI_API_KEY= os.getenv("OPENAI_API_KEY")
+
+def query_openai(prompt: str, model: str, temperature: float = 0.7, max_tokens=150) -> str:
+    openai_client = openai.OpenAI(api_key=OPENAI_API_KEY)
+    response = openai_client.chat.completions.create(
+        model=model,
+        messages=[
+            {"role": "system", "content": "You are a cybersecurity analyst."},
+            {"role": "user", "content": prompt}
+        ],
+        temperature=temperature,
+        max_tokens=max_tokens,
+        stream=False,
+    )
+    return response.choices[0].message.content.strip()
+
 
 # Paths
-input_path = "data/full_supervised_corpus.json"  # Original dataset
-#input_path = "data/vulns_sessions.json"  # Vulns_DB-derived dataset
-output_path = "data/labeled_output.jsonl"
+input_path = "LLM_labeler/data/full_supervised_corpus.json"  # Original dataset
+#input_path = "LLM_labeler/data/vulns_sessions.json"  # Vulns_DB-derived dataset
+output_path = "LLM_labeler/data/labeled_output.jsonl"
 # Error log path
-error_log_path = "data/labeling_errors.log"
+error_log_path = "LLM_labeler/data/labeling_errors.log"
 
 # MITRE ATT&CK mapping (very basic, for demo)
 MITRE_MAP = {
@@ -268,16 +283,7 @@ def build_llm_prompt(session_text: str) -> str:
 
 def classify_session(session_text):
     prompt = build_llm_prompt(session_text)
-    response = openai.ChatCompletion.create(
-        model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": "You are a cybersecurity analyst."},
-            {"role": "user", "content": prompt}
-        ],
-        temperature=0.2,
-        max_tokens=400
-    )
-    content = response['choices'][0]['message']['content']
+    content = query_openai(prompt, "gpt-4o-mini", 0.2, 400)
     try:
         result = json.loads(content)
         # Ensure all required fields are present
@@ -356,7 +362,7 @@ def main():
         print(f"Input file not found: {input_path}")
         return
 
-    error_log_path = "data/labeling_errors.log"
+    error_log_path = "LLM_labeler/data/labeling_errors.log"
     # Open input and output files
     with open(input_path, "r", encoding="utf-8") as infile, \
          open(output_path, "w", encoding="utf-8") as outfile, \

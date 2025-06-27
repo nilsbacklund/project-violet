@@ -47,7 +47,11 @@ if __name__ == "__main__":
         function_type = iteration["llm_response"]["function"]
         arguments = iteration["llm_response"]["arguments"]
         response = iteration["tool_response"]
+        bz_response = iteration["beelzebub_response"]
 
+        if bz_response:
+            raise Exception("beelzebub response returned")
+        
         # Attacker Thoughts
         if message:
             panels.append(

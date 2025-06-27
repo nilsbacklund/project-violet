@@ -1,27 +1,27 @@
-import os
-import os
-import pandas as pd
 from pathlib import Path
+import json
 
 BASE_DIR = Path(__file__).resolve().parent
 
 data_path = BASE_DIR.parent / "LLM_labeler" / "data"
 
-df = pd.read_json(data_path / "sample_test_corpus_predictions.json", orient="records")
+with open(data_path / "sample_test_corpus_expanded.json", "r", encoding="utf8") as f:
+    true_data = json.load(f)
+    
+with open(data_path / "sample_test_corpus_predictions.json", "r", encoding="utf8") as f:
+    pred_data = json.load(f)
 
-predicted_labels = df["labels_predicted"]
-true_labels = df["labels_expanded"]
-N = len(predicted_labels)
+num_preds = 0
+corrects = 0
+for true_row, pred_row in zip(true_data, pred_data):
+    if len(true_row["full_session"]) != len(pred_row["full_session"]):
+        print("shit")
+        print(true_row["full_session"])
+        print(pred_row["full_session"])
+        continue
+    num_preds += len(true_row["full_session"])
+    corrects += sum([true["label"] == pred["label"] for true, pred in zip(true_row["full_session"], pred_row["full_session"])])
 
-num_labels = 0
-
-for predicted_label, true_label in zip(predicted_labels, true_labels):
-    predicted_list = predicted_label.split(" - ")
-    true_list = true_label.split(" - ")
-    if len(true_list) != len(predicted_list):
-        print(f"Number of true labels did not match number of predicted labels! {len(predicted_list), len(true_list)}")
-    num_labels += len(true_list)
-
-
-binary_fidelity = (true_labels == predicted_labels).sum() / N
-print(binary_fidelity)
+print(corrects)
+print(num_preds)
+print(corrects / num_preds)

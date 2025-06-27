@@ -5,8 +5,6 @@ import openai
 import pandas as pd
 import json
 import re
-import ast
-import math
 
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -15,15 +13,15 @@ BASE_DIR = Path(__file__).resolve().parent
 
 data_path = BASE_DIR.parent / "LLM_labeler" / "data"
 
-def query_openai(prompt: str, model: str = "gpt-4.1-mini", temperature: float = 0.7, max_tokens=32768):
+def query_openai(prompt: str, model: str = "o1-mini", temperature: float = 0.7, max_tokens=65536):
     openai_client = openai.OpenAI(api_key=OPENAI_API_KEY)
     response = openai_client.chat.completions.create(
         model=model,
         messages=[
             {"role": "user", "content": prompt}
         ],
-        temperature=temperature,
-        max_tokens=max_tokens,
+        temperature=1,
+        max_completion_tokens=max_tokens,
         stream=False,
     )
     message = response.choices[0].message.content.strip()
@@ -36,7 +34,7 @@ def extract_labels(text: str) -> str | None:
     If no such tags are found, raises ValueError.
     """
     # findall returns a list of all the captured groups
-    pattern = re.compile(r"<labels>\s*(.*?)\s*</labels>", re.DOTALL)
+    pattern = re.compile(r"<output>\s*(.*?)\s*</output>", re.DOTALL)
     all_matches = pattern.findall(text)
     if not all_matches:
         raise ValueError("No output <labels>...</labels> found!")
@@ -45,73 +43,110 @@ def extract_labels(text: str) -> str | None:
     return last_content
 
 def main():
-    # Simple read (auto‐detects engine: 'pyarrow' or 'fastparquet')
-    columns = ["session", "labels", "session_expanded", "labels_expanded"]
-    df_train = pd.read_parquet(data_path / "sample_train_corpus_expanded.parquet", columns=columns)
-    df_test = pd.read_parquet(data_path / "sample_test_corpus_expanded.parquet", columns=columns)
+    with open(data_path / "sample_train_corpus_expanded.json", "r", encoding="utf8") as f:
+        train_data = json.load(f)
+        
+    with open(data_path / "sample_test_corpus_expanded.json", "r", encoding="utf8") as f:
+        test_data = json.load(f)
 
-    train_list = df_train.to_dict(orient="records")
-    test_list  = df_test.to_dict(orient="records")
-    test_predicted_labels = []
+    clean_train_data = [{"session": row["session"], "full_session": row["full_session"]} for row in train_data]
+    clean_test_data = []
+
+    for i, row in enumerate(test_data):
+        clean_test_data.append({
+            "session": row["session"],
+            "full_session": [
+                {
+                    "command": statement["command"],
+                    "label": None,
+                }
+                for statement in row["full_session"]
+            ]
+        })
 
     prompt = f"""
 You are a cybersecurity analyst specialized in identifying attacker behavior from shell commands.
-Your task: Analyze a session and classify it by MITRE ATT&CK tactics.
+Your task: Analyze sessions and classify it by MITRE ATT&CK tactics.
 There are seven tactics: Execution, Persistence, Discovery, Impact, Defense Evasion, Harmless and Other.
-These tactics are tied to sequences of individual commands which are separated by the token <sep>
 
-You will predict the labels of the session enclosed in the tags <session></session>.
+You will predict the labels of the sessions enclosed in the tags <sessions></sessions>.
 You must do some text based analysis before your final prediction.
-Your predicted labels at the end must be enclosed in the tags <labels></labels>.
 
 Training examples:
-{json.dumps(train_list, indent=2, ensure_ascii=False)}
+{json.dumps(clean_train_data[:70], indent=2, ensure_ascii=False)}
 """
-    for i, row in enumerate(test_list):
-        print(f"Processing test session: {i + 1} / {len(test_list)}")
-        session = row["session_expanded"]
-        true_labels = row["labels"]
-        rows_prompt = prompt + f"""
+#     prompt = """
+# You are a cybersecurity analyst specialized in identifying attacker behavior from shell commands.
+# Your task: Analyze sessions and classify it by MITRE ATT&CK tactics.
+# There are seven tactics: Execution, Persistence, Discovery, Impact, Defense Evasion, Harmless and Other.
 
-You will predict the labels of the session enclosed in the tags <session></session>.
+# You will predict the labels of the sessions enclosed in the tags <sessions></sessions>.
+# You must do some text based analysis before your final prediction.
 
-<session>
-{session}
-</session>
+# Example sessions:
+# [
+#     {
+#         "session": "<HERE THERE WILL BE SOME BASH COMMANDS>",
+#         "labels": "Discovery - 1",
+#         "full_session": [
+#             {
+#                 "command": "<HERE THERE WILL BE SOME BASH COMMANDS>",
+#                 "label": "Discovery"
+#             },
+#             {
+#                 "command": "<HERE THERE WILL BE SOME BASH COMMANDS>",
+#                 "label": "Discovery"
+#             }
+#         ]
+#     },
+#     {
+#         "session": "<HERE THERE WILL BE SOME BASH COMMANDS>",
+#         "labels": "Discovery - 2",
+#         "full_session": [
+#             {
+#                 "command": "<HERE THERE WILL BE SOME BASH COMMANDS>",
+#                 "label": "Discovery"
+#             },
+#             {
+#                 "command": "<HERE THERE WILL BE SOME BASH COMMANDS>",
+#                 "label": "Discovery"
+#             },
+#             {
+#                 "command": "<HERE THERE WILL BE SOME BASH COMMANDS>",
+#                 "label": "Discovery"
+#             }
+#         ]
+#     }
+# ]
+# """
+    rows_prompt = prompt + f"""
+You will predict the labels of the sessions enclosed in the tags <sessions></sessions>.
+
+<sessions>
+{json.dumps(clean_test_data, indent=2, ensure_ascii=False)}
+</sessions>
 
 You must do some text based analysis before your final prediction.
-Your predicted labels at the end should be output as a single string (with tactics separated by - ) that must be enclosed in the tags <labels></labels>.
-Example output:
-<labels>Execution - Execution - Discovery - Discovery - Discovery - Other - Other - Persistence - Persistence - Execution</labels>
+You will output the same JSON file as in the sessions-tags, but enclosed in <output></output> tags with your predicted labels.
+Make sure you don't forget any session command and that every command has an associated label!
 """
-        message, usage = query_openai(rows_prompt)
-        predicted_labels = extract_labels(message)
 
-        # print("\t(Debug) Message:", message)
-        print("\tPredicted labels:", predicted_labels)
-        print("\tTrue labels:", true_labels)
-        
-        print(f"\tPrompt tokens:     {usage.prompt_tokens}")
-        print(f"\tCompletion tokens: {usage.completion_tokens}")
-        print(f"\tTotal tokens:      {usage.total_tokens}")
-        input_token_cost = usage.prompt_tokens / 1_000_000 * 0.4
-        output_token_cost = usage.completion_tokens / 1_000_000 * 1.6
-        print(f"\tCost: ${input_token_cost + output_token_cost}")
-        test_predicted_labels.append(predicted_labels)
-        print(f"(Debug) Number of predicted labels: {len(test_predicted_labels)}")
-        print()
+    message, usage = query_openai(rows_prompt)
+    predicted_labels = extract_labels(message)
+    
+    print(f"\tPrompt tokens:     {usage.prompt_tokens}")
+    print(f"\tCompletion tokens: {usage.completion_tokens}")
+    print(f"\tTotal tokens:      {usage.total_tokens}")
+    input_token_cost = usage.prompt_tokens / 1_000_000 * 1.1
+    output_token_cost = usage.completion_tokens / 1_000_000 * 4.4
+    print(f"\tCost: ${input_token_cost + output_token_cost}")
 
-    df_test_predictions = df_test.copy()
-    df_test_predictions["labels_predicted"] = test_predicted_labels
+    test_prediction_data = json.loads(predicted_labels)
 
     output_file = data_path / "sample_test_corpus_predictions.json"
-    df_test_predictions.to_json(
-        output_file,
-        orient="records",    # list of dicts, one per row
-        indent=4,            # pretty-print with 2-space indentation
-        force_ascii=False    # allow Unicode if any
-    )
-    print(f"Saved predictions to {output_file}")
+    with open(output_file, 'w', encoding='utf-8') as f:
+        json.dump(test_prediction_data, f, ensure_ascii=False, indent=2)
+        print(f"Saved predictions to {output_file}")
 
 if __name__ == "__main__":
     main()

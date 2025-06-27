@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 import os
 
-TIMEOUT = 50
+TIMEOUT = 100
 
 # openai.api_key = os.getenv("OPENAI_API_KEY")
 # This is my private key, do not share it. Do not use it in production or use it too much eather. If I notice it being abused, I will remove it.
@@ -16,11 +16,13 @@ load_dotenv()
 openai.api_key = os.getenv('OPENAI_API_KEY')
 openai_client = openai.OpenAI()
 
-prompt_patterns = [pexpect.EOF, r'└─\x1b\[1;31m#',
+prompt_patterns = [pexpect.EOF, 
+                    r'└─\x1b\[1;31m#',
                     r' \x1b\[0m> ', 
                     r'Are you sure you want to continue connecting \(yes/no/\[fingerprint\]\)\? ',
                     'password: ',
-                    r'\:\~\$ ']
+                    r'\:\~\$ ',
+                    "Please type 'yes', 'no' or the fingerprint: "]
 
 def send_terminal_command(connection, command):
     try:
@@ -29,7 +31,9 @@ def send_terminal_command(connection, command):
     except pexpect.exceptions.TIMEOUT:
         connection.expect(r'.*')
 
-    command_response = connection.before
+    matched_pattern = connection.match.group(0) if connection.match else ""
+
+    command_response = f"{connection.before.strip()}{matched_pattern}"
     return command_response
 
 command_messages = [

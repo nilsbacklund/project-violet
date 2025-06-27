@@ -30,12 +30,11 @@ openai_client = openai.OpenAI()
 # )
 
 def start_ssh():
-    ssh = pexpect.spawn('ssh -p 3022 root@localhost')
+    ssh = pexpect.spawn('ssh -p 3022 root@localhost', encoding='utf-8')
     ssh.expect("root@localhost's password: ")
     ssh.sendline('toor')
-    ssh.expect(pexpect.TIMEOUT, timeout=1)
-    ssh.before.decode('utf-8').strip()
-
+    ssh.expect(r'└─\x1b\[1;31m#', timeout=4)
+    a = ssh.before.strip()
     # Real ghetto to put here but just want it to run after the hp has spun up
     global last_checked
     last_checked = datetime.datetime.now(datetime.UTC).isoformat()

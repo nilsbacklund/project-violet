@@ -91,6 +91,8 @@ def run_single_attack(save_logs, messages):
             if assistant_response.function:
                 print(f"Tool call: {assistant_response.function, assistant_response.arguments}")
                 print(f"Command response: {tool_response['content'] if tool_response else 'No tool call made'}")
+                print("\x1b[0m")
+
                 print(f"Mitre Method Used: {mitre_method_used if mitre_method_used else 'No Mitre Method Used'}")
                 print("-" * 50)
         

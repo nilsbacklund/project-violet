@@ -32,16 +32,12 @@ def create_experiment_folder(save_logs=True, experiment_name=None):
     return path
 
 
-def append_json_to_file(data, path, save_logs=True):
+def append_json_to_file(data, path):
     '''
         Save the tokens used to a file, will be appended if file already exists.
         The file will be saved in the logs/tokens_used directory.
         The file will be named tokens_used_<session_id>.json
     '''
-
-    if not save_logs:
-        print("Saving tokens used is disabled.")
-        return
     
     print(f"Saving tokens used to {path}...")
     
@@ -61,14 +57,7 @@ def append_json_to_file(data, path, save_logs=True):
     print("File written:", os.path.exists(path), "Size:", os.path.getsize(path))
 
 
-def save_json_to_file(data, path, save_logs=True):
-    '''
-        Save the logs to a file with specific path
-    '''
-
-    if not save_logs:
-        print("Saving logs is disabled.")
-        return
+def save_json_to_file(data, path):
     
     with open(path, 'w') as f:
         json.dump(data, f, indent=4)
@@ -130,3 +119,4 @@ class MetaDataObject:
         }
     
     
+# %%

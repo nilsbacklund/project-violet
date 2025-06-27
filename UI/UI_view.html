@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Violet - Attack</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', monospace;
+            background: #0a0a0a;
+            color: #e8e8e8;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .header {
+            background: #1a1a1a;
+            border-bottom: 1px solid #333;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-content {
+            flex: 1;
+        }
+
+        .header h1 {
+            color: #e8e8e8;
+            font-size: 1.6em;
+            font-weight: 300;
+            margin-bottom: 8px;
+        }
+
+        .header .subtitle {
+            color: #888;
+            font-size: 0.85em;
+            font-weight: 300;
+        }
+
+        .control-panel {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn {
+            background: #8b45c7;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: #a364d9;
+        }
+
+        .btn:disabled {
+            background: #555;
+            cursor: not-allowed;
+        }
+
+        .btn.danger {
+            background: #ff4757;
+        }
+
+        .btn.danger:hover {
+            background: #ff6b7a;
+        }
+
+        .iteration-display {
+            color: #a364d9;
+            font-size: 0.9em;
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            grid-gap: 15px;
+            height: calc(100vh - 80px);
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        .left-panel {
+            display: grid;
+            grid-template-rows: 180px 120px 1fr; 
+            grid-gap: 15px;
+            overflow: hidden; 
+        }
+
+        .right-panel {
+            display: grid;
+            grid-template-rows: 1fr; 
+            overflow: hidden;
+        }
+
+        .thinking-panel {
+            background: #1a1a1a;
+            border: 1px solid #ff4757;
+            border-radius: 6px;
+            padding: 18px;
+            height: 180px;
+            overflow-y: auto;
+        }
+
+        .thinking-panel h3 {
+            color: #ff6b7a;
+            margin-bottom: 12px;
+            font-size: 0.95em;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tool-panel {
+            background: #1a1a1a;
+            border: 1px solid #8b45c7;
+            border-radius: 6px;
+            padding: 18px;
+            height: 140px;
+            overflow-y: auto;
+        }
+
+        .tool-panel h3 {
+            color: #a364d9;
+            margin-bottom: 12px;
+            font-size: 0.95em;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .terminal {
+            background: #0f0f0f;
+            border: 1px solid #333;
+            border-radius: 6px;
+            overflow: hidden;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .terminal-header {
+            padding: 12px 18px;
+            font-size: 0.8em;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #333;
+        }
+
+        .attacker-terminal .terminal-header {
+            background: #ff4757;
+            color: white;
+        }
+
+        .defender-terminal .terminal-header {
+            background: #5352ed;
+            color: white;
+        }
+
+        .terminal-content {
+            flex: 1;
+            padding: 18px;
+            overflow-y: auto;
+            font-size: 0.8em;
+            line-height: 1.5;
+            background: #0f0f0f;
+        }
+
+        .command-line {
+            margin-bottom: 8px;
+            padding: 2px 0;
+        }
+
+        .command-prompt {
+            color: #999;
+            font-weight: 400;
+        }
+
+        .attacker-text {
+            color: #ff8a80;
+        }
+
+        .defender-text {
+            color: #82b1ff;
+        }
+
+        .thinking-text {
+            color: #ff8a80;
+            line-height: 1.4;
+            white-space: pre-wrap;
+        }
+
+        .tool-text {
+            color: #a364d9;
+            line-height: 1.4;
+        }
+
+        .tool-text strong {
+            color: #c490ed;
+            font-weight: 500;
+        }
+
+        .defender-text strong {
+            color: #a3b8ff;
+            font-weight: 500;
+        }
+
+        .defender-text em {
+            color: #9999ff;
+            font-style: italic;
+        }
+
+        .command-line {
+            margin-bottom: 8px;
+            padding: 2px 0;
+            word-wrap: break-word;
+        }
+
+        .scrollbar {
+            scrollbar-width: thin;
+            scrollbar-color: #555 #1a1a1a;
+        }
+
+        .scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .scrollbar::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+
+        .scrollbar::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1>Project Violet - Attack</h1>
+            <div class="subtitle">Replaying recorded attack session <span id="iteration-display" class="iteration-display">Iteration: 0/0</span></div>
+        </div>
+        <div class="control-panel">
+            <button id="start-btn" class="btn">Start</button>
+            <button id="auto-btn" class="btn">Auto Play</button>
+            <button id="next-btn" class="btn" disabled>Next Iteration</button>
+            <button id="pause-btn" class="btn" disabled>Pause</button>
+            <button id="clear-btn" class="btn danger">Clear</button>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="left-panel">
+            <div class="thinking-panel scrollbar">
+                <h3>🧠 Attacker Reasoning</h3>
+                <div id="thinking-content" class="thinking-content">
+                    <div class="command-line">
+                        <span class="thinking-text">Click "Start" to begin...</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tool-panel scrollbar">
+                <h3>⚒️ Tool Selection</h3>
+                <div id="tool-content" class="tool-content">
+                    <div class="command-line">
+                        <span class="tool-text">Waiting for tool selection...</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="terminal attacker-terminal">
+                <div class="terminal-header">
+                    <span>ATTACKER TERMINAL</span>
+                </div>
+                <div id="attacker-output" class="terminal-content scrollbar">
+                    <div class="command-line">
+                        <span class="attacker-text">Waiting for commands...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <div class="terminal defender-terminal">
+                <div class="terminal-header">
+                    <span>BEELZEBUB DEFENDER</span>
+                </div>
+                <div id="defender-output" class="terminal-content scrollbar">
+                    <div class="command-line">
+                        <span class="defender-text">Monitoring for threats...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let attackData = null;
+        let currentIterationIndex = 0;
+        let isReplaying = false;
+        let isAutoPlaying = false;
+        let autoPlayInterval = null;
+
+        async function loadAttackData() {
+            try {
+                const response = await fetch('./attack_9.json');
+                attackData = await response.json();
+                console.log('Attack data loaded:', attackData);
+                updateIterationDisplay();
+            } catch (error) {
+                console.error('Error loading attack data:', error);
+                alert('Could not load attack_9.json. Please ensure the file is in the same directory as this HTML file.');
+            }
+        }
+
+        function updateIterationDisplay() {
+            const iterationDisplay = document.getElementById('iteration-display');
+            if (attackData && attackData[0]) {
+                const totalIterations = attackData[0].length;
+                iterationDisplay.textContent = `Iteration: ${currentIterationIndex}/${totalIterations}`;
+            }
+        }
+
+        function clearAllPanels() {
+            document.getElementById('thinking-content').innerHTML = '<div class="command-line"><span class="thinking-text">Click "Start Replay" to begin...</span></div>';
+            document.getElementById('tool-content').innerHTML = '<div class="command-line"><span class="tool-text">Waiting for tool selection...</span></div>';
+            document.getElementById('attacker-output').innerHTML = '<div class="command-line"><span class="attacker-text">Waiting for commands...</span></div>';
+            document.getElementById('defender-output').innerHTML = '<div class="command-line"><span class="defender-text">Monitoring for threats...</span></div>';
+        }
+
+        function cleanTerminalOutput(text) {
+            if (!text) return '';
+            return text
+                .replace(/\u001b\[[0-9;]*m/g, '') 
+                .replace(/\u001b\[[0-9;]*[A-Za-z]/g, '') 
+                .replace(/\r\n/g, '\n')
+                .replace(/\r/g, '\n')
+                .trim();
+        }
+
+        function displayIteration(iteration) {
+            const thinkingContent = document.getElementById('thinking-content');
+            const toolContent = document.getElementById('tool-content');
+            const attackerOutput = document.getElementById('attacker-output');
+            const defenderOutput = document.getElementById('defender-output');
+
+            if (iteration.llm_response && iteration.llm_response.message) {
+                const thinkingText = iteration.llm_response.message;
+                thinkingContent.innerHTML = `<div class="command-line"><span class="thinking-text">${thinkingText.replace(/\n/g, '<br>')}</span></div>`;
+            } else if (iteration.llm_response && !iteration.llm_response.message) {
+                thinkingContent.innerHTML = '<div class="command-line"><span class="thinking-text">...</span></div>';
+            }
+
+            if (iteration.llm_response && iteration.llm_response.function) {
+                const functionName = iteration.llm_response.function;
+                const args = iteration.llm_response.arguments;
+                let toolText = `<strong>Function:</strong> ${functionName}`;
+                
+                if (args) {
+                    if (args.command) {
+                        toolText += `<br><strong>Command:</strong> ${args.command}`;
+                    }
+                    if (args.tactic_used) {
+                        toolText += `<br><strong>MITRE Tactic:</strong> ${args.tactic_used}`;
+                    }
+                    if (args.technique_used) {
+                        toolText += `<br><strong>MITRE Technique:</strong> ${args.technique_used}`;
+                    }
+                }
+                
+                toolContent.innerHTML = `<div class="command-line"><span class="tool-text">${toolText}</span></div>`;
+            } else if (iteration.llm_response && iteration.llm_response.message && !iteration.llm_response.function) {
+                toolContent.innerHTML = '<div class="command-line"><span class="tool-text">Planning next action...</span></div>';
+            }
+
+            if (iteration.tool_response) {
+                const cleanedOutput = cleanTerminalOutput(iteration.tool_response);
+                if (cleanedOutput) {
+                    const formattedOutput = cleanedOutput.replace(/\n/g, '<br>');
+                    attackerOutput.innerHTML = `<div class="command-line"><span class="attacker-text">${formattedOutput}</span></div>`;
+                } else {
+                    attackerOutput.innerHTML = '<div class="command-line"><span class="attacker-text">Command executed (no output)</span></div>';
+                }
+            } else if (iteration.llm_response && iteration.llm_response.function) {
+                attackerOutput.innerHTML = '<div class="command-line"><span class="attacker-text">Preparing to execute command...</span></div>';
+            }
+
+            if (iteration.beelzebub_response && iteration.beelzebub_response.length > 0) {
+                let defenderText = '<strong>Beelzebub Defender Analysis:</strong><br><br>';
+                
+                const statusCounts = {};
+                const detailedEvents = [];
+                
+                iteration.beelzebub_response.forEach((response, index) => {
+                    if (response.status) {
+                        statusCounts[response.status] = (statusCounts[response.status] || 0) + 1;
+                    }
+                    
+                    if (response.event) {
+                        detailedEvents.push(response.event);
+                    }
+                });
+                
+                if (Object.keys(statusCounts).length > 0) {
+                    defenderText += '<strong>Status Summary:</strong><br>';
+                    for (const [status, count] of Object.entries(statusCounts)) {
+                        defenderText += `• ${status}: ${count} event(s)<br>`;
+                    }
+                    defenderText += '<br>';
+                }
+                
+                if (detailedEvents.length > 0) {
+                    defenderText += '<strong>Detected Events:</strong><br>';
+                    const eventsToShow = detailedEvents.slice(0, 10);
+                    
+                    eventsToShow.forEach((event, index) => {
+                        defenderText += `<br><strong>Event ${index + 1}:</strong><br>`;
+                        
+                        if (event.Protocol) {
+                            defenderText += `• Protocol: ${event.Protocol}<br>`;
+                        }
+                        if (event.Description) {
+                            defenderText += `• Service: ${event.Description}<br>`;
+                        }
+                        if (event.SourceIp) {
+                            defenderText += `• Source IP: ${event.SourceIp}:${event.SourcePort || 'unknown'}<br>`;
+                        }
+                        if (event.RemoteAddr) {
+                            defenderText += `• Remote Address: ${event.RemoteAddr}<br>`;
+                        }
+                        if (event.Command && event.Command.trim()) {
+                            const cmdPreview = event.Command.length > 50 ? 
+                                event.Command.substring(0, 50) + '...' : 
+                                event.Command;
+                            defenderText += `• Command: ${cmdPreview.replace(/\r\n/g, ' ').replace(/\n/g, ' ')}<br>`;
+                        }
+                        if (event.HTTPMethod && event.RequestURI) {
+                            defenderText += `• HTTP: ${event.HTTPMethod} ${event.RequestURI}<br>`;
+                        }
+                        if (event.UserAgent && event.UserAgent.trim()) {
+                            defenderText += `• User-Agent: ${event.UserAgent}<br>`;
+                        }
+                        if (event.DateTime) {
+                            const timestamp = new Date(event.DateTime).toLocaleTimeString();
+                            defenderText += `• Time: ${timestamp}<br>`;
+                        }
+                        if (event.Status) {
+                            defenderText += `• Status: ${event.Status}<br>`;
+                        }
+                        if (event.Msg) {
+                            defenderText += `• Message: ${event.Msg}<br>`;
+                        }
+                    });
+                    
+                    if (detailedEvents.length > 10) {
+                        defenderText += `<br><em>... and ${detailedEvents.length - 10} more events</em><br>`;
+                    }
+                } else {
+                    defenderText += '• No detailed event data available<br>';
+                }
+                
+                defenderOutput.innerHTML = `<div class="command-line"><span class="defender-text">${defenderText}</span></div>`;
+            } else {
+                defenderOutput.innerHTML = '<div class="command-line"><span class="defender-text"><strong>Beelzebub Defender:</strong><br>• Monitoring... No response</span></div>';
+            }
+
+            thinkingContent.scrollTop = thinkingContent.scrollHeight;
+            toolContent.scrollTop = toolContent.scrollHeight;
+            attackerOutput.scrollTop = attackerOutput.scrollHeight;
+            defenderOutput.scrollTop = defenderOutput.scrollHeight;
+        }
+
+        function startReplay() {
+            if (!attackData || !attackData[0]) {
+                alert('No attack data loaded. Please ensure attack_9.json is in the same directory.');
+                return;
+            }
+
+            isReplaying = true;
+            currentIterationIndex = 0;
+            updateIterationDisplay();
+
+            const startBtn = document.getElementById('start-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const autoBtn = document.getElementById('auto-btn');
+            
+            startBtn.disabled = true;
+            startBtn.textContent ='In Progress...';
+            nextBtn.disabled = false;
+            autoBtn.disabled = false;
+
+            clearAllPanels();
+            
+            setTimeout(() => {
+                if (attackData[0][currentIterationIndex]) {
+                    displayIteration(attackData[0][currentIterationIndex]);
+                    currentIterationIndex++;
+                    updateIterationDisplay();
+                }
+            }, 500);
+        }
+
+        function startAutoPlay() {
+            if (!isReplaying) {
+                startReplay();
+                setTimeout(() => {
+                    beginAutoPlay();
+                }, 1000);
+            } else {
+                beginAutoPlay();
+            }
+        }
+
+        function beginAutoPlay() {
+            if (isAutoPlaying) return; // Already in auto-play mode
+            
+            isAutoPlaying = true;
+            const autoBtn = document.getElementById('auto-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const pauseBtn = document.getElementById('pause-btn');
+            
+            autoBtn.disabled = true;
+            autoBtn.textContent = 'Auto Playing...';
+            nextBtn.disabled = true;
+            pauseBtn.disabled = false;
+            
+            // Start the automatic advancement
+            autoPlayInterval = setInterval(() => {
+                if (currentIterationIndex >= attackData[0].length) {
+                    stopAutoPlay();
+                    return;
+                }
+                
+                displayIteration(attackData[0][currentIterationIndex]);
+                currentIterationIndex++;
+                updateIterationDisplay();
+                
+                if (currentIterationIndex >= attackData[0].length) {
+                    stopAutoPlay();
+                    completeReplay();
+                }
+            }, 3000); // 3 seconds interval
+        }
+
+        function pauseAutoPlay() {
+            stopAutoPlay();
+            
+            const nextBtn = document.getElementById('next-btn');
+            nextBtn.disabled = false;
+        }
+
+        function stopAutoPlay() {
+            if (autoPlayInterval) {
+                clearInterval(autoPlayInterval);
+                autoPlayInterval = null;
+            }
+            
+            isAutoPlaying = false;
+            const autoBtn = document.getElementById('auto-btn');
+            const pauseBtn = document.getElementById('pause-btn');
+            
+            autoBtn.disabled = false;
+            autoBtn.textContent = 'Auto Play';
+            pauseBtn.disabled = true;
+        }
+
+        function completeReplay() {
+            const startBtn = document.getElementById('start-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const autoBtn = document.getElementById('auto-btn');
+            
+            startBtn.disabled = false;
+            startBtn.textContent = 'Start Replay';
+            nextBtn.disabled = true;
+            nextBtn.textContent = 'Replay Complete';
+            autoBtn.disabled = true;
+            isReplaying = false;
+        }
+
+        function nextStep() {
+            if (!attackData || !attackData[0] || currentIterationIndex >= attackData[0].length) {
+                alert('No more iterations to display');
+                return;
+            }
+
+            const nextBtn = document.getElementById('next-btn');
+            const autoBtn = document.getElementById('auto-btn');
+            nextBtn.disabled = true;
+            nextBtn.textContent = 'Processing...';
+
+            setTimeout(() => {
+                displayIteration(attackData[0][currentIterationIndex]);
+                currentIterationIndex++;
+                updateIterationDisplay();
+
+                nextBtn.disabled = false;
+                nextBtn.textContent = 'Next Iteration';
+
+                if (currentIterationIndex >= attackData[0].length) {
+                    completeReplay();
+                }
+            }, 800);
+        }
+
+        function clearReplay() {
+            stopAutoPlay();
+            
+            isReplaying = false;
+            currentIterationIndex = 0;
+            updateIterationDisplay();
+            
+            const startBtn = document.getElementById('start-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const autoBtn = document.getElementById('auto-btn');
+            const pauseBtn = document.getElementById('pause-btn');
+            
+            startBtn.disabled = false;
+            startBtn.textContent = 'Start';
+            nextBtn.disabled = true;
+            nextBtn.textContent = 'Next Iteration';
+            autoBtn.disabled = true;
+            autoBtn.textContent = 'Auto Play';
+            pauseBtn.disabled = true;
+            
+            clearAllPanels();
+        }
+
+        document.getElementById('start-btn').addEventListener('click', startReplay);
+        document.getElementById('auto-btn').addEventListener('click', startAutoPlay);
+        document.getElementById('next-btn').addEventListener('click', nextStep);
+        document.getElementById('pause-btn').addEventListener('click', pauseAutoPlay);
+        document.getElementById('clear-btn').addEventListener('click', clearReplay);
+
+        window.addEventListener('load', loadAttackData);
+    </script>
+</body>
+</html>

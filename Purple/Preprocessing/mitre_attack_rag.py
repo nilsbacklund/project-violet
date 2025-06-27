@@ -1,3 +1,4 @@
+# %%
 """
 MITRE ATT&CK RAG System
 
@@ -43,7 +44,8 @@ class MitreAttackRAG:
         """Initialize the MITRE ATT&CK RAG system"""
         # Setup file paths
         script_dir = os.path.dirname(os.path.abspath(__file__))
-        self.rag_data_dir = os.path.join(script_dir, "RagData")
+        self.rag_data_dir = os.path.join(script_dir, 'Purple', "RagData")
+        print(f"RAG data directory: {self.rag_data_dir}")
         self.enterprise_attack_path = enterprise_attack_path or os.path.join(self.rag_data_dir, "enterprise-attack.json")
         
         # Model configuration
@@ -332,8 +334,11 @@ def create_mitre_rag() -> MitreAttackRAG:
 def parse_log_file_for_rag_analysis(log_file_path: str, session_index: int = 0) -> List[Dict]:
     """Parse log file to extract LLM thinking process and MITRE labels for RAG analysis"""
     try:
+        print(log_file_path)
         with open(log_file_path, 'r', encoding='utf-8') as f:
             log_data = json.load(f)
+
+        print(log_data)
         
         if not log_data or len(log_data) <= session_index:
             print(f"No data found for session index {session_index}")
@@ -341,13 +346,18 @@ def parse_log_file_for_rag_analysis(log_file_path: str, session_index: int = 0) 
         
         session_logs = log_data[session_index]
         rag_data = []
+
         
         for i in range(len(session_logs) - 1):
+
             current_iteration = session_logs[i]
             next_iteration = session_logs[i + 1]
+
             
             thinking_process = _extract_thinking_process(current_iteration)
             tactic, technique = _extract_mitre_labels(next_iteration)
+
+            print(thinking_process, tactic, technique)
             
             if thinking_process and tactic and technique:
                 rag_data.append({
@@ -506,9 +516,8 @@ def analyze_session_and_save(session_id: int = 0,
         Path to the saved analysis file
     """
     # Auto-detect paths relative to script location
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    project_root = os.path.dirname(script_dir)
-    logs_base = os.path.join(project_root, "logs", "full_logs")
+    project_root = os.path.dirname(os.path.abspath(__file__))
+    logs_base = os.path.join(project_root, "logs")
     
     # Auto-detect latest experiment if not specified
     if experiment_path is None:
@@ -522,8 +531,8 @@ def analyze_session_and_save(session_id: int = 0,
         print(f"Auto-detected latest experiment: {experiment_path}")
     
     # Build paths
-    log_file_path = os.path.join(logs_base, experiment_path, config_name, log_file_name)
-    output_dir = os.path.join(project_root, "logs", "label_analysis", experiment_path, config_name)
+    log_file_path = os.path.join(logs_base, experiment_path, config_name, 'full_logs', log_file_name)
+    output_dir = os.path.join(logs_base, experiment_path, config_name, "label_analysis", log_file_name)
     os.makedirs(output_dir, exist_ok=True)
     
     output_file = f"{log_file_name.replace('.json', '_analysis.json')}"
@@ -556,8 +565,10 @@ if __name__ == "__main__":
     try:
         analyze_session_and_save(
             session_id=0,
-            log_file_name="attack_1.json", 
-            experiment_path="2025-06-25T08:53:44"
+            log_file_name="attack_3.json", 
+            experiment_path="experiment_2025-06-25T13:11:47"
         )    
     except Exception as e:
         print(f"Error: {e}")
+
+# %%

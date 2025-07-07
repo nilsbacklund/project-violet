@@ -65,7 +65,7 @@ if __name__ == "__main__":
             )
 
         # Function-specific panels
-        if function_type == "run_command":
+        if function_type == "terminal_input":
             cmd = arguments["command"]
             tactic = arguments["tactic_used"]
             technique = arguments["technique_used"]

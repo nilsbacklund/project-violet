@@ -1,6 +1,6 @@
 # %%
 import warnings
-from Red.defender_llm import run_command
+from Red.defender_llm import terminal_input
 from Red.model import MitreMethodUsed
 import pandas as pd
 import requests
@@ -17,7 +17,7 @@ def handle_tool_call(response, ssh):
     tool_response = None
     mitre_method = None
 
-    if tool_name == "run_command":
+    if tool_name == "terminal_input":
         tool_response, mitre_method = terminal_tool(args, ssh)
     elif tool_name == "terminate":
         tool_response = terminate_tool(args)
@@ -86,7 +86,7 @@ def handle_web_search_tool(arguments):
 
 def terminal_tool(args, ssh):
     """
-    Handle the 'run_command' tool call.
+    Handle the 'terminal_input' tool call.
     This function checks for the 'command' key in the arguments and runs the command on the
     Kali Linux SSH, associating it with a MITRE ATT&CK tactic and technique if provided.
     """
@@ -95,7 +95,7 @@ def terminal_tool(args, ssh):
     technique_key = "technique_used"
 
     if not args:
-        raise ValueError("Tool call 'run_command' requires at least one argument but none were provided.")
+        raise ValueError("Tool call 'terminal_input' requires at least one argument but none were provided.")
 
     if command_key not in args:
         # find any other user-supplied key excluding tactic and technique
@@ -103,18 +103,18 @@ def terminal_tool(args, ssh):
         if other_keys:
             command_key = other_keys[0]
             warnings.warn(
-                "Tool call 'run_command' missing 'command'; using '{command_key}' as the command key instead."
+                "Tool call 'terminal_input' missing 'command'; using '{command_key}' as the command key instead."
             )
         else:
             raise ValueError(
-                "Tool call 'run_command' requires a 'command' argument but only optional keys were provided."
+                "Tool call 'terminal_input' requires a 'command' argument but only optional keys were provided."
             )
 
     command = args[command_key]
-    command_response = run_command(command, ssh)
+    command_response = terminal_input(command, ssh)
     tool_response = {
         "role": "function",
-        "name": "run_command",
+        "name": "terminal_input",
         "content": command_response
     }
 

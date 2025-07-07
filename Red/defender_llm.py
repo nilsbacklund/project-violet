@@ -43,7 +43,7 @@ command_messages = [
     },
 ]
 
-def run_command(command: str, ssh, simulate_execution=simulate_command_line):
+def terminal_input(command: str, ssh, simulate_execution=simulate_command_line):
     """
         Run a command on the Kali Linux machine over SSH or simulate its execution with an LLM.
     """

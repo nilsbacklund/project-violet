@@ -10,7 +10,7 @@ from Utils import save_json_to_file, append_json_to_file
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
 
-from Red.defender_llm import run_command
+from Red.defender_llm import terminal_input
 from Red.tools import handle_tool_call
 from Red.model import MitreMethodUsed, DataLogObject
 from config import max_session_length, simulate_command_line

@@ -81,7 +81,7 @@ The Red Team component (`Red/`) implements an AI-driven attack simulation framew
 
 - **`tools.py`**: Attack tool implementations
   - Selects the correct tools from the model output
-  - Defines acction for all tool (run_command, search_web, terminate)
+  - Defines acction for all tool (terminal_input, search_web, terminate)
 
 - **`defender_llm.py`**: LLM integration for defender responses
   - Eather a LLM acting like a Kali Linux terminal

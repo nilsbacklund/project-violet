@@ -4,7 +4,8 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 import json
 from Red.model import DataLogObject, LabledCommandObject
-from sentence_transformers import SentenceTransformer, util
+from sentence_transformers import SentenceTransformer
+from sentence_transformers.util import pytorch_cos_sim
 from Utils import save_json_to_file
 
 log_path = 'logs/experiment_2025-06-25T13:11:47/hp_config_1/full_logs/attack_3.json'
@@ -24,7 +25,7 @@ def word_similarity(model, query, embeded_canidates):
     word_embedding = model.encode(query, convert_to_tensor=True)
     
     # Compute cosine similarities
-    similarities = util.pytorch_cos_sim(word_embedding, embeded_canidates)[0]
+    similarities = pytorch_cos_sim(word_embedding, embeded_canidates)[0]
     
     # Get the index of the most similar word
     most_similar_index = similarities.argmax().item()

@@ -118,7 +118,7 @@ def get_honeypot_config(id="00", path=""):
     """
     Load a honeypot config by its ID or path from dir.
     """
-    if id == "00" and not path:
+    if not path:
         path = BASE_DIR.parent / 'BeelzebubServices' / f'config_{id}.json'
     
     return load_json(path)

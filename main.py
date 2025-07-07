@@ -6,9 +6,10 @@ from Red.sangria import run_attacks
 from Red.log_formatter import format_logs_to_lables, save_labels
 from Blue.new_config_pipeline import generate_new_honeypot_config, save_config_as_file, get_honeypot_config, set_honeypot_config
 from Blue_Lagoon.honeypot_tools import init_docker
-from Utils import create_experiment_folder, save_json_to_file
+from Utils.meta import create_experiment_folder
+from Utils.jsun import save_json_to_file
 import datetime
-import shutil 
+import shutil
 
 def main():
     base_path = create_experiment_folder(save_logs, experiment_name=experiment_name)

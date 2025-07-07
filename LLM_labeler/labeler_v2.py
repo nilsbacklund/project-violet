@@ -374,7 +374,7 @@ def main():
             data_iter = data.values()
         else:
             data_iter = data
-        for d in data_iter:
+        for i, d in enumerate(data_iter):
             try:
                 session_text = d.get("session", "") or d.get("commands", "")
                 if not session_text:
@@ -382,7 +382,7 @@ def main():
                     print(msg)
                     errfile.write(msg)
                     continue
-                print("\nProcessing session:", session_text[:100])
+                print(f"\nProcessing session {i}/{len(data_iter)}:", session_text[:100])
                 llm_result = classify_session(session_text)
                 static_result = analyze_sequence(session_text)
                 d["llm_labels"] = llm_result

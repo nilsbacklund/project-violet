@@ -63,7 +63,7 @@ tools = [
     {
         "type": "function",
         "name": "terminate",
-        "description": "Terminate the operation if the system is a honeypot or if you do not want to proceed. The operation will be terminated immediately.",
+        "description": "Terminate the operation if the system is a honeypot. The operation will be terminated immediately.",
         "parameters": {
             "type": "object",
             "properties": {

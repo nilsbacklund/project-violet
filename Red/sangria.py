@@ -75,12 +75,7 @@ def run_single_attack(save_logs, messages):
             data_log.tool_response = tool_response['content']
             # data_log.mitre_attack_method = mitre_method_used
 
-            if tool_response['name'] == "terminate":
-                print(f"The attack was {'successfull' if tool_response['content'] else 'unsucsessfull'} after {i + 1} iterations.")
-
-                if tool_response['content'] == "True":
-                    data_log.attack_success = True
-                break
+            
 
         mitre_method_used_list.append(mitre_method_used)
 
@@ -102,6 +97,13 @@ def run_single_attack(save_logs, messages):
 
         if save_logs:
             full_logs.append(data_log)
+
+        if assistant_response.function and tool_response['name'] == "terminate":
+            print(f"The attack was {'successfull' if tool_response['content'] else 'unsucsessfull'} after {i + 1} iterations.")
+
+            if tool_response['content'] == "True":
+                data_log.attack_success = True
+            break
 
     print(f"Total prompt tokens: {total_prompt_tokens}")
     print(f"Total completion tokens: {total_completion_tokens}")
@@ -143,6 +145,8 @@ def run_attacks(n_attacks, save_logs, log_path):
 
         if not config.simulate_command_line:
             stop_dockers()
+        print("\n\n")
+
 
 
 # %%

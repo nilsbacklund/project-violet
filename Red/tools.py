@@ -134,9 +134,6 @@ def terminate_tool(args):
     """
     if not args:
         warnings.warn("Tool call 'terminate' received no arguments, proceeding with default termination response.")
-    if 'success' not in args:
-        warnings.warn("Tool call 'terminate' missing 'success' key; assuming success by default.")
-        args['success'] = False
     success = args.get('success', False)
     if not isinstance(success, bool):
         raise ValueError("Tool call 'terminate' requires a boolean 'success' argument.")

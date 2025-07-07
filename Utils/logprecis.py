@@ -1,18 +1,6 @@
-from dotenv import load_dotenv
-from pathlib import Path
-import os
-import pandas as pd
 import re
-import json
 
-load_dotenv()
-OPENAI_API_KEY= os.getenv("OPENAI_API_KEY")
-
-BASE_DIR = Path(__file__).resolve().parent
-
-data_path = BASE_DIR.parent / "LLM_labeler" / "data"
-
-def divide_statements(session, add_special_token=False, special_token="[STAT]"):
+def divide_statements(session, add_special_token, special_token="[STAT]"):
     """Divide a session into statements.
     This function splits a session into statements using specified separators. Optionally,
     it adds a special token at the beginning of each statement.
@@ -37,6 +25,42 @@ def divide_statements(session, add_special_token=False, special_token="[STAT]"):
         statements = [f"{special_token} " + el for el in statements]
     return statements
 
+
+def assign_labels2tokens(labels, statements):
+    """Assign labels to tokens based on statements.
+    This function assigns labels to tokens based on the provided labels and statements.
+    Args:
+        labels (str): The labels separated by '--'.
+        statements (list of str): The statements to assign labels to.
+    Returns:
+        list of str: A list of labels assigned to tokens.
+    """
+    labels = labels.split(" -- ")
+    tokens_labels = list()
+    for label, statement in zip(labels, statements):
+        for word in statement.split(" "):
+            if word != "[STAT]":
+                tokens_labels.append(label)
+    return tokens_labels
+
+
+def word_truncation(session, max_length):
+    """Truncate words in a session to a maximum length.
+    This function truncates words in a session to a maximum length specified.
+    Args:
+        session (str): The session to truncate words in.
+        max_length (int): The maximum length allowed for each word.
+    Returns:
+        str: The session with truncated words.
+    """
+    return " ".join(
+        map(
+            lambda word: word[:max_length] if len(word) > max_length else word,
+            session.split(" "),
+        )
+    )
+
+
 def expand_labels(labels):
     """Expand abbreviated labels to statement labels.
     This function expands abbreviated labels to 1 label per statement based on the provided input.
@@ -55,29 +79,3 @@ def expand_labels(labels):
             statement_labels.append(label.strip())
         prev_index = index + 1
     return statement_labels
-
-def main():
-    columns = ["session", "labels"]
-
-    for name in ("train", "test"):
-        df  = pd.read_parquet(data_path / f"sample_{name}_corpus.parquet",  columns=columns)
-        data = []
-        for i in range(len(df)):
-            session = df["session"].loc[i]
-            labels = df["labels"].loc[i]
-            commands_split = divide_statements(session, False)
-            labels_split = expand_labels(labels)
-            assert len(commands_split) == len(labels_split)
-            data.append({
-                "session": session,
-                "labels": labels,
-                "full_session": [
-                    { "command" : command, "label" : label} for command, label in zip(commands_split, labels_split)
-                ]
-            })
-
-            with open(data_path / f"sample_{name}_corpus_expanded.json", "w", encoding="utf-8") as f:
-                json.dump(data, f, ensure_ascii=False, indent=4)
-
-if __name__ == "__main__":
-    main()

@@ -4,7 +4,7 @@ import sys
 import os
 from Red.schema import response, start_ssh, get_new_hp_logs
 import Red.sangria_config as sangria_config
-from Utils import save_json_to_file, append_json_to_file
+from Utils.jsun import save_json_to_file, append_json_to_file
 
 # Add parent directory to path to import config
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

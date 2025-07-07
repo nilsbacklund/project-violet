@@ -107,7 +107,7 @@
           "plugin": null
         }
       ],
-      "passwordRegex": "^(root|qwerty|Smoker666|123456|jenkins|minecraft|sinus|alex|postgres|Ly123456)$",
+      "passwordRegex": "^(root|toor|qwerty|Smoker666|123456|jenkins|minecraft|sinus|alex|postgres|Ly123456)$",
       "deadlineTimeoutSeconds": 60,
       "serverName": "ubuntu",
       "plugin": null

@@ -46,7 +46,6 @@ def response(model_host, model_name, messages, tools):
         return response_openai(messages, tools, model=model_name)
     elif model_host == 'ollama':
         return response_openai(messages, tools, model=model_name, model_host=model_host)
-        return response_ollama(messages, tools, model=model_name)
     else:
         raise ValueError(f"Unsupported model host: {model_host}")
 
@@ -86,7 +85,7 @@ def response_openai(messages: list, tools, model: str = 'gpt-4o-mini', model_hos
         time.sleep(5)
         response_openai(messages, tools, model)
 
-# rep_openai = response_openai(messages=[{"role": "user", "content": "Can you see my current directory using your tool/function_call run_command?"}], tools=tools, model="gpt-4o-mini")
+# rep_openai = response_openai(messages=[{"role": "user", "content": "Can you see my current directory using your tool/function_call terminal_input?"}], tools=tools, model="gpt-4o-mini")
 
 # %%
 def response_ollama(messages: list, tools, model: str):

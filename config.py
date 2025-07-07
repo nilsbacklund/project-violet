@@ -10,9 +10,11 @@ save_logs = True
 save_configuration = True
 print_output = True
 n_configurations = 1
-attacks_per_configuration = 25
+attacks_per_configuration = 1
 max_session_length = 50
 
 honeypot = "beelzebub" # beelzebub / cowrie
+
+ISO_FORMAT = "%Y-%m-%dT%H_%M_%S"
 
 # %%

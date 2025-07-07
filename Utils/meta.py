@@ -9,7 +9,8 @@ def create_experiment_folder(save_logs=True, experiment_name=None):
         print("Logs saving is disabled. No folder will be created.")
         return
     
-    timestamp = datetime.datetime.now().isoformat()[:-7]
+    # timestamp = datetime.datetime.now().isoformat()[:-7]
+    timestamp = datetime.datetime.now().strftime(config.ISO_FORMAT)
 
     folder_name = f"experiment_{timestamp}"
     if experiment_name:

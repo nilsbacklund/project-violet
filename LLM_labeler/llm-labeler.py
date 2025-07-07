@@ -2,7 +2,6 @@ from dotenv import load_dotenv
 from pathlib import Path
 import os
 import openai
-import pandas as pd
 import json
 import re
 

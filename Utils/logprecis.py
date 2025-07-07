@@ -1,6 +1,6 @@
 import re
 
-def divide_statements(session, add_special_token, special_token="[STAT]"):
+def divide_statements(session, add_special_token = False, special_token="[STAT]"):
     """Divide a session into statements.
     This function splits a session into statements using specified separators. Optionally,
     it adds a special token at the beginning of each statement.
@@ -79,3 +79,39 @@ def expand_labels(labels):
             statement_labels.append(label.strip())
         prev_index = index + 1
     return statement_labels
+
+def recombine_labels(statement_labels):
+    """
+    Compress per-statement labels back into the abbreviated form. Made with ChatGPT.
+
+    Args:
+        statement_labels (list of str): A list of labels, one per statement.
+
+    Returns:
+        str: Labels in the form "LabelA - endIndexA -- LabelB - endIndexB …"
+             where each endIndex is the 0-based index of the last occurrence
+             of that label in a consecutive run.
+    """
+    if not statement_labels:
+        return ""
+
+    parts = []
+    prev_label = statement_labels[0]
+
+    for i, label in enumerate(statement_labels):
+        # Whenever the label changes, record the end index of the previous run
+        if label != prev_label:
+            parts.append(f"{prev_label} - {i - 1}")
+            prev_label = label
+
+    # Finally, record the last run (up to the last index)
+    parts.append(f"{prev_label} - {len(statement_labels) - 1}")
+
+    return " -- ".join(parts)
+
+if __name__ == "__main__":
+    labels = "Execution - 11 -- Defense Evasion - 12"
+    statement_labels = expand_labels(labels)
+    print(statement_labels)
+    new_labels = recombine_labels(statement_labels)
+    print(new_labels)

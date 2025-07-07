@@ -15,6 +15,7 @@ from Red.tools import handle_tool_call
 from Red.model import MitreMethodUsed, DataLogObject
 from config import max_session_length, simulate_command_line
 from Blue_Lagoon.honeypot_tools import start_dockers, stop_dockers
+from Preprocessing.extraction import extract_session
 
 import os
 
@@ -137,8 +138,13 @@ def run_attacks(n_attacks, save_logs, log_path):
         # create path if not exists
             os.makedirs(log_path + "full_logs", exist_ok=True)
             logs = [log.to_dict() for log in logs]
-        
             save_json_to_file(logs, log_path + f"full_logs/attack_{i+1}.json")
+
+            # extract sessions from logs
+            session = extract_session(logs)
+            save_json_to_file(session, log_path + f"sessions/session_{i+1}.json")
+
+            # update tokens used
             append_json_to_file(tokens_used, log_path + f"tokens_used.json")
 
         if not config.simulate_command_line:

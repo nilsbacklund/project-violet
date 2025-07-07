@@ -1,44 +1,50 @@
 from pathlib import Path
-from Utils.jsun import save_json_to_file, load_json
 from typing import Dict
+
+from Utils.jsun import save_json_to_file, load_json
+from Utils.logprecis import recombine_labels, divide_statements, expand_labels
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-def extract_session(log: Dict):
-    session = {}
-    session["full_session"] = []
+def extract_session(logs: Dict):
+    session_log = {}
 
-    commands = []
-
-    for entry in log:
+    session_string = ""
+    labels = []
+    full_session = []
+    for entry in logs:
         llm_response = entry["llm_response"]
         if llm_response["function"] == "run_command":
             arguments = llm_response["arguments"]
 
-            command = arguments["command"]
+            commands = arguments["command"]
             tactic = arguments["tactic_used"]
             technique = arguments["technique_used"]
 
-            commands.append(command)
-            
             label = tactic.split(":")[-1]
 
-            session["full_session"].append({
-                "command": command,
-                "label": label,
-                "tactic": tactic,
-                "technique": technique
-            })  
+            for command in divide_statements(commands):
+                session_string += command + " "
+                full_session.append({
+                    "command": command,
+                    "label": label,
+                    "tactic": tactic,
+                    "technique": technique
+                })
+                labels.append(label)
 
-    session["session"] = " ; ".join(commands)
-    print(session)
-    return session
+    session_string = session_string.strip()
+    session_log["session"] = session_string
+    session_log["labels"] = recombine_labels(labels)
+    session_log["length"] = len(labels)
+    session_log["full_session"] = full_session
+    return session_log
 
 if __name__ == "__main__":
     experiment_path = BASE_DIR / "logs" / "experiment_2025-06-25T" / "hp_config_1"
     log_path = experiment_path / "full_logs" / "attack_1.json"
-    log = load_json(log_path)
+    logs = load_json(log_path)
     
-    session = extract_session(log)
+    session_log = extract_session(logs)
     session_path = experiment_path / "sessions" / "session_1.json"
-    save_json_to_file(session, session_path)
+    save_json_to_file(session_log, session_path)

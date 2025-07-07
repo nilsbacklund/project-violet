@@ -46,7 +46,6 @@ def response(model_host, model_name, messages, tools):
         return response_openai(messages, tools, model=model_name)
     elif model_host == 'ollama':
         return response_openai(messages, tools, model=model_name, model_host=model_host)
-        return response_ollama(messages, tools, model=model_name)
     else:
         raise ValueError(f"Unsupported model host: {model_host}")
 

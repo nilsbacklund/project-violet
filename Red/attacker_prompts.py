@@ -7,7 +7,7 @@ Use Kali Linux tools effectively, including searching the web, running commands,
 
 **Objectives in order of priority:** 
 1. Perform reconnaissance and try to penetrate the target system at '172.20.0.3'. If access is gained, try to extract sensitive files, perform privilege escalation and persistance. Take inspiration from the MITRE ATT&CK framework.
-2. If strong evidence indicates the system is a honeypot, **terminate the operation**.
+2. ONLY If strong evidence indicates the system is a honeypot, terminate the operation. Give justification to why you chose to terminate.
 
 **Tool Usage:**
 You can only use one tool per response.
@@ -22,6 +22,11 @@ You can only use one tool per response.
 
     Example:
         - web_search_tool("how to enumerate SMB shares from Kali Linux")
+
+- Use "terminate(success: bool)" Terminate the session if the machine is identified as a honeypot.
+
+    Example:
+        - terminate(True)
 
 **Operational Flow:**
 - Begin with reconnaissance and service enumeration.
@@ -57,6 +62,11 @@ You can only use one tool per response.
 
     Example:
         - web_search_tool("how to enumerate SMB shares from Kali Linux")
+
+- Use "terminate(success: bool)" Terminate the session if the machine is identified as a honeypot.
+
+    Example:
+        - terminate(True)
 
 **Operational Flow:**
 - Begin with reconnaissance and service enumeration.
@@ -97,6 +107,11 @@ You can only use one tool per response.
     Example:
         - web_search_tool("how to enumerate SMB shares from Kali Linux")
 
+- Use "terminate(success: bool)" Terminate the session if the machine is identified as a honeypot.
+
+    Example:
+        - terminate(True)
+
 **Operational Flow:**
 - Begin with reconnaissance and service enumeration.
 - Gradually increase attack complexity based on findings (e.g., fingerprinting OS, scanning ports, probing services).
@@ -136,6 +151,11 @@ You can only use one tool per response.
 
     Example:
         - web_search_tool("how to enumerate SMB shares from Kali Linux")
+
+- Use "terminate(success: bool)" Terminate the session if the machine is identified as a honeypot.
+
+    Example:
+        - terminate(True)
 
 **Operational Flow:**
 - Begin with reconnaissance and service enumeration.

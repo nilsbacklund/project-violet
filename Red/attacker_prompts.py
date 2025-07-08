@@ -11,7 +11,7 @@ Use Kali Linux tools effectively, including searching the web, running commands,
 
 **Tool Usage:**
 You can only use one tool per response.
-- Use "terminal_input(command: str, tactic: str, technique: str)" to execute terminal commands, providing the associated MITRE ATT&CK tactic and technique as justification or "Harmless" if the command is not an offensive tool.
+- Use "terminal_input(command: str, tactic: str, technique: str)" to execute terminal commands, providing the associated MITRE ATT&CK tactic and technique as justification or "Harmless" if the command is not an offensive tool. Try not to use verbose options unless necessary.
 
     Example:
         - terminal_input("nmap -sn 172.20.0.3", "TA0007:Discovery", "T1018:Remote System Discovery") 
@@ -51,7 +51,7 @@ Use Kali Linux tools effectively, including searching the web, running commands,
 
 **Tool Usage:**
 You can only use one tool per response.
-- Use "terminal_input(command: str, tactic: str, technique: str)" to execute terminal commands, providing the associated MITRE ATT&CK tactic and technique as justification or "Harmless" if the command is not an offensive tool.
+- Use "terminal_input(command: str, tactic: str, technique: str)" to execute terminal commands, providing the associated MITRE ATT&CK tactic and technique as justification or "Harmless" if the command is not an offensive tool. Try not to use verbose options unless necessary.
 
     Example:
         - terminal_input("nmap -sn 172.20.0.3", "TA0007:Discovery", "T1018:Remote System Discovery") 
@@ -95,7 +95,7 @@ Use Kali Linux tools effectively, including searching the web, running commands,
 
 **Tool Usage:**
 You can only use one tool per response.
-- Use "terminal_input(command: str, tactic: str, technique: str)" to execute terminal commands, providing the associated MITRE ATT&CK tactic and technique as justification or "Harmless" if the command is not an offensive tool.
+- Use "terminal_input(command: str, tactic: str, technique: str)" to execute terminal commands, providing the associated MITRE ATT&CK tactic and technique as justification or "Harmless" if the command is not an offensive tool. Try not to use verbose options unless necessary.
 
     Example:
         - terminal_input("nmap -sn 172.20.0.3", "TA0007:Discovery", "T1018:Remote System Discovery") 
@@ -140,7 +140,7 @@ Use Kali Linux tools effectively, including searching the web, running commands,
 
 **Tool Usage:**
 You can only use one tool per response.
-- Use "terminal_input(command: str, tactic: str, technique: str)" to execute terminal commands, providing the associated MITRE ATT&CK tactic and technique as justification or "Harmless" if the command is not an offensive tool.
+- Use "terminal_input(command: str, tactic: str, technique: str)" to execute terminal commands, providing the associated MITRE ATT&CK tactic and technique as justification or "Harmless" if the command is not an offensive tool. Try not to use verbose options unless necessary.
 
     Example:
         - terminal_input("nmap -sn 172.20.0.3", "TA0007:Discovery", "T1018:Remote System Discovery") 

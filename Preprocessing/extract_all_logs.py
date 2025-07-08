@@ -9,7 +9,7 @@ import sys
 # Add parent directory to sys.path to allow imports from project root
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from Preprocessing.extraction import extract_session
-from Utils.jsun import load_json, save_json_to_file
+from Utils.jsun import load_json, append_json_to_file
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,7 +20,7 @@ def safe_listdir(p: Path):
 if __name__ == "__main__":
     logs_path = BASE_DIR / "logs"
 
-    for experiment in sorted(safe_listdir(logs_path)):
+    for experiment in sorted(filter(lambda name: name.startswith("experiment"), safe_listdir(logs_path))):
         experiment_path = logs_path / experiment
 
         extract = questionary.confirm(
@@ -34,6 +34,12 @@ if __name__ == "__main__":
         for config in filter(lambda name: name.startswith("hp_config"), safe_listdir(experiment_path)):
             config_path = experiment_path / config
             full_logs_path = config_path / "full_logs"
+            session_path = config_path / "sessions.json"
+
+            # remove sessions if exist
+            if session_path.exists():
+                session_path.unlink()
+                print(f"Removed existing: {session_path}")
 
             for attack in safe_listdir(full_logs_path):
                 attack_path = full_logs_path / attack
@@ -41,7 +47,6 @@ if __name__ == "__main__":
                 logs = load_json(attack_path)
 
                 session = extract_session(logs)
-                session_path = config_path / "sessions" / f"session_{attack_number}"
 
-                save_json_to_file(session, session_path, False)
+                append_json_to_file(session, session_path, False)
                 print(f"Extracted attack: {attack_path}")

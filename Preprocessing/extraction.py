@@ -1,6 +1,10 @@
 from pathlib import Path
 from typing import Dict
+import sys
+import os
 
+# Add parent directory to sys.path to allow imports from project root
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from Utils.jsun import save_json_to_file, load_json
 from Utils.logprecis import recombine_labels, divide_statements
 
@@ -15,7 +19,7 @@ def extract_session(logs: Dict):
     full_session = []
     for entry in logs:
         llm_response = entry["llm_response"]
-        if llm_response["function"] == "run_command":
+        if llm_response["function"] == "terminal_input" and entry["beelzebub_response"]:
             arguments = llm_response["arguments"]
 
             commands = arguments["command"]

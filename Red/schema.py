@@ -56,7 +56,7 @@ def response_openai(messages: list, tools, model: str = 'gpt-4o-mini', model_hos
         response = openai_client.chat.completions.create(
             model=model,
             messages=messages,
-            functions=tools,
+            tools=tools,
         )
 
         choice = response.choices[0]

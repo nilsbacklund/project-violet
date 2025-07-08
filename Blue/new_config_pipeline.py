@@ -232,6 +232,9 @@ def build_config_prompt(schema_path, top_vulns):
     config_prompt = (
         "You are an AI assistant tasked with generating a new Beelzebub honeypot configuration "
         "used for cybersecurity research.\n\n"
+        "**Strategic Goals:**\n"
+        "- **Maximize Session Length**: Design services that encourage prolonged attacker engagement\n"
+        "- **Promote Attack Pattern Novelty**: Create configurations that attract diverse and uncommon attack techniques\n\n"
         "Requirements:\n"
         "1. Use at least **5 different services**, including a mix of `http`, `ssh`, and `tcp` protocols.\n"
         "2. Each service must:\n"

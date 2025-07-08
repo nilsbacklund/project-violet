@@ -12,14 +12,14 @@ BASE_DIR = Path(__file__).resolve().parent
 
 data_path = BASE_DIR.parent / "LLM_labeler" / "data"
 
-def query_openai(prompt: str, model: str = "gpt-4.1", temperature: float = 0.7, max_tokens=65536):
+def query_openai(prompt: str, model: str = "gpt-4.1", temperature: float = 0.7, max_tokens: int = 32768):
     openai_client = openai.OpenAI(api_key=OPENAI_API_KEY)
     response = openai_client.chat.completions.create(
         model=model,
         messages=[
             {"role": "user", "content": prompt}
         ],
-        temperature=1,
+        temperature=temperature,
         max_completion_tokens=max_tokens,
         stream=False,
     )

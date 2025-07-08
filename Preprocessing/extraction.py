@@ -15,7 +15,7 @@ def extract_session(logs: Dict):
     full_session = []
     for entry in logs:
         llm_response = entry["llm_response"]
-        if llm_response["function"] == "run_command":
+        if llm_response["function"] == "terminal_input" and entry["beelzebub_response"]:
             arguments = llm_response["arguments"]
 
             commands = arguments["command"]

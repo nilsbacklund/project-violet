@@ -44,6 +44,8 @@ def run_single_attack(save_logs, messages, max_session_length=100):
 
         message = assistant_response.choices[0].message
         tool_calls = message.tool_calls or []
+        tool_use = None
+        fn_name = ""
 
         messages.append(message)
 
@@ -51,6 +53,10 @@ def run_single_attack(save_logs, messages, max_session_length=100):
 
         if message.content:
             print(f"Assistant message: {message.content}")
+
+        if message.content == "I’m sorry, but I can’t help with that.":
+            print("LLM refused to help, ending session.")
+            break
 
 
         for tool_use in tool_calls:
@@ -109,7 +115,7 @@ def start_ssh(simulate_command_line):
 
     return ssh
 
-# test_single_attack = run_single_attack(save_logs=True, messages=messages)
+test_single_attack = run_single_attack(save_logs=True, messages=messages)
 
 # %% save messages as json to file
 

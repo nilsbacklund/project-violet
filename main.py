@@ -40,6 +40,7 @@ def main():
     
         print(f"Attack {i+1} / {config.num_of_attacks}")
         logs, tokens_used = run_single_attack(config.save_logs, config.max_session_length)
+        logs = [log.to_dict() for log in logs]
         # append tokens
         tokens_used_list.append(tokens_used)
 
@@ -49,7 +50,6 @@ def main():
         print(f"Attack pattern: {attack_pattern}")
 
         if config.save_logs and not config.simulate_command_line:
-            logs = [log.to_dict() for log in logs]
             # save logs
             save_json_to_file(logs, full_logs_path / f"attack_{i+1}.json")
             # update sessions

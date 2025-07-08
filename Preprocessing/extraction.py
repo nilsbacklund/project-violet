@@ -27,7 +27,7 @@ def extract_session(logs: Dict):
             continue
 
         for j, tool in enumerate(entry["tool_calls"]):
-            if tool["function"]["name"] == "terminal_input":
+            if tool["function"]["name"] != "terminal_input":
                 continue
 
             arguments = tool["function"]["arguments"]

@@ -1,0 +1,2 @@
+10,000 sessions with 4o_mini: $70
+10,000 sessions with 4_1_mini: $471

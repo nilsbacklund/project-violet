@@ -73,6 +73,7 @@ def run_single_attack(save_logs, messages, max_session_length=100):
                 messages[-1]["honeypot_logs"] = beelzebub_logs
                 
 
+
             print(f"Tool call: {fn_name} with args: {fn_args}")
             print(f"Tool response: {result}")
 
@@ -85,6 +86,11 @@ def run_single_attack(save_logs, messages, max_session_length=100):
             messages.append(assistant_msg)
 
             print(f"Follow-up message: {assistant_msg.content}")
+
+        if fn_name == "terminate":
+            print("Termination tool called, ending session.")
+            break
+
         
     messages_log_json = create_json_log(messages)
 

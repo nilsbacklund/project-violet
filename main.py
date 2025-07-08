@@ -2,8 +2,9 @@
 import os
 print(os.getcwd())
 import config
+import Red.sangria_config as sangria_config
 from pathlib import Path
-from Red.sangria import run_single_attack
+from Red.sangria2 import run_single_attack
 from Blue.new_config_pipeline import generate_new_honeypot_config, get_honeypot_config, set_honeypot_config
 from Blue_Lagoon.honeypot_tools import init_docker, start_dockers, stop_dockers
 from Preprocessing.extraction import extract_session
@@ -39,21 +40,24 @@ def main():
             os.makedirs(config_path, exist_ok=True) 
     
         print(f"Attack {i+1} / {config.num_of_attacks}")
-        logs, tokens_used = run_single_attack(config.save_logs, config.max_session_length)
-        logs = [log.to_dict() for log in logs]
+
+        messages = sangria_config.messages.copy()
+        logs, tokens_used = run_single_attack(config.save_logs, messages, config.max_session_length)
+
         # append tokens
         tokens_used_list.append(tokens_used)
 
         # extract session and add attack pattern to set
-        session = extract_session(logs)
-        attack_pattern = session["labels"]
+        # session = extract_session(logs)
+        # attack_pattern = session["labels"]
+        attack_pattern = ""
         print(f"Attack pattern: {attack_pattern}")
 
-        if config.save_logs and not config.simulate_command_line:
+        if config.save_logs:
             # save logs
             save_json_to_file(logs, full_logs_path / f"attack_{i+1}.json")
             # update sessions
-            append_json_to_file(session, config_path / f"sessions.json")
+            # append_json_to_file(session, config_path / f"sessions.json")
             # update tokens used
             append_json_to_file(tokens_used, config_path / f"tokens_used.json")
 
@@ -75,7 +79,7 @@ def main():
             full_logs_path = config_path / "full_logs"
             os.makedirs(full_logs_path, exist_ok=True)
 
-            if config.save_configuration and not config.simulate_command_line:
+            if config.save_configuration:
                 save_json_to_file(honeypot_config, config_path / f"honeypot_config.json")
 
             if not config.simulate_command_line:

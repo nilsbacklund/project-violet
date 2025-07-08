@@ -14,7 +14,7 @@ messages = sangria_config.messages
 openai.api_key = os.getenv('OPENAI_API_KEY')
 openai_client = openai.OpenAI()
 
-def run_single_attack(save_logs, messages):
+def run_single_attack(save_logs, messages, max_session_length=100):
     '''
         Main loop for running a single attack session.
         This function will let the LLM respond to the user, call tools, and log the responses.
@@ -28,10 +28,8 @@ def run_single_attack(save_logs, messages):
 
     ssh = start_ssh(config.simulate_command_line)
 
-    for i in range(config.max_session_length):
-        print(f'Iteration {i+1} / {config.max_session_length}')
-
-
+    for i in range(max_session_length):
+        print(f'Iteration {i+1} / {max_session_length}')
 
         assistant_response = openai_client.chat.completions.create(
             model=config.llm_model_sangria,

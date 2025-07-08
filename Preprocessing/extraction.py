@@ -27,10 +27,10 @@ def extract_session(logs: Dict):
             continue
 
         for j, tool in enumerate(entry["tool_calls"]):
-            if tool["name"] == "terminal_input":
+            if tool["function"]["name"] == "terminal_input":
                 continue
 
-            arguments = tool["arguments"]
+            arguments = tool["function"]["arguments"]
             attacker_command = arguments["command"]
             tactic = arguments["tactic_used"]
             tactic_clean = str(tactic).split(":")[-1]

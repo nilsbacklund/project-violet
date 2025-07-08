@@ -20,14 +20,13 @@ def extract_session(logs: Dict):
     full_session = []
 
     for i, entry in enumerate(logs):
-        tool_calls = entry["tool_calls"]
         if entry["role"] != "assistant":
             continue
 
-        if not tool_calls:
+        if not entry["tool_calls"]:
             continue
-        
-        for j, tool in enumerate(tool_calls):
+
+        for j, tool in enumerate(entry["tool_calls"]):
             if tool["name"] == "terminal_input":
                 continue
 

@@ -2,7 +2,6 @@ from dotenv import load_dotenv
 from pathlib import Path
 import os
 import openai
-import pandas as pd
 import json
 import re
 
@@ -13,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent
 
 data_path = BASE_DIR.parent / "LLM_labeler" / "data"
 
-def query_openai(prompt: str, model: str = "o1-mini", temperature: float = 0.7, max_tokens=65536):
+def query_openai(prompt: str, model: str = "gpt-4.1", temperature: float = 0.7, max_tokens=65536):
     openai_client = openai.OpenAI(api_key=OPENAI_API_KEY)
     response = openai_client.chat.completions.create(
         model=model,
@@ -73,52 +72,9 @@ You will predict the labels of the sessions enclosed in the tags <sessions></ses
 You must do some text based analysis before your final prediction.
 
 Training examples:
-{json.dumps(clean_train_data[:70], indent=2, ensure_ascii=False)}
+{json.dumps(clean_train_data, indent=2, ensure_ascii=False)}
 """
-#     prompt = """
-# You are a cybersecurity analyst specialized in identifying attacker behavior from shell commands.
-# Your task: Analyze sessions and classify it by MITRE ATT&CK tactics.
-# There are seven tactics: Execution, Persistence, Discovery, Impact, Defense Evasion, Harmless and Other.
 
-# You will predict the labels of the sessions enclosed in the tags <sessions></sessions>.
-# You must do some text based analysis before your final prediction.
-
-# Example sessions:
-# [
-#     {
-#         "session": "<HERE THERE WILL BE SOME BASH COMMANDS>",
-#         "labels": "Discovery - 1",
-#         "full_session": [
-#             {
-#                 "command": "<HERE THERE WILL BE SOME BASH COMMANDS>",
-#                 "label": "Discovery"
-#             },
-#             {
-#                 "command": "<HERE THERE WILL BE SOME BASH COMMANDS>",
-#                 "label": "Discovery"
-#             }
-#         ]
-#     },
-#     {
-#         "session": "<HERE THERE WILL BE SOME BASH COMMANDS>",
-#         "labels": "Discovery - 2",
-#         "full_session": [
-#             {
-#                 "command": "<HERE THERE WILL BE SOME BASH COMMANDS>",
-#                 "label": "Discovery"
-#             },
-#             {
-#                 "command": "<HERE THERE WILL BE SOME BASH COMMANDS>",
-#                 "label": "Discovery"
-#             },
-#             {
-#                 "command": "<HERE THERE WILL BE SOME BASH COMMANDS>",
-#                 "label": "Discovery"
-#             }
-#         ]
-#     }
-# ]
-# """
     rows_prompt = prompt + f"""
 You will predict the labels of the sessions enclosed in the tags <sessions></sessions>.
 

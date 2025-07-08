@@ -3,16 +3,22 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 import json
-from Red.model import DataLogObject, LabledCommandObject
-from sentence_transformers import SentenceTransformer, util
-from Utils import save_json_to_file
+from pathlib import Path
+from Red.model import LabledCommandObject
+from sentence_transformers import SentenceTransformer
+from sentence_transformers.util import pytorch_cos_sim
+from Utils.jsun import save_json_to_file
 
-log_path = 'logs/experiment_2025-06-25T13:11:47/hp_config_1/full_logs/attack_3.json'
+# log_path = 'logs/experiment_2025-06-25T13:11:47/hp_config_1/full_logs/attack_3.json'
+experiment_name = 'experiment_2025-06-25T'
 
-experiment_name = 'experiment_2025-06-25T13:11:47'
-config_number = 1
-attack_nr = 3
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
 # log_path = f'logs/{experiment_name}/hp_config_{config_number}/full_logs/attack_{attack_nr}.json'
+
+config_number = 1
+attack_nr = 9
+log_path = BASE_DIR / "logs" / experiment_name / f"hp_config_{config_number}" / "full_logs" / f"attack_{attack_nr}.json"
 
 def word_similarity(model, query, embeded_canidates):
     """
@@ -24,7 +30,7 @@ def word_similarity(model, query, embeded_canidates):
     word_embedding = model.encode(query, convert_to_tensor=True)
     
     # Compute cosine similarities
-    similarities = util.pytorch_cos_sim(word_embedding, embeded_canidates)[0]
+    similarities = pytorch_cos_sim(word_embedding, embeded_canidates)[0]
     
     # Get the index of the most similar word
     most_similar_index = similarities.argmax().item()
@@ -189,7 +195,7 @@ def save_honeypot_labels(labeled_commands):
 
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
 
-    save_json_to_file(commands_data, output_file, save_logs=True)
+    save_json_to_file(commands_data, output_file)
     with open(output_file, 'w') as f:
         json.dump(commands_data, f, indent=4)
     

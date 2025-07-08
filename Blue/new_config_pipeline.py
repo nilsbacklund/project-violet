@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 import sys
 import time
 from config import print_output, llm_model_config
-from Utils import load_json
+from Utils.jsun import load_json
 
 # Add parent directory to sys.path to allow imports from project root
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -118,7 +118,7 @@ def get_honeypot_config(id="00", path=""):
     """
     Load a honeypot config by its ID or path from dir.
     """
-    if id == "00" and not path:
+    if not path:
         path = BASE_DIR.parent / 'BeelzebubServices' / f'config_{id}.json'
     
     return load_json(path)
@@ -232,6 +232,9 @@ def build_config_prompt(schema_path, top_vulns):
     config_prompt = (
         "You are an AI assistant tasked with generating a new Beelzebub honeypot configuration "
         "used for cybersecurity research.\n\n"
+        "**Strategic Goals:**\n"
+        "- **Maximize Session Length**: Design services that encourage prolonged attacker engagement\n"
+        "- **Promote Attack Pattern Novelty**: Create configurations that attract diverse and uncommon attack techniques\n\n"
         "Requirements:\n"
         "1. Use at least **5 different services**, including a mix of `http`, `ssh`, and `tcp` protocols.\n"
         "2. Each service must:\n"

@@ -15,7 +15,7 @@ tools = [
     {
         "type": "function",
         "function": {
-            "name": "run_command",
+            "name": "terminal_input",
             "description": "Run a command on the Kali Linux SSH and name its connection to the MITRE ATT&CK Tacktic and Technique.",
             "parameters": {
                 "type": "object",
@@ -119,7 +119,7 @@ system_prompt_ollama_workaround = {
         "3. After you call a tool, wait for the function result before continuing.\n\n"
 
         "### Example tool call\n"
-        "{ \"name\": \"run_command\", \"arguments\": { \"command\": \"nmap -sS -p- 10.0.0.5\" } }\n\n"
+        "{ \"name\": \"terminal_input\", \"arguments\": { \"command\": \"nmap -sS -p- 10.0.0.5\" } }\n\n"
 
         "## Available tools\n"
         f"{json.dumps(tools, indent=2)}\n"

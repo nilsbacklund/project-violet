@@ -19,7 +19,7 @@ def format_logs_to_lables(full_logs, session_id):
             if not log_dict['llm_response']:
                 continue
 
-            if not log_dict['llm_response'].__dict__['function'] == 'run_command':
+            if not log_dict['llm_response'].__dict__['function'] == 'terminal_input':
                 continue
 
             tactic = log_dict['mitre_attack_method'].__dict__['tactic_used']

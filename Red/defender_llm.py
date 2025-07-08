@@ -8,13 +8,33 @@ from dotenv import load_dotenv
 
 import os
 
-TIMEOUT = 1
+TIMEOUT = 100
 
 # openai.api_key = os.getenv("OPENAI_API_KEY")
 # This is my private key, do not share it. Do not use it in production or use it too much eather. If I notice it being abused, I will remove it.
 load_dotenv()
 openai.api_key = os.getenv('OPENAI_API_KEY')
 openai_client = openai.OpenAI()
+
+prompt_patterns = [pexpect.EOF, 
+                    r'└─\x1b\[1;31m#',
+                    r' \x1b\[0m> ', 
+                    r'Are you sure you want to continue connecting \(yes/no/\[fingerprint\]\)\? ',
+                    'password: ',
+                    r'\:\~\$ ',
+                    "Please type 'yes', 'no' or the fingerprint: "]
+
+def send_terminal_command(connection, command):
+    try:
+        connection.sendline(command)
+        connection.expect(prompt_patterns, timeout=TIMEOUT)    
+    except pexpect.exceptions.TIMEOUT:
+        connection.expect(r'.*')
+
+    matched_pattern = connection.match.group(0) if connection.match else ""
+
+    command_response = f"{connection.before.strip()}{matched_pattern}"
+    return command_response
 
 command_messages = [
     {
@@ -23,7 +43,7 @@ command_messages = [
     },
 ]
 
-def run_command(command: str, ssh, simulate_execution=simulate_command_line):
+def terminal_input(command: str, ssh, simulate_execution=simulate_command_line):
     """
         Run a command on the Kali Linux machine over SSH or simulate its execution with an LLM.
     """
@@ -31,10 +51,7 @@ def run_command(command: str, ssh, simulate_execution=simulate_command_line):
     
     # Run command on Kali over SSH
     if not simulate_execution:
-        ssh.sendline(command)
-        ssh.expect([pexpect.TIMEOUT, pexpect.EOF], timeout=TIMEOUT)
-        ssh.expect(r'.*')
-        command_response = ssh.after.decode('utf-8', errors='replace').strip()
+        command_response = send_terminal_command(ssh, command)
         if len(command_response) > 10000:
             command_response = command_response[-10000:]
         

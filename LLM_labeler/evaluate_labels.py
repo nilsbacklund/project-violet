@@ -12,7 +12,7 @@ def normalize_labels(labels):
     return norm
 
 # Load ground-truth tactics from full_supervised_corpus_fixed.json (support JSONL or JSON array)
-gt_path = os.path.join("LLM-labeler", "data", "full_supervised_corpus_fixed.json")
+gt_path = os.path.join("data", "full_supervised_corpus_fixed.json")
 gt_sessions = []
 try:
     with open(gt_path, 'r', encoding='utf-8') as f:
@@ -28,9 +28,9 @@ except Exception as e:
 gt_tactics_list = [normalize_labels(entry.get('tactics', [])) for entry in gt_sessions]
 
 # Determine the minimum number of sessions to compare
-input_path = "LLM-labeler/data/labeled_output.jsonl"
-eval_output_path = os.path.join("data", "eval_output.json")
-eval_output_jsonl = os.path.join("data", "eval_output.jsonl")
+input_path = "LLM_labeler/data/labeled_output.jsonl"
+eval_output_path = os.path.join("LLM_labeler", "data", "eval_output.json")
+eval_output_jsonl = os.path.join("LLM_labeler", "data", "eval_output.jsonl")
 num_sessions = min(len(gt_tactics_list), sum(1 for _ in open(input_path, 'r', encoding='utf-8')))
 
 # Read LLM predictions (support both JSONL and JSON array)
@@ -187,7 +187,7 @@ if metrics and "micro" in metrics and "macro" in metrics:
     print(f"Session-by-session comparison written to {eval_output_jsonl}")
 
     # Write a human-readable summary
-    summary_path = os.path.join("LLM-labeler", "data", "eval_summary.txt")
+    summary_path = os.path.join("data", "eval_summary.txt")
     with open(summary_path, "w", encoding="utf-8") as f:
         f.write("=== MITRE ATT&CK Tactics Evaluation Summary ===\n\n")
         f.write(f"Micro Precision: {metrics['micro'][0]:.3f}\n")

@@ -4,18 +4,13 @@ import sys
 import os
 from Red.schema import response, start_ssh, get_new_hp_logs
 import Red.sangria_config as sangria_config
-from Utils import save_json_to_file, append_json_to_file
-import Red.sangria2 as sangria2
 
 # Add parent directory to path to import config
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
 
-from Red.defender_llm import run_command
 from Red.tools import handle_tool_call
 from Red.model import MitreMethodUsed, DataLogObject
-from config import max_session_length, simulate_command_line
-from Blue_Lagoon.honeypot_tools import start_dockers, stop_dockers
 
 import os
 
@@ -25,7 +20,7 @@ tools = sangria_config.tools
 messages = sangria_config.messages
 mitre_method_used_list = []
 
-def run_single_attack(save_logs, messages):
+def run_single_attack(save_logs: bool, max_session_length: int):
     '''
         Main loop for running a single attack session.
         This function will let the LLM respond to the user, call tools, and log the responses.
@@ -34,6 +29,9 @@ def run_single_attack(save_logs, messages):
     total_prompt_tokens = 0
     total_completion_tokens = 0
     total_cached_tokens = 0
+
+    # Reset messages for each attack
+    messages = sangria_config.messages.copy()  
 
     # start SSH connection to Kali Linux
     if not config.simulate_command_line:
@@ -76,12 +74,7 @@ def run_single_attack(save_logs, messages):
             data_log.tool_response = tool_response['content']
             # data_log.mitre_attack_method = mitre_method_used
 
-            if tool_response['name'] == "terminate":
-                print(f"The attack was {'successfull' if tool_response['content'] else 'unsucsessfull'} after {i + 1} iterations.")
-
-                if tool_response['content'] == "True":
-                    data_log.attack_success = True
-                break
+            
 
         mitre_method_used_list.append(mitre_method_used)
 
@@ -92,6 +85,8 @@ def run_single_attack(save_logs, messages):
             if assistant_response.function:
                 print(f"Tool call: {assistant_response.function, assistant_response.arguments}")
                 print(f"Command response: {tool_response['content'] if tool_response else 'No tool call made'}")
+                print("\x1b[0m")
+
                 print(f"Mitre Method Used: {mitre_method_used if mitre_method_used else 'No Mitre Method Used'}")
                 print("-" * 50)
         
@@ -101,6 +96,13 @@ def run_single_attack(save_logs, messages):
 
         if save_logs:
             full_logs.append(data_log)
+
+        if assistant_response.function and tool_response['name'] == "terminate":
+            print(f"The attack was {'successfull' if tool_response['content'] else 'unsucsessfull'} after {i + 1} iterations.")
+
+            if tool_response['content'] == "True":
+                data_log.attack_success = True
+            break
 
     print(f"Total prompt tokens: {total_prompt_tokens}")
     print(f"Total completion tokens: {total_completion_tokens}")
@@ -113,40 +115,3 @@ def run_single_attack(save_logs, messages):
     }
 
     return full_logs, tokens_used
-
-def run_attacks(n_attacks, save_logs, log_path):
-    '''
-        Run multiple attack sessions.
-        Each session will run a attack and log the responses.
-    '''
-    tokens_used_list = []
-
-    for i in range(n_attacks):
-        
-        messages = sangria_config.messages.copy()  # Reset messages for each attack
-
-        if not config.simulate_command_line:
-            start_dockers()
-
-        print(f"Running attack session {i + 1} / {n_attacks}")
-        logs, tokens_used = sangria2.run_single_attack(save_logs, messages)
-        tokens_used_list.append(tokens_used)
-
-        if save_logs:
-        # create path if not exists
-            os.makedirs(log_path + "full_logs", exist_ok=True)
-            # logs = [log.to_dict() for log in logs]
-            save_json_to_file(logs, log_path + f"full_logs/attack_{i+1}.json")
-            append_json_to_file(tokens_used, log_path + f"tokens_used.json")
-
-        if not config.simulate_command_line:
-            stop_dockers()
-
-
-# %%
-
-# all_logs = run_attacks(2, save_logs=True)
-# save_logs_to_file(all_logs, 'test_id', save_logs_flag=True)
-
-
-# %%

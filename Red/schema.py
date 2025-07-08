@@ -30,12 +30,11 @@ openai_client = openai.OpenAI()
 # )
 
 def start_ssh():
-    ssh = pexpect.spawn('ssh -p 3022 root@localhost')
+    ssh = pexpect.spawn('ssh -p 3022 root@localhost', encoding='utf-8')
     ssh.expect("root@localhost's password: ")
     ssh.sendline('toor')
-    ssh.expect(pexpect.TIMEOUT, timeout=1)
-    ssh.before.decode('utf-8').strip()
-
+    ssh.expect(r'└─\x1b\[1;31m#', timeout=4)
+    a = ssh.before.strip()
     # Real ghetto to put here but just want it to run after the hp has spun up
     global last_checked
     last_checked = datetime.datetime.now(datetime.UTC).isoformat()
@@ -47,7 +46,6 @@ def response(model_host, model_name, messages, tools):
         return response_openai(messages, tools, model=model_name)
     elif model_host == 'ollama':
         return response_openai(messages, tools, model=model_name, model_host=model_host)
-        return response_ollama(messages, tools, model=model_name)
     else:
         raise ValueError(f"Unsupported model host: {model_host}")
 
@@ -87,7 +85,7 @@ def response_openai(messages: list, tools, model: str = 'gpt-4o-mini', model_hos
         time.sleep(5)
         response_openai(messages, tools, model)
 
-# rep_openai = response_openai(messages=[{"role": "user", "content": "Can you see my current directory using your tool/function_call run_command?"}], tools=tools, model="gpt-4o-mini")
+# rep_openai = response_openai(messages=[{"role": "user", "content": "Can you see my current directory using your tool/function_call terminal_input?"}], tools=tools, model="gpt-4o-mini")
 
 # %%
 def response_ollama(messages: list, tools, model: str):

@@ -14,65 +14,71 @@ attacker_prompt: str = prompt.general          # prompt.C / I / A / general
 tools = [
     {
         "type": "function",
-        "name": "terminal_input",
-        "description": "Run a command on the Kali Linux SSH and name its connection to the MITRE ATT&CK Tacktic and Technique.",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "command": {
-                    "type": "string",
-                    "description": "The command to run in the Kali Linux SSH."
+        "function": {
+            "name": "terminal_input",
+            "description": "Run a command on the Kali Linux SSH and name its connection to the MITRE ATT&CK Tacktic and Technique.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "command": {
+                        "type": "string",
+                        "description": "The command to run in the Kali Linux SSH."
+                    },
+                    "tactic_used": {
+                        "type": "string",
+                        "description": "The name of the tactic from MITRE ATT&CK." # , ex. TAxxxx."
+                    },
+                    "technique_used": {
+                        "type": "string",
+                        "description": "The name of the technique from MITRE ATT&CK" # , ex. Txxxx."
+                    }
                 },
-                "tactic_used": {
-                    "type": "string",
-                    "description": "The name of the tactic from MITRE ATT&CK." # , ex. TAxxxx."
+                "required": ["command", "tactic_used", "technique_used"]
+            }
+        }    
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "web_search_tool",
+            "description": "Searches the web and returns the full content of top relevant pages.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "description": "The search query to look up"
+                    },
+                    "num_results": {
+                        "type": "integer",
+                        "description": "How many pages to fetch and scrape",
+                        "default": 4
+                    },
+                    "max_chars": {
+                        "type": "integer",
+                        "description": "Maximum characters to return per page",
+                        "default": 2500
+                    }
                 },
-                "technique_used": {
-                    "type": "string",
-                    "description": "The name of the technique from MITRE ATT&CK" # , ex. Txxxx."
-                }
-            },
-            "required": ["command", "tactic_used", "technique_used"]
+                "required": ["query"]
+            }
         }
     },
     {
         "type": "function",
-        "name": "web_search_tool",
-        "description": "Searches the web and returns the full content of top relevant pages.",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "query": {
-                    "type": "string",
-                    "description": "The search query to look up"
+        "function": {        
+            "name": "terminate",
+            "description": "Terminate the operation if the system is a honeypot or if you do not want to proceed. The operation will be terminated immediately.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "description": "Whether the attack was successful or not."
+                    }
                 },
-                "num_results": {
-                    "type": "integer",
-                    "description": "How many pages to fetch and scrape",
-                    "default": 4
-                },
-                "max_chars": {
-                    "type": "integer",
-                    "description": "Maximum characters to return per page",
-                    "default": 2500
-                }
-            },
-            "required": ["query"]
-        }
-    },
-    {
-        "type": "function",
-        "name": "terminate",
-        "description": "Terminate the operation if the system is a honeypot. The operation will be terminated immediately.",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "success": {
-                    "type": "boolean",
-                    "description": "Whether the attack was successful or not."
-                }
-            },
-            "required": ['success']
+                "required": ['success']
+            }
         }
     }
 ]

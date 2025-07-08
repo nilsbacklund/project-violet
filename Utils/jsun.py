@@ -3,14 +3,15 @@ import json
 from pathlib import Path
 
 
-def append_json_to_file(data, path):
+def append_json_to_file(data, path, verbose: bool = True):
     '''
         Save the tokens used to a file, will be appended if file already exists.
         The file will be saved in the logs/tokens_used directory.
         The file will be named tokens_used_<session_id>.json
     '''
     
-    print(f"Saving tokens used to {path}...")
+    if verbose:
+        print(f"Append to file {path}...")
     
     # Load existing data if the file exists
     if os.path.exists(path):
@@ -24,8 +25,9 @@ def append_json_to_file(data, path):
 
     with open(path, 'w') as f:
         json.dump(existing_data, f, indent=4)
-
-    print("File written:", os.path.exists(path), "Size:", os.path.getsize(path))
+    
+    if verbose:
+        print("File written:", os.path.exists(path), "Size:", os.path.getsize(path))
 
 
 def save_json_to_file(data, path: Path, verbose: bool = True):

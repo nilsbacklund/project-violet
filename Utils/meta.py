@@ -35,8 +35,8 @@ def create_metadata():
     md = MetaDataObject(
         llm_model_sangria=config.llm_model_sangria,
         llm_model_honeypot=config.llm_model_config,
-        n_configurations=config.n_configurations,
-        attacks_per_configuration=config.attacks_per_configuration,
+        num_of_attacks=config.num_of_attacks,
+        min_num_of_attacks_reconfig=config.min_num_of_attacks_reconfig,
         max_session_length=config.max_session_length,
         save_logs=config.save_logs,
         honeypot=config.honeypot,
@@ -47,11 +47,11 @@ def create_metadata():
     
 
 class MetaDataObject:
-    def __init__(self, llm_model_sangria, llm_model_honeypot, n_configurations, attacks_per_configuration, max_session_length, save_logs, honeypot, system_prompt):
+    def __init__(self, llm_model_sangria, llm_model_honeypot, num_of_attacks, min_num_of_attacks_reconfig, max_session_length, save_logs, honeypot, system_prompt):
         self.llm_model_sangria = llm_model_sangria
         self.llm_model_honeypot = llm_model_honeypot
-        self.n_configurations = n_configurations
-        self.attacks_per_configuration = attacks_per_configuration
+        self.num_of_attacks = num_of_attacks
+        self.min_num_of_attacks_reconfig = min_num_of_attacks_reconfig
         self.max_session_length = max_session_length
         self.save_logs = save_logs
         self.honeypot = honeypot
@@ -61,8 +61,8 @@ class MetaDataObject:
         return {
             "llm_model_sangria": self.llm_model_sangria,
             "llm_model_honeypot": self.llm_model_honeypot,
-            "n_configurations": self.n_configurations,
-            "attacks_per_configuration": self.attacks_per_configuration,
+            "num_of_attacks": self.num_of_attacks,
+            "min_num_of_attacks_reconfig": self.min_num_of_attacks_reconfig,
             "max_session_length": self.max_session_length,
             "save_logs": self.save_logs,
             "honeypot": self.honeypot,

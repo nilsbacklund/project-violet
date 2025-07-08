@@ -4,18 +4,13 @@ import sys
 import os
 from Red.schema import response, start_ssh, get_new_hp_logs
 import Red.sangria_config as sangria_config
-from Utils.jsun import save_json_to_file, append_json_to_file
 
 # Add parent directory to path to import config
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
 
-from Red.defender_llm import terminal_input
 from Red.tools import handle_tool_call
 from Red.model import MitreMethodUsed, DataLogObject
-from config import max_session_length, simulate_command_line
-from Blue_Lagoon.honeypot_tools import start_dockers, stop_dockers
-from Preprocessing.extraction import extract_session
 
 import os
 
@@ -25,7 +20,7 @@ tools = sangria_config.tools
 messages = sangria_config.messages
 mitre_method_used_list = []
 
-def run_single_attack(save_logs, messages):
+def run_single_attack(save_logs: bool, max_session_length: int):
     '''
         Main loop for running a single attack session.
         This function will let the LLM respond to the user, call tools, and log the responses.
@@ -34,6 +29,9 @@ def run_single_attack(save_logs, messages):
     total_prompt_tokens = 0
     total_completion_tokens = 0
     total_cached_tokens = 0
+
+    # Reset messages for each attack
+    messages = sangria_config.messages.copy()  
 
     # start SSH connection to Kali Linux
     if not config.simulate_command_line:
@@ -117,48 +115,3 @@ def run_single_attack(save_logs, messages):
     }
 
     return full_logs, tokens_used
-
-def run_attacks(n_attacks, save_logs, log_path):
-    '''
-        Run multiple attack sessions.
-        Each session will run a attack and log the responses.
-    '''
-    tokens_used_list = []
-
-    for i in range(n_attacks):
-        
-        messages = sangria_config.messages.copy()  # Reset messages for each attack
-
-        if not config.simulate_command_line:
-            start_dockers()
-
-        print(f"Running attack session {i + 1} / {n_attacks}")
-        logs, tokens_used = run_single_attack(save_logs, messages)
-        tokens_used_list.append(tokens_used)
-
-        if save_logs and not simulate_command_line:
-        # create path if not exists
-            os.makedirs(log_path + "full_logs", exist_ok=True)
-            logs = [log.to_dict() for log in logs]
-            save_json_to_file(logs, log_path + f"full_logs/attack_{i+1}.json")
-
-            # extract sessions from logs
-            session = extract_session(logs)
-            save_json_to_file(session, log_path + f"sessions/session_{i+1}.json")
-
-            # update tokens used
-            append_json_to_file(tokens_used, log_path + f"tokens_used.json")
-
-        if not config.simulate_command_line:
-            stop_dockers()
-        print("\n\n")
-
-
-
-# %%
-
-# all_logs = run_attacks(2, save_logs=True)
-# save_logs_to_file(all_logs, 'test_id', save_logs_flag=True)
-
-
-# %%

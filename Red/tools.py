@@ -8,24 +8,30 @@ from bs4 import BeautifulSoup
 import urllib.parse
 import json
 
-def handle_tool_call(response, ssh):
+def handle_tool_call(name, args, ssh):
     """
     Handle the tool call from the LLM response.
     """
-    tool_name = response.function
-    args = response.arguments or {}
+    tool_name = name
+    args = args or {}
     tool_response = None
     mitre_method = None
 
     if tool_name == "terminal_input":
-        tool_response, mitre_method = terminal_tool(args, ssh)
+        resp, mitre_method = terminal_tool(args, ssh)
     elif tool_name == "terminate":
-        tool_response = terminate_tool(args)
+        resp = terminate_tool(args)
     elif tool_name == "web_search_tool":
-        tool_response = handle_web_search_tool(args)
+        resp = handle_web_search_tool(args)
     else:
         raise ValueError(f"Unknown tool call: {tool_name}")
     
+    tool_response = {
+        "role": "tool",
+        "name": tool_name,
+        "content": resp
+    }
+
     return tool_response, mitre_method
 
 def search_and_scrape(query: str, num_results=4, max_chars=2500):
@@ -72,11 +78,7 @@ def search_and_scrape(query: str, num_results=4, max_chars=2500):
             "content": content
         })
 
-    return {
-        "role": "function",
-        "name": "web_search_tool",
-        "content": json.dumps(results, indent=2)
-    }
+    return json.dumps(results, indent=2)
 
 
 # Needs SSH development
@@ -112,11 +114,7 @@ def terminal_tool(args, ssh):
 
     command = args[command_key]
     command_response = terminal_input(command, ssh)
-    tool_response = {
-        "role": "function",
-        "name": "terminal_input",
-        "content": command_response
-    }
+    tool_response = command_response
 
     mitre_method = MitreMethodUsed()
 
@@ -139,13 +137,8 @@ def terminate_tool(args):
         raise ValueError("Tool call 'terminate' requires a boolean 'success' argument.")
     
     terminate_response = "Sangria feels like it has completed its task and is now terminating the session."
-    print(terminate_response)
-    tool_response = {
-        "role": "function",
-        "name": "terminate",
-        "content": str(success)
-    }
-    return tool_response
+
+    return str(success)
 
 
 # %%

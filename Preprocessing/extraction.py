@@ -2,10 +2,11 @@ from pathlib import Path
 from typing import Dict
 
 from Utils.jsun import save_json_to_file, load_json
-from Utils.logprecis import recombine_labels, divide_statements, expand_labels
+from Utils.logprecis import recombine_labels, divide_statements
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# only keep commands when the attacker has gained access
 def extract_session(logs: Dict):
     session_log = {}
 
@@ -21,7 +22,7 @@ def extract_session(logs: Dict):
             tactic = arguments["tactic_used"]
             technique = arguments["technique_used"]
 
-            label = tactic.split(":")[-1]
+            label = str(tactic).split(":")[-1]
 
             for command in divide_statements(commands):
                 session_string += command + " "

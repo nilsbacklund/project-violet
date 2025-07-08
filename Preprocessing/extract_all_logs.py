@@ -4,7 +4,10 @@
 from pathlib import Path
 import os
 import questionary
+import sys
 
+# Add parent directory to sys.path to allow imports from project root
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from Preprocessing.extraction import extract_session
 from Utils.jsun import load_json, save_json_to_file
 

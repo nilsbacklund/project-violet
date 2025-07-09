@@ -16,21 +16,21 @@ tools = [
         "type": "function",
         "function": {
             "name": "terminal_input",
-            "description": "Run a command on the Kali Linux SSH and name its connection to the MITRE ATT&CK Tacktic and Technique.",
+        "description": "Run a command on the Kali Linux SSH and name its connection to the MITRE ATT&CK Tactic and Technique. If the command is not an offensive tool, specify tactic and technique as 'Harmless'. Try not to use verbose options unless necessary. ",
             "parameters": {
                 "type": "object",
                 "properties": {
                     "command": {
                         "type": "string",
-                        "description": "The command to run in the Kali Linux SSH."
+                        "description": "The command to run in the Kali Linux SSH. For example: 'nmap -sn 172.20.0.3'"
                     },
                     "tactic_used": {
                         "type": "string",
-                        "description": "The name of the tactic from MITRE ATT&CK." # , ex. TAxxxx."
+                        "description": "The name of the tactic from MITRE ATT&CK. For example: 'TA0007:Discovery'"
                     },
                     "technique_used": {
                         "type": "string",
-                        "description": "The name of the technique from MITRE ATT&CK" # , ex. Txxxx."
+                        "description": "The name of the technique from MITRE ATT&CK. For example: 'T1018:Remote System Discovery'"
                     }
                 },
                 "required": ["command", "tactic_used", "technique_used"]

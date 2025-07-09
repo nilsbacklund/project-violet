@@ -3,8 +3,8 @@ from Red.model import LLMModel
 
 experiment_name = ""
 
-llm_model_sangria = LLMModel.GPT_4O_MINI
-llm_model_config = LLMModel.GPT_4O_MINI
+llm_model_sangria = LLMModel.GPT_4_1_MINI
+llm_model_config = LLMModel.GPT_4_1_MINI
 simulate_command_line = False
 save_logs = True
 save_configuration = True

@@ -63,11 +63,11 @@ def run_single_attack(save_logs, messages, max_session_length=100):
             fn_name = tool_use.function.name
             fn_args = json.loads(tool_use.function.arguments)
 
+            terminal_input_tools = list(filter(lambda x: x['role'] == 'tool' and x['name'] == 'terminal_input', (messages)))
             if not config.simulate_command_line:
                 beelzebub_logs = schema.get_new_hp_logs()
-                terminal_input_tool = list(filter(lambda x: x['role'] == 'tool' and x['name'] == 'terminal_input', messages))
-                if terminal_input_tool:
-                    last_terminal_input_tool = terminal_input_tool[-1]
+                if terminal_input_tools:
+                    last_terminal_input_tool = terminal_input_tools[-1]
                     last_terminal_input_tool["honeypot_logs"] = beelzebub_logs
                 
             result, mitre_method_used = red_tools.handle_tool_call(fn_name, fn_args, ssh)
@@ -94,7 +94,7 @@ def run_single_attack(save_logs, messages, max_session_length=100):
                 messages=messages
             )
             assistant_msg = followup.choices[0].message
-            messages.append(assistant_msg)
+            messages.append(assistant_msg.model_dump())
 
             print(f"Follow-up message: {assistant_msg.content}")
 
@@ -120,7 +120,7 @@ def start_ssh(simulate_command_line):
 
     return ssh
 
-# test_single_attack = run_single_attack(save_logs=True, messages=messages)
+test_single_attack = run_single_attack(save_logs=True, messages=messages)
 
 # %% save messages as json to file
 

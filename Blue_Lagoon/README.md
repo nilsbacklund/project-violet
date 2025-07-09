@@ -226,7 +226,6 @@ commands:
 serverVersion: "OpenSSH"
 serverName: "ubuntu"
 passwordRegex: "^(root|qwerty|Smoker666|123456|jenkins|minecraft|sinus|alex|postgres|Ly123456)$"
-deadlineTimeoutSeconds: 60
 plugin:
    llmProvider: "openai"
    llmModel: "gpt-4o" #Models https://platform.openai.com/docs/models
@@ -246,7 +245,6 @@ commands:
 serverVersion: "OpenSSH"
 serverName: "ubuntu"
 passwordRegex: "^(root|qwerty|Smoker666|123456|jenkins|minecraft|sinus|alex|postgres|Ly123456)$"
-deadlineTimeoutSeconds: 60
 plugin:
    llmProvider: "ollama"
    llmModel: "codellama:7b" #Models https://ollama.com/search
@@ -265,7 +263,6 @@ commands:
 serverVersion: "OpenSSH"
 serverName: "ubuntu"
 passwordRegex: "^(root|qwerty|Smoker666|123456|jenkins|minecraft|sinus|alex|postgres|Ly123456)$"
-deadlineTimeoutSeconds: 60
 plugin:
    llmProvider: "openai"
    llmModel: "gpt-4o"
@@ -304,7 +301,6 @@ commands:
 serverVersion: "OpenSSH"
 serverName: "ubuntu"
 passwordRegex: "^(root|qwerty|Smoker666)$"
-deadlineTimeoutSeconds: 60
 ```
 
 ## Roadmap

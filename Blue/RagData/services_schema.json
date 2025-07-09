@@ -213,10 +213,7 @@
           "type": "string",
           "description": "Regex for accepted or logged passwords."
         },
-        "deadlineTimeoutSeconds": {
-          "type": "integer",
-          "description": "Timeout in seconds before session terminates."
-        },
+
         "serverName": {
           "type": "string",
           "description": "Fake server name reported to clients (e.g., 'ubuntu')."
@@ -238,7 +235,6 @@
         "cve_description",
         "commands",
         "passwordRegex",
-        "deadlineTimeoutSeconds",
         "serverName"
       ],
       "additionalProperties": false
@@ -282,10 +278,7 @@
           "type": "string",
           "description": "Text banner sent to clients upon connection."
         },
-        "deadlineTimeoutSeconds": {
-          "type": "integer",
-          "description": "Timeout in seconds before closing the connection."
-        },
+
         "plugin": {
           "oneOf": [
             { "$ref": "#/definitions/LLMPlugin" },
@@ -301,8 +294,7 @@
         "description",
         "cve_tags",
         "cve_description",
-        "banner",
-        "deadlineTimeoutSeconds"
+        "banner"
       ],
       "additionalProperties": false
     }

@@ -121,7 +121,6 @@ func TestGetHoneypotsConfigurationsWithResults(t *testing.T) {
 			ServerVersion:          "OpenSSH",
 			ServerName:             "ubuntu",
 			PasswordRegex:          "^(root|qwerty|Smoker666|123456|jenkins|minecraft|sinus|alex|postgres|Ly123456)$",
-			DeadlineTimeoutSeconds: 60,
 			Plugin: parser.Plugin{
 				LLMModel:        "gpt-4o",
 				OpenAISecretKey: "1234",

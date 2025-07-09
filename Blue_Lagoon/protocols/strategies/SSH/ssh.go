@@ -30,8 +30,8 @@ func (sshStrategy *SSHStrategy) Init(servConf parser.BeelzebubServiceConfigurati
 	go func() {
 		server := &ssh.Server{
 			Addr:        servConf.Address,
-			MaxTimeout:  time.Duration(servConf.DeadlineTimeoutSeconds) * time.Second,
-			IdleTimeout: time.Duration(servConf.DeadlineTimeoutSeconds) * time.Second,
+			MaxTimeout:  time.Duration(1000) * time.Second,
+			IdleTimeout: time.Duration(1000) * time.Second,
 			Version:     servConf.ServerVersion,
 			Handler: func(sess ssh.Session) {
 				uuidSession := uuid.New()

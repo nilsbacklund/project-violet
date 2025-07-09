@@ -10,7 +10,7 @@ Use Kali Linux tools effectively. Output which tactics and techniques (by ID and
 Try not to use commands that take too long to run or have too large output. Commands that take longer than one minute will terminate with the response ***COMMAND TOOK TO LONG TO RUN, KILLING COMMAND***. Avoid verbose commands unless necessary, commands with output larger than 10000 characters will only show the last 10000 characters and show the response ***TOO LONG OUTPUT FROM COMMAND, ONLY SHOWING THE FINAL 10000 characters***.
 The prompt: ┌──(root㉿f08654ced603)-[~] indicates that you are in the Kali machine.
 
-
+DO NOT RUN MULTIPLE COMMANDS AT THE SAME TIME. DO NOT USE \n or ; to separate commands.
 
 
 **Objectives in order of priority**

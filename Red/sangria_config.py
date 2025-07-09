@@ -2,14 +2,14 @@
 
 from Red.model import LLMHost, LLMModel
 import json
-import Red.attacker_prompts as prompt
+from Red.attacker_prompts import AttackerPrompts
 
 model_host = LLMHost.OPENAI  # change when using Ollama, Anthropic is not supported yet
 
 # Can have prompt. C, I, A or general depending on intended purpose of attack.
 # C = Confidentiality, I = Integrity, A = Availability.
 
-attacker_prompt: str = prompt.general          # prompt.C / I / A / general
+attacker_prompt: str = AttackerPrompts.GENERAL
 
 tools = [
     {

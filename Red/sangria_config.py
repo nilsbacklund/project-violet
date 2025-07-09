@@ -22,7 +22,7 @@ tools = [
                 "properties": {
                     "command": {
                         "type": "string",
-                        "description": "The command to run in the Kali Linux SSH. For example: 'nmap -sn 172.20.0.3'"
+                        "description": "The terminal input to run in the Kali Linux machine. For example: 'nmap -sn 172.20.0.3', 'yes' 'root'"
                     },
                     "tactic_used": {
                         "type": "string",

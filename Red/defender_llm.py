@@ -26,7 +26,7 @@ prompt_patterns = [pexpect.EOF,
 
 def send_terminal_command(connection, command):
     try:
-        connection.sendline(command)
+        connection.send(command + "\r")
         connection.expect(prompt_patterns, timeout=TIMEOUT)
         matched_pattern = connection.match.group(0) if connection.match else ""
 

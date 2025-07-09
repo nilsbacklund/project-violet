@@ -38,11 +38,51 @@ if __name__ == "__main__":
     with open(file_path, "r", encoding="utf8") as f:
         attack_logs = json.load(f)
     
-    for iteration in attack_logs:
+    for i, iteration in enumerate(attack_logs):
         # Collect individual panels
         panels = []
 
-        i = iteration["iteration"]
+        if iteration["role"] != "assistant":
+            continue
+
+        if iteration["content"]:
+            panels.append(
+                Panel(
+                    iteration["content"],
+                    title="Attacker thoughts",
+                    border_style="green",
+                    box=ROUNDED,
+                    expand=True
+                )
+            )
+
+        if iteration["tool_calls"]:
+            for j, tool_call in enumerate(iteration["tool_calls"]):
+                tool_name = tool_call["function"]["name"]
+
+                match tool_name:
+                    case "terminal_input":
+                        cmd = arguments["command"]
+                        tactic = arguments["tactic_used"]
+                        technique = arguments["technique_used"]
+                        panel_cmd = Panel(
+                            f"$ {cmd}",
+                            title="Terminal input",
+                            border_style="red",
+                            box=ROUNDED,
+                            expand=True
+                        )
+                        panel_meta = Panel(
+                            f"[bold]Tactic[/bold]: {tactic}\n[bold]Technique[/bold]: {technique}",
+                            title="MITRE ATT&CK",
+                            border_style="yellow",
+                            box=ROUNDED,
+                            expand=True
+                        )
+                        # add side-by-side
+                        panels.append(Columns([panel_cmd, panel_meta], expand=True, equal=True))
+
+
         message = iteration["llm_response"]["message"]
         function_type = iteration["llm_response"]["function"]
         arguments = iteration["llm_response"]["arguments"]

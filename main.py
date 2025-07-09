@@ -55,7 +55,7 @@ def main():
 
         # extract session and add attack pattern to set
         session = extract_session(logs)
-        attack_pattern = session["tactics"]
+        attack_pattern = session["techniques"]
         print(f"Attack pattern: {attack_pattern}")
 
         if config.save_logs:

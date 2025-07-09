@@ -80,8 +80,10 @@ def run_single_attack(save_logs, messages, max_session_length=100):
                 
 
 
-            print(f"Tool call: {fn_name} with args: {fn_args}")
-            print(f"Tool response: {result}")
+            print(f"Tool call: {fn_name} with args: {fn_args}\n")
+            print(f"Tool response: {result['content']}")
+            print("\x1b[0m")
+
 
         if tool_use:
             followup = openai_client.chat.completions.create(

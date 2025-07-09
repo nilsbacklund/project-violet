@@ -14,6 +14,52 @@ messages = sangria_config.messages
 openai.api_key = os.getenv('OPENAI_API_KEY')
 openai_client = openai.OpenAI()
 
+# %% save messages as json to file
+
+def create_json_log(messages):
+    # Convert messages to JSON serializable format
+    serializable_messages = []
+    for msg in messages:
+        if hasattr(msg, 'model_dump'):
+            # For Pydantic models (like ChatCompletionMessage)
+            serializable_messages.append(msg.model_dump())
+        elif hasattr(msg, 'dict'):
+            # Alternative method for some object types
+            serializable_messages.append(msg.dict())
+        else:
+            # For regular dictionaries
+            serializable_messages.append(msg)
+
+    # Parse string JSON fields to actual JSON objects
+    for msg in serializable_messages:
+        if msg.get('role') == 'assistant' and msg.get('tool_calls'):
+            for tool_call in msg['tool_calls']:
+                if 'function' in tool_call and 'arguments' in tool_call['function']:
+                    try:
+                        tool_call['function']['arguments'] = json.loads(tool_call['function']['arguments'])
+                    except (json.JSONDecodeError, TypeError):
+                        pass  # Keep as string if not valid JSON
+
+        elif msg.get('role') == 'tool' and 'content' in msg:
+            try:
+                msg['content'] = json.loads(msg['content'])
+            except (json.JSONDecodeError, TypeError):
+                # If it's not valid JSON, try to evaluate as Python literal
+                try:
+                    import ast
+                    msg['content'] = ast.literal_eval(msg['content'])
+                except (ValueError, SyntaxError):
+                    # Keep as string if neither JSON nor valid Python literal
+                    pass
+            
+
+    # Convert to JSON string without saving to file
+    return serializable_messages
+    json_string = json.dumps(serializable_messages, indent=4)
+    return json_string
+# %%
+
+
 def run_single_attack(save_logs, messages, max_session_length=100):
     '''
         Main loop for running a single attack session.
@@ -122,47 +168,3 @@ def start_ssh(simulate_command_line):
 
 test_single_attack = run_single_attack(save_logs=True, messages=messages)
 
-# %% save messages as json to file
-
-def create_json_log(messages):
-    # Convert messages to JSON serializable format
-    serializable_messages = []
-    for msg in messages:
-        if hasattr(msg, 'model_dump'):
-            # For Pydantic models (like ChatCompletionMessage)
-            serializable_messages.append(msg.model_dump())
-        elif hasattr(msg, 'dict'):
-            # Alternative method for some object types
-            serializable_messages.append(msg.dict())
-        else:
-            # For regular dictionaries
-            serializable_messages.append(msg)
-
-    # Parse string JSON fields to actual JSON objects
-    for msg in serializable_messages:
-        if msg.get('role') == 'assistant' and msg.get('tool_calls'):
-            for tool_call in msg['tool_calls']:
-                if 'function' in tool_call and 'arguments' in tool_call['function']:
-                    try:
-                        tool_call['function']['arguments'] = json.loads(tool_call['function']['arguments'])
-                    except (json.JSONDecodeError, TypeError):
-                        pass  # Keep as string if not valid JSON
-
-        elif msg.get('role') == 'tool' and 'content' in msg:
-            try:
-                msg['content'] = json.loads(msg['content'])
-            except (json.JSONDecodeError, TypeError):
-                # If it's not valid JSON, try to evaluate as Python literal
-                try:
-                    import ast
-                    msg['content'] = ast.literal_eval(msg['content'])
-                except (ValueError, SyntaxError):
-                    # Keep as string if neither JSON nor valid Python literal
-                    pass
-            
-
-    # Convert to JSON string without saving to file
-    return serializable_messages
-    json_string = json.dumps(serializable_messages, indent=4)
-    return json_string
-# %%

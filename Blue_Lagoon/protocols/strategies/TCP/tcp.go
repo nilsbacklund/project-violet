@@ -5,8 +5,8 @@ import (
 	"net"
 	"time"
 
-	"github.com/mariocandela/beelzebub/v3/parser"
 	"github.com/mariocandela/beelzebub/v3/historystore"
+	"github.com/mariocandela/beelzebub/v3/parser"
 	"github.com/mariocandela/beelzebub/v3/plugins"
 	"github.com/mariocandela/beelzebub/v3/tracer"
 
@@ -34,7 +34,7 @@ func (tcpStrategy *TCPStrategy) Init(servConf parser.BeelzebubServiceConfigurati
 		for {
 			if conn, err := listen.Accept(); err == nil {
 				go func() {
-					conn.SetDeadline(time.Now().Add(time.Duration(servConf.DeadlineTimeoutSeconds) * time.Second))
+					conn.SetDeadline(time.Now().Add(time.Duration(1000) * time.Second))
 					conn.Write(fmt.Appendf([]byte{}, "%s\n", servConf.Banner))
 
 					buffer := make([]byte, 1024)

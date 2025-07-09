@@ -1,6 +1,6 @@
 import re
 
-def divide_statements(session, add_special_token = False, special_token="[STAT]"):
+def divide_statements(session: str, add_special_token = False, special_token="[STAT]"):
     """Divide a session into statements.
     This function splits a session into statements using specified separators. Optionally,
     it adds a special token at the beginning of each statement.
@@ -11,6 +11,8 @@ def divide_statements(session, add_special_token = False, special_token="[STAT]"
     Returns:
         list of str: A list of statements.
     """
+    if session.strip()[-1] != ";":
+        session += " ;"
     statements = re.split(r"(; |\|\|? |&& )", session + " ")
     # concatenate with separators
     if len(statements) != 1:

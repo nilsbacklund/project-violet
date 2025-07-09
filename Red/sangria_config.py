@@ -20,7 +20,7 @@ tools = [
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "input": {
+                    "command": {
                         "type": "string",
                         "description": "The terminal input to run in the Kali Linux machine. For example: 'nmap -sn 172.20.0.3', 'yes' 'root'"
                     },
@@ -33,7 +33,7 @@ tools = [
                         "description": "The name of the technique from MITRE ATT&CK. For example: 'T1018:Remote System Discovery'"
                     }
                 },
-                "required": ["input", "tactic_used", "technique_used"]
+                "required": ["command", "tactic_used", "technique_used"]
             }
         }    
     },

@@ -19,7 +19,7 @@ prompt_patterns = [pexpect.EOF,
                     r'└─\x1b\[1;31m#',
                     r' \x1b\[0m> ', 
                     r'Are you sure you want to continue connecting \(yes/no/\[fingerprint\]\)\? ',
-                    's password: ',
+                    'password: ',
                     r'\:\~\$ ',
                     "Please type 'yes', 'no' or the fingerprint: "]
 

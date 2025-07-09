@@ -92,7 +92,7 @@ def terminal_tool(args, ssh):
     This function checks for the 'command' key in the arguments and runs the command on the
     Kali Linux SSH, associating it with a MITRE ATT&CK tactic and technique if provided.
     """
-    command_key = "input"
+    command_key = "command"
     tactic_key = "tactic_used"
     technique_key = "technique_used"
 
@@ -105,11 +105,11 @@ def terminal_tool(args, ssh):
         if other_keys:
             command_key = other_keys[0]
             warnings.warn(
-                "Tool call 'terminal_input' missing 'input'; using '{command_key}' as the command key instead."
+                "Tool call 'terminal_input' missing 'command'; using '{command_key}' as the command key instead."
             )
         else:
             raise ValueError(
-                "Tool call 'terminal_input' requires a 'input' argument but only optional keys were provided."
+                "Tool call 'terminal_input' requires a 'command' argument but only optional keys were provided."
             )
 
     command = args[command_key]

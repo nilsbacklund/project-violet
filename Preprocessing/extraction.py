@@ -20,6 +20,7 @@ def extract_session(logs: Dict):
     full_session = []
 
     for i, entry in enumerate(logs):
+        print(i, entry)
         if entry["role"] != "assistant":
             continue
 

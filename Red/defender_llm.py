@@ -63,9 +63,9 @@ def terminal_input(command: str, ssh, simulate_execution=simulate_command_line):
     if not simulate_execution:
         command_response = send_terminal_command(ssh, command)
         if len(command_response) > 10000:
-            command_response = command_response[-10000:]
+            command_response = command_response[-10000:] + "\n***TOO LONG OUTPUT FROM COMMAND, ONLY SHOWING THE FINAL 10000 characters***"
         
-        return command_response + "\n***TOO LONG OUTPUT FROM COMMAND, ONLY SHOWING THE FINAL 10000 characters***"
+        return command_response 
 
     # Simulate command execution
     if simulate_execution:

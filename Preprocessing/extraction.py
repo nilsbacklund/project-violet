@@ -56,10 +56,10 @@ def extract_session(logs: Dict):
                         full_session.append({
                             "command": hp_command,
                             "attacker_command": attacker_command,
-                            "tactic": tactic,
-                            "tactic_clean": tactic_clean,
-                            "technique": technique,
-                            "technique_clean": technique_clean
+                            "tactic_raw": tactic,
+                            "tactic": tactic_clean,
+                            "technique_raw": technique,
+                            "technique": technique_clean
                         })
                         tactics.append(tactic_clean)
                         techniques.append(technique_clean)

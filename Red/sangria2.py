@@ -47,7 +47,7 @@ def run_single_attack(save_logs, messages, max_session_length=100):
         tool_use = None
         fn_name = ""
 
-        messages.append(message)
+        messages.append(message.model_dump())
 
         print(f"Prompt tokens: {assistant_response.usage.prompt_tokens}, Completion tokens: {assistant_response.usage.completion_tokens}, Cached tokens: {total_cached_tokens}")
 
@@ -65,9 +65,10 @@ def run_single_attack(save_logs, messages, max_session_length=100):
 
             if not config.simulate_command_line:
                 beelzebub_logs = schema.get_new_hp_logs()
-                
-                last_terminal_input_tool = list(filter(lambda x: x['role'] == 'tool' and x['name'] == 'terminal_input', messages))[-1]
-                last_terminal_input_tool["honeypot_logs"] = beelzebub_logs
+                terminal_input_tool = list(filter(lambda x: x['role'] == 'tool' and x['name'] == 'terminal_input', messages))
+                if terminal_input_tool:
+                    last_terminal_input_tool = terminal_input_tool[-1]
+                    last_terminal_input_tool["honeypot_logs"] = beelzebub_logs
                 
             result, mitre_method_used = red_tools.handle_tool_call(fn_name, fn_args, ssh)
 
@@ -78,7 +79,7 @@ def run_single_attack(save_logs, messages, max_session_length=100):
                 "content": str(result['content'])
             })
 
-            messages[-1]["honeypot_logs"] = last_terminal_input_tool.get("honeypot_logs", "")
+            # messages[-1]["honeypot_logs"] = last_terminal_input_tool.get("honeypot_logs", "")
 
 
 

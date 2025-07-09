@@ -31,7 +31,7 @@ def extract_session(logs: Dict):
                 continue
 
             arguments = tool["function"]["arguments"]
-            attacker_command = arguments["command"]
+            attacker_command = arguments["input"]
             tactic = arguments["tactic_used"]
             tactic_clean = str(tactic).split(":")[-1]
             technique = arguments["technique_used"]

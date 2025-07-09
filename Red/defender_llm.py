@@ -20,6 +20,7 @@ prompt_patterns = [pexpect.EOF,
                     r' \x1b\[0m> ', 
                     r'Are you sure you want to continue connecting \(yes/no/\[fingerprint\]\)\? ',
                     's password: ',
+                    'Enter password: ',
                     r'\:\~\$ ',
                     "Please type 'yes', 'no' or the fingerprint: "]
 
@@ -32,6 +33,7 @@ def send_terminal_command(connection, command):
         command_response = f"{connection.before.strip()}{matched_pattern}"
         return command_response
     except pexpect.exceptions.TIMEOUT:
+        connection.sendline('\r')
         connection.expect(r'.*')
         matched_pattern = connection.match.group(0) if connection.match else ""
         command_response = f"{connection.before.strip()}{matched_pattern}***COMMAND TOOK TO LONG TO RUN, KILLING COMMAND***\n"
@@ -63,7 +65,7 @@ def terminal_input(command: str, ssh, simulate_execution=simulate_command_line):
         if len(command_response) > 10000:
             command_response = command_response[-10000:]
         
-        return command_response
+        return command_response + "\n***TOO LONG OUTPUT FROM COMMAND, ONLY SHOWING THE FINAL 10000 characters***"
 
     # Simulate command execution
     if simulate_execution:

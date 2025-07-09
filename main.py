@@ -43,6 +43,12 @@ def main():
 
         messages = sangria_config.messages.copy()
         logs, tokens_used = run_single_attack(config.save_logs, messages, config.max_session_length)
+        
+        if config.save_logs:
+            # save logs
+            save_json_to_file(logs, full_logs_path / f"attack_{i+1}.json")
+            # update tokens used
+            append_json_to_file(tokens_used, config_path / f"tokens_used.json")
 
         # append tokens
         tokens_used_list.append(tokens_used)
@@ -53,12 +59,8 @@ def main():
         print(f"Attack pattern: {attack_pattern}")
 
         if config.save_logs:
-            # save logs
-            save_json_to_file(logs, full_logs_path / f"attack_{i+1}.json")
             # update sessions
             append_json_to_file(session, config_path / f"sessions.json")
-            # update tokens used
-            append_json_to_file(tokens_used, config_path / f"tokens_used.json")
 
         config_attack_counter += 1
         if config_attack_counter >= config.min_num_of_attacks_reconfig and attack_pattern in all_attack_patterns:

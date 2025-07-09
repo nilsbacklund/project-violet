@@ -47,7 +47,7 @@ def run_single_attack(save_logs, messages, max_session_length=100):
         tool_use = None
         fn_name = ""
 
-        messages.append(message)
+        messages.append(message.model_dump())
 
         print(f"Prompt tokens: {assistant_response.usage.prompt_tokens}, Completion tokens: {assistant_response.usage.completion_tokens}, Cached tokens: {total_cached_tokens}")
 

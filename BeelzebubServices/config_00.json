@@ -108,7 +108,6 @@
         }
       ],
       "passwordRegex": "^(root|toor|qwerty|Smoker666|123456|jenkins|minecraft|sinus|alex|postgres|Ly123456)$",
-      "deadlineTimeoutSeconds": 60,
       "serverName": "ubuntu",
       "plugin": null
     },
@@ -127,7 +126,6 @@
         }
       ],
       "passwordRegex": "^(root|qwerty|Smoker666|123456|jenkins|minecraft|sinus|alex|postgres|Ly123456|1234)$",
-      "deadlineTimeoutSeconds": 60,
       "serverName": "ubuntu",
       "plugin": {
         "llmProvider": "openai",
@@ -145,8 +143,7 @@
         "CVE-2022-21449"
       ],
       "cve_description": "MySQL before 8.0.30 allows unauthenticated attackers to cause a crash via malformed handshake packets.",
-      "banner": "8.0.29",
-      "deadlineTimeoutSeconds": 10
+      "banner": "8.0.29"
     }
   ]
 }

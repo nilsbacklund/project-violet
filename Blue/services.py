@@ -178,7 +178,7 @@ class ServiceTCP(Service):
         banner: str,
         plugin: Optional[LLMPlugin]
     ):
-        """Initialize the TCP service with its address, banner, and timeout settings."""
+        """Initialize the TCP service with its address and banner settings."""
         self.address = address
         self.description = description
         self.banner = banner

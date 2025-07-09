@@ -131,14 +131,12 @@ class ServiceSSH(Service):
         protocol (str): Always 'ssh' for SSH services.
         commands (List[CommandSSH]): List of SSH command rules.
         passwordRegex (str): Regex for accepted or logged passwords.
-        deadlineTimeoutSeconds (int): Timeout in seconds before session terminates.
         serverName (str): Fake server name reported to clients (e.g., 'ubuntu').
         plugin (Optional[LLMPlugin]): Optional LLM plugin for dynamic SSH interaction.
     """
     protocol: str = "ssh"
     commands: List[CommandSSH]
     passwordRegex: str
-    deadlineTimeoutSeconds: int
     serverName: str
     plugin: Optional[LLMPlugin]
 
@@ -148,7 +146,6 @@ class ServiceSSH(Service):
         description: str,
         commands: List[CommandSSH],
         passwordRegex: str,
-        deadlineTimeoutSeconds: int,
         serverName: str,
         plugin: Optional[LLMPlugin]
     ):
@@ -157,7 +154,6 @@ class ServiceSSH(Service):
         self.description = description
         self.commands = commands
         self.passwordRegex = passwordRegex
-        self.deadlineTimeoutSeconds = deadlineTimeoutSeconds
         self.serverName = serverName
         self.plugin = plugin
 
@@ -169,12 +165,10 @@ class ServiceTCP(Service):
     Attributes:
         protocol (str): Always 'tcp' for TCP services.
         banner (str): Text banner sent to clients upon connection.
-        deadlineTimeoutSeconds (int): Timeout in seconds before closing the connection.
         plugin (Optional[LLMPlugin]): Optional LLM plugin for dynamic TCP interaction.
     """
     protocol: str = "tcp"
     banner: str
-    deadlineTimeoutSeconds: int
     plugin: Optional[LLMPlugin]
 
     def __init__(
@@ -182,14 +176,12 @@ class ServiceTCP(Service):
         address: str,
         description: str,
         banner: str,
-        deadlineTimeoutSeconds: int,
         plugin: Optional[LLMPlugin]
     ):
-        """Initialize the TCP service with its address, banner, and timeout settings."""
+        """Initialize the TCP service with its address and banner settings."""
         self.address = address
         self.description = description
         self.banner = banner
-        self.deadlineTimeoutSeconds = deadlineTimeoutSeconds
         self.plugin = plugin
 
 class Services:

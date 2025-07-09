@@ -120,7 +120,7 @@ def start_ssh(simulate_command_line):
 
     return ssh
 
-test_single_attack = run_single_attack(save_logs=True, messages=messages)
+# test_single_attack = run_single_attack(save_logs=True, messages=messages)
 
 # %% save messages as json to file
 

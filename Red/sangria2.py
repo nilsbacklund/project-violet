@@ -63,21 +63,23 @@ def run_single_attack(save_logs, messages, max_session_length=100):
             fn_name = tool_use.function.name
             fn_args = json.loads(tool_use.function.arguments)
 
+            if not config.simulate_command_line:
+                beelzebub_logs = schema.get_new_hp_logs()
+                
+                last_terminal_input_tool = list(filter(lambda x: x['role'] == 'tool' and x['name'] == 'terminal_input', messages))[-1]
+                last_terminal_input_tool["honeypot_logs"] = beelzebub_logs
+                
             result, mitre_method_used = red_tools.handle_tool_call(fn_name, fn_args, ssh)
 
             messages.append({
                 "role": "tool",
                 "name": fn_name,
                 "tool_call_id": tool_use.id,
-                "content": str(result)
+                "content": str(result['content'])
             })
 
-            messages[-1]["honeypot_logs"] = "placeholder for honeypot logs"
+            messages[-1]["honeypot_logs"] = last_terminal_input_tool.get("honeypot_logs", "")
 
-            if not config.simulate_command_line:
-                beelzebub_logs = schema.get_new_hp_logs()
-                messages[-1]["honeypot_logs"] = beelzebub_logs
-                
 
 
             print(f"Tool call: {fn_name} with args: {fn_args}\n")

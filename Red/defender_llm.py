@@ -1,6 +1,5 @@
 from ollama import chat, ChatResponse
 from pydantic import BaseModel
-import subprocess
 import openai
 import pexpect
 from config import simulate_command_line
@@ -8,7 +7,7 @@ from dotenv import load_dotenv
 
 import os
 
-TIMEOUT = 100
+TIMEOUT = 60
 
 # openai.api_key = os.getenv("OPENAI_API_KEY")
 # This is my private key, do not share it. Do not use it in production or use it too much eather. If I notice it being abused, I will remove it.
@@ -27,14 +26,23 @@ prompt_patterns = [pexpect.EOF,
 def send_terminal_command(connection, command):
     try:
         connection.sendline(command)
-        connection.expect(prompt_patterns, timeout=TIMEOUT)    
+        connection.expect(prompt_patterns, timeout=TIMEOUT)
+        matched_pattern = connection.match.group(0) if connection.match else ""
+
+        command_response = f"{connection.before.strip()}{matched_pattern}"
+        return command_response
     except pexpect.exceptions.TIMEOUT:
         connection.expect(r'.*')
+        matched_pattern = connection.match.group(0) if connection.match else ""
+        command_response = f"{connection.before.strip()}{matched_pattern}***COMMAND TOOK TO LONG TO RUN, KILLING COMMAND***\n"
 
-    matched_pattern = connection.match.group(0) if connection.match else ""
+        connection.sendcontrol('c')
+        connection.expect(prompt_patterns, timeout=TIMEOUT)
+        matched_pattern = connection.match.group(0) if connection.match else ""
+        command_response2 = f"{connection.before.strip()}{matched_pattern}"
 
-    command_response = f"{connection.before.strip()}{matched_pattern}"
-    return command_response
+
+        return command_response + command_response2
 
 command_messages = [
     {

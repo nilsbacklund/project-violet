@@ -45,6 +45,9 @@ def extract_session(logs: Dict):
 
             for log in hp_logs:
                 event = log["event"]
+                if log["Protocol"] != "ssh":
+                    continue
+                
                 if "Command" in event and event["Command"]:
                     hp_commands = event["Command"]
 

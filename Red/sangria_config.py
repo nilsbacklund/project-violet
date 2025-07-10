@@ -1,6 +1,4 @@
-# %%
-
-from Red.model import LLMHost, LLMModel
+from Red.model import LLMHost
 import json
 from Red.attacker_prompts import AttackerPrompts
 
@@ -144,4 +142,3 @@ messages = [
     system_prompt,
     {"role": "user", "content": "What is your next move?"}
 ]
-# %%

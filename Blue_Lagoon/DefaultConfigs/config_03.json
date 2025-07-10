@@ -1,0 +1,104 @@
+{
+  "description": "Top-level container for a set of honeypot service configurations.",
+  "id": "5c6f99cb-ed14-4715-b98e-9323d466f679",
+  "services": [
+    {
+      "apiVersion": "v1",
+      "protocol": "http",
+      "address": ":8080",
+      "description": "Legacy web interface vulnerable to XSS and directory traversal.",
+      "cve_tags": [
+        "CVE-2024-0006"
+      ],
+      "cve_description": "Information exposure in the logging system in Yugabyte Platform allows local attackers with access to application logs to obtain database user credentials in log files, potentially leading to unauthorized database access.",
+      "commands": [
+        {
+          "regex": ".*",
+          "handler": "Welcome to the honeypot. Your request is being logged.",
+          "headers": [
+            "Content-Type: text/plain"
+          ],
+          "statusCode": 200
+        }
+      ],
+      "plugin": {
+        "llmProvider": "openai",
+        "llmModel": "gpt-4o-mini",
+        "openAISecretKey": "placeholder",
+        "prompt": "Respond to HTTP requests in a welcoming manner."
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "protocol": "ssh",
+      "address": ":22",
+      "description": "Outdated SSH server with hardcoded credentials and misconfigurations.",
+      "cve_tags": [
+        "CVE-2024-0001"
+      ],
+      "cve_description": "A condition exists in FlashArray Purity whereby a local account intended for initial array configuration remains active potentially allowing a malicious actor to gain elevated privileges.",
+      "commands": [
+        {
+          "regex": ".*",
+          "handler": "SSH access granted. You can execute commands.",
+          "plugin": "LLMHoneypot"
+        }
+      ],
+      "passwordRegex": ".*",
+      "deadlineTimeoutSeconds": 300,
+      "serverName": "vulnerable-server",
+      "plugin": null
+    },
+    {
+      "apiVersion": "v1",
+      "protocol": "http",
+      "address": ":3000",
+      "description": "Legacy web interface vulnerable to XSS and directory traversal.",
+      "cve_tags": [
+        "CVE-2024-0002"
+      ],
+      "cve_description": "A condition exists in FlashArray Purity whereby an attacker can employ a privileged account allowing remote access to the array.",
+      "commands": [
+        {
+          "regex": ".*",
+          "handler": "Unauthorized access denied.",
+          "headers": [
+            "Content-Type: text/plain"
+          ],
+          "statusCode": 401
+        }
+      ],
+      "plugin": {
+        "llmProvider": "openai",
+        "llmModel": "gpt-4o-mini",
+        "openAISecretKey": "placeholder",
+        "prompt": "Respond to unauthorized HTTP access attempts."
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "protocol": "tcp",
+      "address": ":4000",
+      "description": "Custom TCP interface mimicking vulnerable database commands.",
+      "cve_tags": [
+        "CVE-2024-0005"
+      ],
+      "cve_description": "A condition exists in FlashArray and FlashBlade Purity whereby a malicious user could execute arbitrary commands remotely through a specifically crafted SNMP configuration.",
+      "banner": "Welcome to the TCP honeypot. Please connect.",
+      "deadlineTimeoutSeconds": 120
+    },
+    {
+      "apiVersion": "v1",
+      "protocol": "tcp",
+      "address": ":5000",
+      "description": "Custom TCP interface mimicking vulnerable database commands.",
+      "cve_tags": [
+        "CVE-2024-0003"
+      ],
+      "cve_description": "A condition exists in FlashArray Purity whereby a malicious user could use a remote administrative service to create an account on the array allowing privileged access.",
+      "banner": "Welcome to the admin interface. Please authenticate.",
+      "deadlineTimeoutSeconds": 150
+    }
+  ],
+  "timestamp": "2025-07-07T19:29:07.555259+00:00"
+}

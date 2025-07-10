@@ -1,0 +1,113 @@
+{
+  "description": "Honeypot configuration for various services with distinct vulnerabilities.",
+  "id": "c94f5239-a1fc-4a93-aa47-b3d548fec98b",
+  "services": [
+    {
+      "apiVersion": "v1",
+      "protocol": "http",
+      "address": ":8080",
+      "description": "HTTP service for testing information exposure vulnerabilities.",
+      "cve_tags": [
+        "CVE-2024-0006"
+      ],
+      "cve_description": "Information exposure in the logging system in Yugabyte Platform allows local attackers with access to application logs to obtain database user credentials in log files, potentially leading to unauthorized database access.",
+      "commands": [
+        {
+          "regex": "^GET /logs",
+          "handler": "Access to logs is restricted.",
+          "headers": [
+            "Content-Type: text/plain"
+          ],
+          "statusCode": 403
+        }
+      ],
+      "plugin": null
+    },
+    {
+      "apiVersion": "v1",
+      "protocol": "ssh",
+      "address": ":22",
+      "description": "Outdated SSH server with hardcoded credentials and misconfigurations.",
+      "cve_tags": [
+        "CVE-2024-0001"
+      ],
+      "cve_description": "A condition exists in FlashArray Purity whereby a local account intended for initial array configuration remains active potentially allowing a malicious actor to gain elevated privileges.",
+      "commands": [
+        {
+          "regex": "^sudo .*",
+          "handler": "Permission denied.",
+          "plugin": "LLMHoneypot"
+        }
+      ],
+      "passwordRegex": ".*",
+      "deadlineTimeoutSeconds": 300,
+      "serverName": "ubuntu",
+      "plugin": {
+        "llmProvider": "openai",
+        "llmModel": "gpt-4o-mini",
+        "openAISecretKey": "placeholder",
+        "prompt": "You are a virtual assistant in a secure SSH environment."
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "protocol": "tcp",
+      "address": ":9999",
+      "description": "TCP service for testing remote administrative access vulnerabilities.",
+      "cve_tags": [
+        "CVE-2024-0003"
+      ],
+      "cve_description": "A condition exists in FlashArray Purity whereby a malicious user could use a remote administrative service to create an account on the array allowing privileged access.",
+      "banner": "Welcome to the TCP service. Unauthorized access is prohibited.",
+      "deadlineTimeoutSeconds": 60
+    },
+    {
+      "apiVersion": "v1",
+      "protocol": "http",
+      "address": ":8081",
+      "description": "HTTP service potentially allowing command execution through SNMP.",
+      "cve_tags": [
+        "CVE-2024-0005"
+      ],
+      "cve_description": "A condition exists in FlashArray and FlashBlade Purity whereby a malicious user could execute arbitrary commands remotely through a specifically crafted SNMP configuration.",
+      "commands": [
+        {
+          "regex": "^POST /execute",
+          "handler": "Command execution is not allowed.",
+          "headers": [
+            "Content-Type: application/json"
+          ],
+          "statusCode": 403
+        }
+      ],
+      "plugin": {
+        "llmProvider": "openai",
+        "llmModel": "gpt-4o-mini",
+        "openAISecretKey": "placeholder",
+        "prompt": "Respond to HTTP requests in a secure environment."
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "protocol": "ssh",
+      "address": ":2222",
+      "description": "SSH service that allows testing of remote access vulnerabilities.",
+      "cve_tags": [
+        "CVE-2024-0002"
+      ],
+      "cve_description": "A condition exists in FlashArray Purity whereby an attacker can employ a privileged account allowing remote access to the array.",
+      "commands": [
+        {
+          "regex": "^ssh .*",
+          "handler": "Access denied.",
+          "plugin": null
+        }
+      ],
+      "passwordRegex": ".*",
+      "deadlineTimeoutSeconds": 120,
+      "serverName": "centos",
+      "plugin": null
+    }
+  ],
+  "timestamp": "2025-07-07T19:28:07.119500+00:00"
+}

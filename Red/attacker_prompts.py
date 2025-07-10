@@ -1,4 +1,3 @@
-# %%
 from enum import Enum
 
 PROMPT_TEMPLATE = """
@@ -70,6 +69,3 @@ class AttackerPrompts(str, Enum):
     CONFIDENTIALITY = confidentiality_prompt
     INTEGRITY = integrity_prompt
     AVAILABILITY = availability_prompt
-
-
-# %%

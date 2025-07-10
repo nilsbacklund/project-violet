@@ -37,7 +37,7 @@ def send_terminal_command(connection, command):
         connection.expect(r'.*')
         matched_pattern = connection.match.group(0) if connection.match else ""
         command_response = f"{connection.before.strip()}{matched_pattern}***COMMAND TOOK TO LONG TO RUN, KILLING COMMAND***\n"
-
+        connection.sendline('\r')
         connection.sendcontrol('c')
         connection.expect(prompt_patterns, timeout=TIMEOUT)
         matched_pattern = connection.match.group(0) if connection.match else ""

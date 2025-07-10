@@ -73,7 +73,7 @@ def openai_call(model, messages, tools, tool_choice):
     except openai.RateLimitError:
         print("OpenAI API limit reached, waiting 5 seconds...")
         time.sleep(5)
-        openai_call(model, messages, tools, tool_choice)
+        return openai_call(model, messages, tools, tool_choice)
 
 def run_single_attack(save_logs, messages, max_session_length, full_logs_path):
     '''

@@ -43,7 +43,7 @@ def main():
         logs_path = full_logs_path / f"attack_{i+1}.json"
 
         messages = sangria_config.messages.copy()
-        logs, tokens_used = run_single_attack(config.save_logs, messages, config.max_session_length, logs_path)
+        logs, tokens_used = run_single_attack(messages, config.max_session_length, logs_path)
         
         if config.save_logs:
             # save logs

@@ -70,12 +70,13 @@ def openai_call(model, messages, tools, tool_choice, wait_time=1):
             tool_choice=tool_choice
         )
 
-    except openai.RateLimitError:
+    except openai.RateLimitError as e:
         print("OpenAI API limit reached, waiting", wait_time, "seconds...")
+        print("Might also be out of money", e.message)
         time.sleep(wait_time)
         return openai_call(model, messages, tools, tool_choice, wait_time * 2)
 
-def run_single_attack(save_logs, messages, max_session_length, full_logs_path):
+def run_single_attack(messages, max_session_length, full_logs_path):
     '''
         Main loop for running a single attack session.
         This function will let the LLM respond to the user, call tools, and log the responses.
@@ -176,5 +177,5 @@ def run_single_attack(save_logs, messages, max_session_length, full_logs_path):
     return messages_log_json, total_tokens_used
 
 if __name__ == "__main__":
-    test_single_attack = run_single_attack(save_logs=True, messages=messages)
+    test_single_attack = run_single_attack(messages=messages)
 

@@ -7,7 +7,7 @@ import os
 os.environ["HF_TOKEN"] = "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"
 
 # Load your vulnerabilities database
-with open("Blue/RagData/vulns_DB.json", "r", encoding="utf-8") as f:
+with open("Blue/RagData/vulnsDB_cleaned.json", "r", encoding="utf-8") as f:
     vulns = json.load(f)
 
 print(f"Loaded {len(vulns)} vulnerabilities.")
@@ -24,5 +24,5 @@ embeddings = model.encode(texts, show_progress_bar=True)
 print(f"Generated embeddings shape: {embeddings.shape}")
 
 # Save embeddings for later use
-np.save("Blue/RagData/vulns_embeddings_bge_m3.npy", embeddings)
+np.save("Blue/RagData/vulns_cleaned_embeddings_bge_m3.npy", embeddings)
 print("Embeddings saved.")

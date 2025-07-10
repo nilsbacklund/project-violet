@@ -25,7 +25,13 @@ def extract_session(logs: Dict):
 
         if not entry["tool_calls"]:
             continue
-
+    
+        # Get follow up message
+        num_tool_calls = len(entry["tool_calls"])
+        follow_up_entry = logs[i + num_tool_calls + 1]
+        assert follow_up_entry["role"] == "assistant"
+        follow_up_content = follow_up_entry["content"]
+        
         for j, tool in enumerate(entry["tool_calls"]):
             if tool["function"]["name"] != "terminal_input":
                 continue
@@ -56,11 +62,11 @@ def extract_session(logs: Dict):
                         session_string += hp_command + " "
                         full_session.append({
                             "command": hp_command,
-                            "attacker_command": attacker_command,
                             "tactic_raw": tactic,
                             "tactic": tactic_clean,
                             "technique_raw": technique,
-                            "technique": technique_clean
+                            "technique": technique_clean,
+                            "content": follow_up_content
                         })
                         tactics.append(tactic_clean)
                         techniques.append(technique_clean)

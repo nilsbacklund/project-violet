@@ -25,25 +25,42 @@ def extract_session(logs: Dict):
 
         if not entry["tool_calls"]:
             continue
-
+    
+        # Get follow up message
+        num_tool_calls = len(entry["tool_calls"])
+        follow_up_entry = logs[i + num_tool_calls + 1]
+        assert follow_up_entry["role"] == "assistant"
+        follow_up_content = follow_up_entry["content"]
+        
         for j, tool in enumerate(entry["tool_calls"]):
             if tool["function"]["name"] != "terminal_input":
                 continue
 
             arguments = tool["function"]["arguments"]
-            attacker_command = arguments["input"]
-            tactic = arguments["tactic_used"]
-            tactic_clean = str(tactic).split(":")[-1]
-            technique = arguments["technique_used"]
-            technique_clean = str(technique).split(":")[-1]
+            if "tactic_used" in arguments:
+                tactic = arguments["tactic_used"]
+                tactic_clean = str(tactic).split(":")[-1]
+            else:
+                tactic = "Error"
+                tactic_clean = "Error"
+            if "technique_used" in arguments:
+                technique = arguments["technique_used"]
+                technique_clean = str(technique).split(":")[-1]
+            else:
+                technique = "Error"
+                technique_clean = "Error"
 
             hp_entry = logs[i + j + 1]
             # check that hp iteration is a tool
             assert hp_entry["role"] == "tool"
 
-            hp_logs = hp_entry["honeypot_logs"]
+            if "honeypot_logs" not in hp_entry:
+                continue
 
-            for log in hp_logs:
+            for log in hp_entry["honeypot_logs"]:
+                if "event" not in log:
+                    continue
+                
                 event = log["event"]
                 if str(event["Protocol"]).lower() != "ssh":
                     continue
@@ -55,11 +72,11 @@ def extract_session(logs: Dict):
                         session_string += hp_command + " "
                         full_session.append({
                             "command": hp_command,
-                            "attacker_command": attacker_command,
                             "tactic_raw": tactic,
                             "tactic": tactic_clean,
                             "technique_raw": technique,
-                            "technique": technique_clean
+                            "technique": technique_clean,
+                            "content": follow_up_content
                         })
                         tactics.append(tactic_clean)
                         techniques.append(technique_clean)

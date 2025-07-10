@@ -44,9 +44,9 @@ if __name__ == "__main__":
             attack_files = safe_listdir(full_logs_path)
             sorted_attacks = sorted(
                 attack_files,
-                key=lambda name: int(Path(name).stem.split('_')[-1])
-)
-            for attack in attack_files:
+                key=lambda name: int(Path(name).stem.split('_')[-1]))
+            
+            for attack in sorted_attacks:
                 attack_path = full_logs_path / attack
                 attack_number = attack.split("_")[-1]
                 logs = load_json(attack_path)

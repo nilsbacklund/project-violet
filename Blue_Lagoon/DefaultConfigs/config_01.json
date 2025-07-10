@@ -1,0 +1,113 @@
+{
+  "description": "Honeypot configuration for research with various services and vulnerabilities.",
+  "id": "e9452207-abd1-4302-a412-39c558dbcece",
+  "services": [
+    {
+      "apiVersion": "v1",
+      "protocol": "http",
+      "address": ":8080",
+      "description": "Legacy web interface vulnerable to XSS and directory traversal.",
+      "cve_tags": [
+        "CVE-2024-0006"
+      ],
+      "cve_description": "Information exposure in the logging system in Yugabyte Platform allows local attackers with access to application logs to obtain database user credentials in log files, potentially leading to unauthorized database access.",
+      "commands": [
+        {
+          "regex": "^GET /api/v1/users",
+          "handler": "List of users",
+          "headers": [
+            "Content-Type: application/json"
+          ],
+          "statusCode": 200
+        }
+      ],
+      "plugin": {
+        "llmProvider": "openai",
+        "llmModel": "gpt-4o-mini",
+        "openAISecretKey": "placeholder",
+        "prompt": "Respond to API requests related to user data."
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "protocol": "ssh",
+      "address": ":22",
+      "description": "SSH service with a known privilege escalation issue.",
+      "cve_tags": [
+        "CVE-2024-0001"
+      ],
+      "cve_description": "A condition exists in FlashArray Purity whereby a local account intended for initial array configuration remains active potentially allowing a malicious actor to gain elevated privileges.",
+      "commands": [
+        {
+          "regex": "^sudo .*",
+          "handler": "Permission denied.",
+          "plugin": null
+        }
+      ],
+      "passwordRegex": "^[a-zA-Z0-9]{8,}$",
+      "deadlineTimeoutSeconds": 300,
+      "serverName": "ubuntu",
+      "plugin": {
+        "llmProvider": "openai",
+        "llmModel": "gpt-4o-mini",
+        "openAISecretKey": "placeholder",
+        "prompt": "Assist with SSH commands."
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "protocol": "tcp",
+      "address": ":3306",
+      "description": "Custom TCP interface mimicking vulnerable database commands.",
+      "cve_tags": [
+        "CVE-2024-0002"
+      ],
+      "cve_description": "A condition exists in FlashArray Purity whereby an attacker can employ a privileged account allowing remote access to the array.",
+      "banner": "Welcome to the database service!",
+      "deadlineTimeoutSeconds": 120
+    },
+    {
+      "apiVersion": "v1",
+      "protocol": "http",
+      "address": ":9090",
+      "description": "Legacy web interface vulnerable to XSS and directory traversal.",
+      "cve_tags": [
+        "CVE-2024-0005"
+      ],
+      "cve_description": "A condition exists in FlashArray and FlashBlade Purity whereby a malicious user could execute arbitrary commands remotely through a specifically crafted SNMP configuration.",
+      "commands": [
+        {
+          "regex": "^POST /execute",
+          "handler": "Executing command...",
+          "headers": [
+            "Content-Type: text/plain"
+          ],
+          "statusCode": 200
+        }
+      ],
+      "plugin": null
+    },
+    {
+      "apiVersion": "v1",
+      "protocol": "ssh",
+      "address": ":2222",
+      "description": "SSH service with vulnerabilities in account management.",
+      "cve_tags": [
+        "CVE-2024-0003"
+      ],
+      "cve_description": "A condition exists in FlashArray Purity whereby a malicious user could use a remote administrative service to create an account on the array allowing privileged access.",
+      "commands": [
+        {
+          "regex": "^create user .*",
+          "handler": "User created successfully.",
+          "plugin": null
+        }
+      ],
+      "passwordRegex": "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)[A-Za-z\\d]{8,}$",
+      "deadlineTimeoutSeconds": 300,
+      "serverName": "CentOS",
+      "plugin": null
+    }
+  ],
+  "timestamp": "2025-07-07T19:28:37.349242+00:00"
+}

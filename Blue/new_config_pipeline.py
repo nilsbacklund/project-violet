@@ -25,7 +25,7 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 # Set up base directory and important paths
 BASE_DIR = Path(__file__).resolve().parent
 
-service_configs_path = BASE_DIR.parent / 'BeelzebubServices'
+service_configs_path = BASE_DIR.parent / 'Blue_Lagoon' / 'DefaultConfigs'
 attack_patterns_path = BASE_DIR.parent / 'logs'
 vulns_db_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'vulnsDB_cleaned.json'
 vulns_embeddings_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'vulns_cleaned_embeddings_bge_m3.npy'
@@ -118,7 +118,7 @@ def get_honeypot_config(id="00", path=""):
     Load a honeypot config by its ID or path from dir.
     """
     if not path:
-        path = BASE_DIR.parent / 'BeelzebubServices' / f'config_{id}.json'
+        path = BASE_DIR.parent / 'Blue_Lagoon' / 'DefaultConfigs' / f'config_{id}.json'
     
     return load_json(path)
 
@@ -283,9 +283,9 @@ def validate_config(config, schema_path):
 
 def save_config_as_file(config, path):
     """
-    Save the generated config as a JSON file in the BeelzebubServices directory, named by its ID.
+    Save the generated config as a JSON file in the Blue_Lagoon/DefaultConfigs directory, named by its ID.
     """
-    output_dir = BASE_DIR.parent / 'BeelzebubServices'
+    output_dir = BASE_DIR.parent / 'Blue_Lagoon' / 'DefaultConfigs'
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     config_id = config.get('id', 'unknown')

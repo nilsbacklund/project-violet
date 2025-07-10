@@ -21,7 +21,7 @@ def main():
 
     config_counter = 1
     config_attack_counter = 0
-    all_attack_patterns = set()
+    seen_techniques = set()
 
     if not config.simulate_command_line:
         start_dockers()
@@ -56,17 +56,24 @@ def main():
 
         # extract session and add attack pattern to set
         session = extract_session(logs)
-        attack_pattern = session["techniques"]
-        print(f"Attack pattern: {attack_pattern}")
+
+        # Extract individual techniques from full_session
+        current_techniques = set()
+        for command_entry in session.get("full_session", []):
+           if "technique" in command_entry and command_entry["technique"]:
+               current_techniques.add(command_entry["technique"])
 
         if config.save_logs:
             # update sessions
             append_json_to_file(session, config_path / f"sessions.json")
 
         config_attack_counter += 1
-        if config_attack_counter >= config.min_num_of_attacks_reconfig and attack_pattern in all_attack_patterns:
-            
-            print(f"Reconfiguring: Found same attack ({attack_pattern}) after {config_attack_counter} attacks.")
+
+        new_techniques = current_techniques - seen_techniques
+        has_new_techniques = len(new_techniques) > 0
+
+        if config_attack_counter >= config.min_num_of_attacks_reconfig and not has_new_techniques:
+            print(f"Reconfiguring: No new techniques found after {config_attack_counter} attacks.")
 
             if not config.simulate_command_line:
                 stop_dockers()
@@ -87,7 +94,7 @@ def main():
             if not config.simulate_command_line:
                 start_dockers()
 
-        all_attack_patterns.update(attack_pattern)
+        seen_techniques.update(current_techniques)
 
         print("\n\n")
 

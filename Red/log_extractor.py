@@ -2,7 +2,6 @@ import subprocess
 import datetime
 import json
 
-# %%
 last_checked = datetime.datetime.now(datetime.UTC).isoformat()
 def get_new_hp_logs():
     """

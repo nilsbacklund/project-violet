@@ -5,7 +5,7 @@ from pathlib import Path
 
 def append_json_to_file(data, path, verbose: bool = True):
     '''
-        Save the tokens used to a file, will be appended if file already exists.
+        Save data to a file, will be appended if file already exists.
         The file will be saved in the logs/tokens_used directory.
         The file will be named tokens_used_<session_id>.json
     '''

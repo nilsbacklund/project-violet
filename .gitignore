@@ -9,6 +9,7 @@ Blue/RagData/vulns_embeddings_e5.npy
 .DS_Store
 Blue_Lagoon/configurations/services/
 .vscode
+BeelzebubServices/*
 
 !logs/honeypot_command_extractor.py
 

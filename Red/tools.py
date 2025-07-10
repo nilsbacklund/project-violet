@@ -1,11 +1,9 @@
 # %%
 import warnings
-from Red.defender_llm import terminal_input
+from Red.terminal_io import terminal_input
 from Red.model import MitreMethodUsed
-import pandas as pd
 import requests
 from bs4 import BeautifulSoup
-import urllib.parse
 import json
 
 def handle_tool_call(name, args, ssh):

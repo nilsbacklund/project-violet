@@ -2,7 +2,7 @@
 import openai
 import os
 import json
-
+import time
 import Red.sangria_config as sangria_config
 import config
 import Red.schema as schema
@@ -56,10 +56,23 @@ def create_json_log(messages):
 
     # Convert to JSON string without saving to file
     return serializable_messages
-    json_string = json.dumps(serializable_messages, indent=4)
-    return json_string
+    # json_string = json.dumps(serializable_messages, indent=4)
+    # return json_string
 # %%
 
+def openai_call(model, messages, tools, tool_choice):
+    try:
+        return openai_client.chat.completions.create(
+            model=model,
+            messages=messages,
+            tools=tools,
+            tool_choice=tool_choice
+        )
+
+    except openai.RateLimitError:
+        print("OpenAI API limit reached, waiting 5 seconds...")
+        time.sleep(5)
+        openai_call(model, messages, tools, tool_choice)
 
 def run_single_attack(save_logs, messages, max_session_length, full_logs_path):
     '''
@@ -80,12 +93,7 @@ def run_single_attack(save_logs, messages, max_session_length, full_logs_path):
     for i in range(max_session_length):
         print(f'Iteration {i+1} / {max_session_length}')
 
-        assistant_response = openai_client.chat.completions.create(
-            model=config.llm_model_sangria,
-            messages=messages,
-            tools=tools,
-            tool_choice="auto"
-        )
+        assistant_response = openai_call(config.llm_model_sangria, messages, tools, "auto")
 
         total_cached_tokens += assistant_response.usage.prompt_tokens_details.cached_tokens
         total_completion_tokens += assistant_response.usage.completion_tokens
@@ -142,10 +150,7 @@ def run_single_attack(save_logs, messages, max_session_length, full_logs_path):
 
 
         if tool_use:
-            followup = openai_client.chat.completions.create(
-                model=config.llm_model_sangria,
-                messages=messages
-            )
+            followup = openai_call(config.llm_model_sangria, messages, None, None)
             assistant_msg = followup.choices[0].message
             messages.append(assistant_msg.model_dump())
             append_json_to_file(assistant_msg.model_dump(), full_logs_path, False)

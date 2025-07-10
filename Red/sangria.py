@@ -7,6 +7,7 @@ import Red.sangria_config as sangria_config
 import config
 import Red.log_extractor as log_extractor
 import Red.tools as red_tools
+from Utils.jsun import append_json_to_file
 from Red.terminal_io import start_ssh
 
 tools = sangria_config.tools
@@ -74,7 +75,7 @@ def openai_call(model, messages, tools, tool_choice):
         time.sleep(5)
         openai_call(model, messages, tools, tool_choice)
 
-def run_single_attack(save_logs, messages, max_session_length=100):
+def run_single_attack(save_logs, messages, max_session_length, full_logs_path):
     '''
         Main loop for running a single attack session.
         This function will let the LLM respond to the user, call tools, and log the responses.
@@ -89,6 +90,8 @@ def run_single_attack(save_logs, messages, max_session_length=100):
     ssh = None
     if not config.simulate_command_line:
         ssh = start_ssh()
+
+    append_json_to_file(messages, full_logs_path)
 
     for i in range(max_session_length):
         print(f'Iteration {i+1} / {max_session_length}')
@@ -105,6 +108,7 @@ def run_single_attack(save_logs, messages, max_session_length=100):
         fn_name = ""
 
         messages.append(message.model_dump())
+        append_json_to_file(message.model_dump(), full_logs_path, False)
 
         print(f"Prompt tokens: {assistant_response.usage.prompt_tokens}, Completion tokens: {assistant_response.usage.completion_tokens}, Cached tokens: {total_cached_tokens}")
 
@@ -129,12 +133,15 @@ def run_single_attack(save_logs, messages, max_session_length=100):
                 
             result, mitre_method_used = red_tools.handle_tool_call(fn_name, fn_args, ssh)
 
-            messages.append({
+            tool_response = {
                 "role": "tool",
                 "name": fn_name,
                 "tool_call_id": tool_use.id,
                 "content": str(result['content'])
-            })
+
+            }
+            messages.append(tool_response)
+            append_json_to_file(tool_response, full_logs_path, False)
 
             # messages[-1]["honeypot_logs"] = last_terminal_input_tool.get("honeypot_logs", "")
 
@@ -149,6 +156,7 @@ def run_single_attack(save_logs, messages, max_session_length=100):
             followup = openai_call(config.llm_model_sangria, messages, None, None)
             assistant_msg = followup.choices[0].message
             messages.append(assistant_msg.model_dump())
+            append_json_to_file(assistant_msg.model_dump(), full_logs_path, False)
 
             print(f"Follow-up message: {assistant_msg.content}")
 

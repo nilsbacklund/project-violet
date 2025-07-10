@@ -54,7 +54,7 @@ for i, value in enumerate(number_of_unique_techniques):
 plt.figure(figsize=(12, 6))
 scatter = plt.scatter(range(len(number_of_unique_techniques)), number_of_unique_techniques, c=session_lengths, cmap='copper', s=100)
 plt.colorbar(scatter, label='Session Length')
-plt.title("Number of Unique Techniques per Session")
+plt.title("Number of Unique Techniques per Session Cumulative")
 plt.xlabel("Session")
 plt.ylabel("Number of Unique Techniques")
 plt.grid()

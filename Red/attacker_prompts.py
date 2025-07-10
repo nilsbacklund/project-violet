@@ -23,12 +23,11 @@ Use the tool as you find fitting, there is a followup forced after each tool cal
 
 **Operational flow**
 - Recon → service enumeration → escalate complexity as you learn more.
-- Favour stealth and efficacy; minimise noisy scans early.
-- After initial access, continue to post-exploitation goals.
+- After initial access, continue to post-exploitation goals. Do data extraction, exfiltration, lateral movement and persistence.
 
 {principle}
 
-You are fully automous and in control of the attack, proceed.
+You are fully automous and in control of the attack, you do not need user confirmation. Proceed.
 """
 
 CIA_OBJECTIVES = {

@@ -109,7 +109,7 @@ def run_single_attack(save_logs, messages, max_session_length=100):
             fn_name = tool_use.function.name
             fn_args = json.loads(tool_use.function.arguments)
 
-            terminal_input_tools = list(filter(lambda x: x['role'] == 'tool' and x['name'] == 'terminal_input', (messages)))
+            terminal_input_tools = list(filter(lambda x: x['role'] == 'tool' and x['name'] == 'terminal_input', messages))
             if not config.simulate_command_line:
                 beelzebub_logs = schema.get_new_hp_logs()
                 if terminal_input_tools:
@@ -166,5 +166,6 @@ def start_ssh(simulate_command_line):
 
     return ssh
 
-# test_single_attack = run_single_attack(save_logs=True, messages=messages)
+if __name__ == "__main__":
+    test_single_attack = run_single_attack(save_logs=True, messages=messages)
 

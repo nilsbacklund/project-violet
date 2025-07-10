@@ -41,9 +41,10 @@ def extract_session(logs: Dict):
             # check that hp iteration is a tool
             assert hp_entry["role"] == "tool"
 
-            hp_logs = hp_entry["honeypot_logs"]
+            if "honeypot_logs" not in hp_entry:
+                continue
 
-            for log in hp_logs:
+            for log in hp_entry["honeypot_logs"]:
                 event = log["event"]
                 if str(event["Protocol"]).lower() != "ssh":
                     continue

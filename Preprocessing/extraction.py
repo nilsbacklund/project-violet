@@ -37,11 +37,18 @@ def extract_session(logs: Dict):
                 continue
 
             arguments = tool["function"]["arguments"]
-            attacker_command = arguments["input"]
-            tactic = arguments["tactic_used"]
-            tactic_clean = str(tactic).split(":")[-1]
-            technique = arguments["technique_used"]
-            technique_clean = str(technique).split(":")[-1]
+            if "tactic_used" in arguments:
+                tactic = arguments["tactic_used"]
+                tactic_clean = str(tactic).split(":")[-1]
+            else:
+                tactic = "Error"
+                tactic_clean = "Error"
+            if "technique_used" in arguments:
+                technique = arguments["technique_used"]
+                technique_clean = str(technique).split(":")[-1]
+            else:
+                technique = "Error"
+                technique_clean = "Error"
 
             hp_entry = logs[i + j + 1]
             # check that hp iteration is a tool

@@ -61,7 +61,7 @@ def create_json_log(messages):
     # return json_string
 # %%
 
-def openai_call(model, messages, tools, tool_choice):
+def openai_call(model, messages, tools, tool_choice, wait_time=1):
     try:
         return openai_client.chat.completions.create(
             model=model,
@@ -71,9 +71,9 @@ def openai_call(model, messages, tools, tool_choice):
         )
 
     except openai.RateLimitError:
-        print("OpenAI API limit reached, waiting 5 seconds...")
-        time.sleep(5)
-        return openai_call(model, messages, tools, tool_choice)
+        print("OpenAI API limit reached, waiting", wait_time, "seconds...")
+        time.sleep(wait_time)
+        return openai_call(model, messages, tools, tool_choice, wait_time * 2)
 
 def run_single_attack(save_logs, messages, max_session_length, full_logs_path):
     '''

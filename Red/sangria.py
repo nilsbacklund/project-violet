@@ -5,8 +5,9 @@ import json
 import time
 import Red.sangria_config as sangria_config
 import config
-import Red.schema as schema
+import Red.log_extractor as log_extractor
 import Red.tools as red_tools
+from Red.terminal_io import start_ssh
 
 tools = sangria_config.tools
 messages = sangria_config.messages
@@ -85,7 +86,9 @@ def run_single_attack(save_logs, messages, max_session_length=100):
 
     # using full logs and messages, full logs will also include the the honeypot logs
 
-    ssh = start_ssh(config.simulate_command_line)
+    ssh = None
+    if not config.simulate_command_line:
+        ssh = start_ssh()
 
     for i in range(max_session_length):
         print(f'Iteration {i+1} / {max_session_length}')
@@ -119,7 +122,7 @@ def run_single_attack(save_logs, messages, max_session_length=100):
 
             terminal_input_tools = list(filter(lambda x: x['role'] == 'tool' and x['name'] == 'terminal_input', messages))
             if not config.simulate_command_line:
-                beelzebub_logs = schema.get_new_hp_logs()
+                beelzebub_logs = log_extractor.get_new_hp_logs()
                 if terminal_input_tools:
                     last_terminal_input_tool = terminal_input_tools[-1]
                     last_terminal_input_tool["honeypot_logs"] = beelzebub_logs
@@ -163,13 +166,6 @@ def run_single_attack(save_logs, messages, max_session_length=100):
     }
 
     return messages_log_json, total_tokens_used
-
-def start_ssh(simulate_command_line):
-    ssh = None
-    if not simulate_command_line:
-        ssh = schema.start_ssh()
-
-    return ssh
 
 if __name__ == "__main__":
     test_single_attack = run_single_attack(save_logs=True, messages=messages)

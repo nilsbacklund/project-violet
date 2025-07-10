@@ -1,8 +1,10 @@
 import openai
-import pexpect
-from config import simulate_command_line
+import platform
+if platform.system() != 'Windows':
+    import pexpect
 from dotenv import load_dotenv
-
+import datetime
+import config
 import os
 
 TIMEOUT = 60
@@ -19,6 +21,18 @@ prompt_patterns = [pexpect.EOF,
                     'Enter password: ',
                     r'\:\~\$ ',
                     "Please type 'yes', 'no' or the fingerprint: "]
+
+def start_ssh():
+    ssh = pexpect.spawn('ssh -p 3022 root@localhost', encoding='utf-8')
+    ssh.expect("root@localhost's password: ")
+    ssh.sendline('toor')
+    ssh.expect(r'└─\x1b\[1;31m#', timeout=4)
+    a = ssh.before.strip()
+    # Real ghetto to put here but just want it to run after the hp has spun up
+    global last_checked
+    last_checked = datetime.datetime.now(datetime.UTC).isoformat()
+
+    return ssh
 
 def send_terminal_command(connection, command):
     try:
@@ -55,14 +69,14 @@ command_messages = [
     },
 ]
 
-def terminal_input(command: str, ssh, simulate_execution=simulate_command_line):
+def terminal_input(command: str, ssh):
     """
         Run a command on the Kali Linux machine over SSH or simulate its execution with an LLM.
     """
     command_response = ""
     
     # Run command on Kali over SSH
-    if not simulate_execution:
+    if not config.simulate_command_line:
         command_response = send_terminal_command(ssh, command)
         if len(command_response) > 10000:
             command_response = command_response[-10000:] + "\n***TOO LONG OUTPUT FROM COMMAND, ONLY SHOWING THE FINAL 10000 characters***"
@@ -70,7 +84,7 @@ def terminal_input(command: str, ssh, simulate_execution=simulate_command_line):
         return command_response 
 
     # Simulate command execution
-    if simulate_execution:
+    else:
         command_messages.append({
             'role': 'user',
             'content': f'Run the command: {command}'

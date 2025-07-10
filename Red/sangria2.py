@@ -55,8 +55,8 @@ def create_json_log(messages):
 
     # Convert to JSON string without saving to file
     return serializable_messages
-    json_string = json.dumps(serializable_messages, indent=4)
-    return json_string
+    # json_string = json.dumps(serializable_messages, indent=4)
+    # return json_string
 # %%
 
 def openai_call(model, messages, tools, tool_choice):

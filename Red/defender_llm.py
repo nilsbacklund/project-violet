@@ -28,7 +28,13 @@ def send_terminal_command(connection, command):
     try:
         connection.send(command + "\r")
         connection.expect(prompt_patterns, timeout=TIMEOUT)
-        matched_pattern = connection.match.group(0) if connection.match else ""
+        if not connection.match or connection.match is pexpect.EOF:
+            matched_pattern = ""
+        elif connection.match is pexpect.EOF:
+            print(f"Debug: Got an EOF.\n\tconnection.match = {connection.match}")
+            matched_pattern = ""
+        else:
+            matched_pattern = connection.match.group(0)
 
         command_response = f"{connection.before.strip()}{matched_pattern}"
         return command_response

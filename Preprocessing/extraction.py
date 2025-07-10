@@ -58,6 +58,9 @@ def extract_session(logs: Dict):
                 continue
 
             for log in hp_entry["honeypot_logs"]:
+                if "event" not in log:
+                    continue
+                
                 event = log["event"]
                 if str(event["Protocol"]).lower() != "ssh":
                     continue

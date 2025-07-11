@@ -6,6 +6,8 @@ from rich.columns import Columns
 from rich.console import Console, Group
 from rich.box import ROUNDED
 
+# THIS IS BROKEN AT THE MOMENT, SORRY // Sackarias
+
 console = Console()
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 

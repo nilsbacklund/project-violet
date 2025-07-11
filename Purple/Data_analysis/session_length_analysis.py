@@ -8,8 +8,8 @@ from Utils.jsun import load_json
 from collections import Counter
 
 current_path = Path(__file__)
-base_path = current_path.parent
-path = base_path / "logs/logs/hp_config_1/sessions.json"
+base_path = current_path.parent.parent.parent
+path = base_path / "logs/experiment_2025-07-10T22_03_01/hp_config_1/sessions.json"
 
 data = load_json(Path(path))
 command_session_lengths: List[int] = []

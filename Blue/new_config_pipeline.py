@@ -215,11 +215,16 @@ def retrieve_top_vulns(user_query, vulns_db, embeddings_path, top_n=5):
     query_embedding = model.encode([user_query])[0]
     similarities = [cosine_similarity(query_embedding, emb) for emb in vulns_embeddings]
     top_idx = np.argsort(similarities)[-top_n:][::-1]
-    if isinstance(vulns_db, dict) and "CVE_Items" in vulns_db:
-        vulns_db_list = vulns_db["CVE_Items"]
-    else:
-        vulns_db_list = vulns_db
-    top_vulns = [vulns_db_list[i] for i in top_idx]
+   # Convert vulns_db keys to a list to index by embeddings order
+    cve_ids = list(vulns_db.keys())  
+    
+    top_vulns = []
+    for i in top_idx:
+        cve_id = cve_ids[i]
+        cve_data = vulns_db[cve_id]
+        cve_data["cve_id"] = cve_id 
+        top_vulns.append(cve_data)
+    
     return top_vulns
 
 def build_config_prompt(schema_path, top_vulns):
@@ -248,10 +253,10 @@ def build_config_prompt(schema_path, top_vulns):
         "Begin output with an opening `{` and end with a closing `}`.\n"
     )
     config_prompt += f"\nSchema:\n{schema_text}\n\nVulnerabilities:\n"
-    for v in top_vulns:
-        cve_id = v.get("cve", {}).get("CVE_data_meta", {}).get("ID", "N/A")
-        descs = v.get("cve", {}).get("description", {}).get("description_data", [])
-        description = " ".join(d.get("value", "") for d in descs)
+
+    for vuln_data in top_vulns:
+        cve_id = vuln_data.get("cve_id", "N/A")
+        description = vuln_data.get("description", "No description provided.")
         config_prompt += f"- {cve_id}: {description}\n"
     return config_prompt
 

@@ -7,7 +7,7 @@ from collections import Counter
 
 current_path = Path(__file__)
 base_path = current_path.parent
-path = base_path / "logs/logs/hp_config_1/sessions.json"
+path = base_path / "logs/experiment_2025-07-10T22_03_01/hp_config_1/sessions.json"
 
 data = load_json(Path(path))
 command_session_lengths: List[int] = []
@@ -30,25 +30,25 @@ for session in data:
 
 # tactics used
 print("Tactics used:")
-for tactic, count in tactics_used.items():
+for tactic, count in sorted(tactics_used.items(), key=lambda x: x[1], reverse=True):
     print(f" - {tactic}: {count}")
 
 total_commands = sum(tactics_used.values())
 tactics_percentages = {tactic: (count / total_commands) * 100 for tactic, count in tactics_used.items()}
 print("\nTactics used percentages:")
-for tactic, percentage in tactics_percentages.items():
+for tactic, percentage in sorted(tactics_percentages.items(), key=lambda x: x[1], reverse=True):
     print(f" - {tactic}: {percentage:.2f}%")
 
 
 # techniques used
-print("Techniques used:")
-for technique, count in techniques_used.items():
+print("\nTechniques used:")
+for technique, count in sorted(techniques_used.items(), key=lambda x: x[1], reverse=True):
     print(f" - {technique}: {count}")
 
 total_techniques = sum(techniques_used.values())
 techniques_percentages = {technique: (count / total_techniques) * 100 for technique, count in techniques_used.items()}
 print("\nTechniques used percentages:")
-for technique, percentage in techniques_percentages.items():
+for technique, percentage in sorted(techniques_percentages.items(), key=lambda x: x[1], reverse=True):
     print(f" - {technique}: {percentage:.2f}%")
 # %%
 

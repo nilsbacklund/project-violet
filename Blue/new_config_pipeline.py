@@ -25,8 +25,6 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 # Set up base directory and important paths
 BASE_DIR = Path(__file__).resolve().parent
 
-service_configs_path = BASE_DIR.parent / 'Blue_Lagoon' / 'DefaultConfigs'
-attack_patterns_path = BASE_DIR.parent / 'logs'
 vulns_db_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'vulnsDB_cleaned.json'
 vulns_embeddings_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'vulns_cleaned_embeddings_bge_m3.npy'
 schema_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'services_schema.json'
@@ -42,59 +40,6 @@ if not print_output:
     print = silent_print
 else:
     print = _builtin_print
-
-def get_attack_patterns_for_config(config_id, attack_patterns):
-    """
-    Retrieve attack patterns associated with a specific config ID from the attack patterns list.
-    """
-    for session in attack_patterns:
-        if session.get('config_id') == config_id:
-            return session.get('patterns', [])
-    
-    return []
-
-def extract_attack_patterns_from_labels(session_id):
-    """
-    Extract attack patterns (tactics and techniques) from labeled command logs.
-    
-    Args:
-        session_id: The session ID to look for in the labels directory
-        
-    Returns:
-        dict: Attack patterns with session info, or None if file doesn't exist
-    """
-    labels_file = attack_patterns_path /'labels'/ f'labels_{session_id}.json'
-    
-    # Check if the labels file exists
-    if not labels_file.exists():
-        print(f"Labels file {labels_file} does not exist. Skipping attack pattern extraction for session {session_id}.")
-        return None
-    
-    try:
-        with open(labels_file, 'r', encoding="utf8") as f:
-            labeled_commands = json.load(f)
-        
-        # Extract unique attack patterns
-        attack_patterns = []
-        
-        for command_data in labeled_commands:
-            tactic = command_data.get('tactic')
-            technique = command_data.get('technique')
-            
-            # Skip if tactic or technique is missing or "Unknown"
-            if not tactic or not technique or tactic == "Unknown" or technique == "Unknown":
-                continue
-            
-            attack_patterns.append({
-                    'tactic': tactic,
-                    'technique': technique 
-                    })
-         
-        return attack_patterns
-    
-    except Exception as e:
-        print(f"Error extracting attack patterns from {labels_file}: {e}")
-        return None
 
 
 def query_openai(prompt: str, model: str = None, temperature: float = 0.7) -> str:
@@ -130,7 +75,6 @@ def set_honeypot_config(config):
     """
     target_dir = BASE_DIR.parent / "Blue_Lagoon" / "configurations" / "services"
     target_dir.mkdir(parents=True, exist_ok=True)
-    # Remove old service files to avoid stale configs
     for file in target_dir.iterdir():
         if file.is_file():
             file.unlink()
@@ -146,42 +90,58 @@ def set_honeypot_config(config):
 
 # Pipeline Functions
 
-def sample_previous_configs(services_dir, sample_size=5):
+def sample_previous_configs(config_dir, sample_size=5):
     """
     Randomly sample up to sample_size previous honeypot config files from the given directory.
     Extract relevant information for each sampled config for use in LLM prompting.
     """
-    services_dir = Path(services_dir)
-    json_files = list(services_dir.glob("config_*.json"))
-    if len(json_files) == 0:
-        raise ValueError("No config files found in the directory.")
-    if len(json_files) <= sample_size:
-        sampled_files = json_files
-    else:
-        sampled_files = random.sample(json_files, sample_size)
-    sampled_configs = []
-    for file in sampled_files:
-        with open(file, "r", encoding="utf8") as f:
-            sampled_configs.append(json.load(f))
-    config_attack_info = []
-    for config in sampled_configs:
-        config_id = config['id']
-        attacks = extract_attack_patterns_from_labels(config_id)
-        cve_tags = [
-            cve
-            for svc in config.get('services', [])
-            for cve in svc.get('cve_tags', [])
-        ]
-        config_attack_info.append({
-            'config_id': config_id,
-            'description': config.get('description'),
-            'services': config.get('services'),
-            'attacks': attacks,
-            'vulnerabilities': cve_tags
-        })
-    return config_attack_info
+    config_dir = Path(config_dir)
 
-def build_llm_prompt(config_attack_info):
+    config_files = []
+    for hp_config_dir in config_dir.glob("hp_config_*"):
+        config_file = hp_config_dir / "honeypot_config.json"
+        if config_file.exists():
+            config_files.append((hp_config_dir, config_file))
+
+    if len(config_files) == 0:
+        raise ValueError("No config files found in the directory.")
+    if len(config_files) <= sample_size:
+        sampled_files = config_files
+    else:
+        sampled_files = random.sample(config_files, sample_size)
+    
+    sampled_configs_with_sessions = []
+    for hp_config_dir, config_file in sampled_files:
+        try:
+            with open(config_file, "r", encoding="utf8") as f:
+                config_data = json.load(f)
+            
+            sessions_file = hp_config_dir / "sessions.json"
+            session_data = None
+            if sessions_file.exists():
+                try:
+                    with open(sessions_file, "r", encoding="utf8") as f:
+                        session_data = json.load(f)
+                except Exception as e:
+                    print(f"Error loading session data from {sessions_file}: {e}")
+                    session_data = None
+            else:
+                print(f"No sessions.json found in {hp_config_dir}")
+            
+            sampled_configs_with_sessions.append({
+                "config": config_data,
+                "sessions": session_data,
+                "config_path": str(config_file),
+                "sessions_path": str(sessions_file) if sessions_file.exists() else None
+            })
+            
+        except Exception as e:
+            print(f"Error loading config from {config_file}: {e}")
+            continue
+    
+    return sampled_configs_with_sessions
+
+def build_llm_prompt(sampled_configs):
     """
     Build a prompt for the LLM that summarizes previous honeypot configs and instructs it to generate a new user query for the RAG.
     """
@@ -197,10 +157,30 @@ def build_llm_prompt(config_attack_info):
     Below is the history of prior honeypot configurations:
 
     """
-    for entry in config_attack_info:
-        attacks_list = entry['attacks'] if entry['attacks'] is not None else []
-        attack_patterns = [f"{a['tactic']} -> {a['technique']}" for a in attacks_list]
-        llm_prompt += f"Config ID: {entry['config_id']}\nDescription: {entry['description']}\nServices: {[s['description'] for s in entry['services']]}\nAttacks: {attack_patterns}\n\n"
+    for i, entry in enumerate(sampled_configs, 1):
+            config = entry["config"]
+            sessions = entry["sessions"]
+            
+            llm_prompt += f"=== Previous Configuration {i} ===\n"
+            llm_prompt += "HONEYPOT CONFIG:\n"
+            llm_prompt += json.dumps(config, indent=2)
+            llm_prompt += "\n\n"
+            
+            if sessions:
+                llm_prompt += "ATTACK SESSIONS THIS CONFIG ATTRACTED:\n"
+                if isinstance(sessions, list):
+                    for j, session in enumerate(sessions):
+                        llm_prompt += f"Session {j+1}:\n"
+                        llm_prompt += json.dumps(session, indent=2)
+                        llm_prompt += "\n"
+                else:
+                    llm_prompt += json.dumps(sessions, indent=2)
+                llm_prompt += "\n"
+            else:
+                llm_prompt += "ATTACK SESSIONS: No session data available for this config.\n\n"
+            
+            llm_prompt += "=" * 50 + "\n\n"
+
     llm_prompt += "Now generate a specific user query that will retrieve exactly 5 novel and diverse vulnerabilities:\nUser query: "
     return llm_prompt
 
@@ -215,7 +195,7 @@ def retrieve_top_vulns(user_query, vulns_db, embeddings_path, top_n=5):
     query_embedding = model.encode([user_query])[0]
     similarities = [cosine_similarity(query_embedding, emb) for emb in vulns_embeddings]
     top_idx = np.argsort(similarities)[-top_n:][::-1]
-   # Convert vulns_db keys to a list to index by embeddings order
+
     cve_ids = list(vulns_db.keys())  
     
     top_vulns = []
@@ -240,7 +220,7 @@ def build_config_prompt(schema_path, top_vulns):
         "- **Maximize Session Length**: Design services that encourage prolonged attacker engagement\n"
         "- **Promote Attack Pattern Novelty**: Create configurations that attract diverse and uncommon attack techniques\n\n"
         "Requirements:\n"
-        "1. Use at least **5 different services**, including a mix of `http`, `ssh`, and `tcp` protocols.\n"
+        "1. Use **3 different services**, including one `http`, one `ssh`, and one `tcp` protocol.\n"
         "2. Each service must:\n"
         "   - Include a **relevant and unique CVE** (avoid duplicate CVEs across services).\n"
         "   - Provide a meaningful `cve_description` and valid `cve_tags`.\n"
@@ -301,7 +281,7 @@ def save_config_as_file(config, path):
     print(f"Config saved to {filepath}")
 
 # Main Pipeline
-def generate_new_honeypot_config():
+def generate_new_honeypot_config(experiment_base_path=None):
     """
     Main pipeline to generate a new honeypot config:
     - Loads attack patterns and vulnerabilities
@@ -312,14 +292,16 @@ def generate_new_honeypot_config():
     - Cleans, validates, and saves the config
     Returns the config ID and config object.
     """
+    print("Starting Reconfigurations with: " + str(experiment_base_path))
+
     vulns_db = load_json(vulns_db_path)
-    config_attack_info = sample_previous_configs(service_configs_path)
+    config_attack_info = sample_previous_configs(experiment_base_path)
     llm_prompt = build_llm_prompt(config_attack_info)
-    print(llm_prompt)
+    #print(llm_prompt)
     user_query = query_openai(llm_prompt)
-    print(user_query)
+    #print(user_query)
     top5_vulns = retrieve_top_vulns(user_query, vulns_db, vulns_embeddings_path)
-    print("\nTop 5 vulnerabilities for new config:")
+    #print("\nTop 5 vulnerabilities for new config:")
     for vuln in top5_vulns:
         cve_id = None
         description = None
@@ -332,10 +314,9 @@ def generate_new_honeypot_config():
             cve_id = vuln.get('id', 'N/A')
         if not description:
             description = vuln.get('description', 'No description')
-        print(f"- {cve_id}: {description}")
     config_prompt = build_config_prompt(schema_path, top5_vulns)
-    print("\nPrompt sent to LLM for config generation:\n")
-    print(config_prompt[:1000], "...")
+    # print("\nPrompt sent to LLM for config generation:\n")
+    # print(config_prompt[:1000], "...")
     
     for attempts in range(3):
         try:

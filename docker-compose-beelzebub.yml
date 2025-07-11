@@ -3,21 +3,17 @@ version: "3.9"
 services:
   kali:
     image: bloatedkali4
-    container_name: kali4
     privileged: true
     ports:
-      - "3022:3022"  # SSH from host -> Kali
+      - "${HOST_PORT}:3022"  # SSH from host -> Kali
     networks:
       innet:
-        ipv4_address: 172.20.0.2
+        ipv4_address: "${SUBSUBNET}.0.2"
 
   blue_lagoon:
-    build: .
-    container_name: blue_lagoon
+    build: Blue_Lagoon
     restart: always
-    ports:
-      - "8081:8081"
-      - "2112:2112"
+
     environment:
       RABBITMQ_URI: ${RABBITMQ_URI}
       OPEN_AI_SECRET_KEY: ${OPENAI_API_KEY}
@@ -25,12 +21,12 @@ services:
       - "./configurations:/configurations"
     networks:
       innet:
-        ipv4_address: 172.20.0.3
+        ipv4_address: "${SUBSUBNET}.0.3"
 
 networks:
   innet:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.20.0.0/24
+        - subnet: "${SUBSUBNET}.0.0/24"
 

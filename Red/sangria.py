@@ -92,7 +92,8 @@ def run_single_attack(messages, max_session_length, full_logs_path):
     if not config.simulate_command_line:
         ssh = start_ssh()
 
-    append_json_to_file(messages, full_logs_path)
+    for message in messages:
+        append_json_to_file(message, full_logs_path)
 
     for i in range(max_session_length):
         print(f'Iteration {i+1} / {max_session_length}')

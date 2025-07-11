@@ -7,7 +7,7 @@ from pathlib import Path
 from Red.sangria import run_single_attack
 from Blue.new_config_pipeline import generate_new_honeypot_config, get_honeypot_config, set_honeypot_config
 from Blue_Lagoon.honeypot_tools import init_docker, start_dockers, stop_dockers
-from Preprocessing.extraction import extract_session
+from Red.extraction import extract_session
 from Utils.meta import create_experiment_folder
 from Utils.jsun import save_json_to_file, append_json_to_file
 from dotenv import load_dotenv

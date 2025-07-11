@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import Dict
 import sys
+import json
 import os
 
 # Add parent directory to sys.path to allow imports from project root
@@ -28,7 +29,13 @@ def extract_session(logs: Dict):
     
         # Get follow up message
         num_tool_calls = len(entry["tool_calls"])
-        follow_up_entry = logs[i + num_tool_calls + 1]
+        tool_entry_index = i + num_tool_calls + 1
+
+        # If terminates before tool call
+        if tool_entry_index > len(logs):
+            continue
+
+        follow_up_entry = logs[tool_entry_index]
         assert follow_up_entry["role"] == "assistant"
         follow_up_content = follow_up_entry["content"]
         
@@ -37,6 +44,9 @@ def extract_session(logs: Dict):
                 continue
 
             arguments = tool["function"]["arguments"]
+            if type(arguments) is str:
+                arguments = json.loads(arguments)
+
             if "tactic_used" in arguments:
                 tactic = arguments["tactic_used"]
                 tactic_clean = str(tactic).split(":")[-1]
@@ -53,10 +63,8 @@ def extract_session(logs: Dict):
             hp_entry = logs[i + j + 1]
             # check that hp iteration is a tool
             assert hp_entry["role"] == "tool"
-
             if "honeypot_logs" not in hp_entry:
                 continue
-
             for log in hp_entry["honeypot_logs"]:
                 if "event" not in log:
                     continue

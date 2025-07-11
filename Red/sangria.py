@@ -7,7 +7,7 @@ import Red.sangria_config as sangria_config
 import config
 import Red.log_extractor as log_extractor
 import Red.tools as red_tools
-from Utils.jsun import append_json_to_file
+from Utils.jsun import append_json_to_file, save_json_to_file
 from Red.terminal_io import start_ssh
 
 tools = sangria_config.tools
@@ -168,6 +168,7 @@ def run_single_attack(messages, max_session_length, full_logs_path):
 
         
     messages_log_json = create_json_log(messages)
+    save_json_to_file(messages_log_json, full_logs_path)
 
     total_tokens_used = {
         "prompt_tokens": total_prompt_tokens,
@@ -178,5 +179,7 @@ def run_single_attack(messages, max_session_length, full_logs_path):
     return messages_log_json, total_tokens_used
 
 if __name__ == "__main__":
-    test_single_attack = run_single_attack(messages=messages)
+    test_single_attack = run_single_attack(messages, 2, "test_logs.json")
 
+
+# %%

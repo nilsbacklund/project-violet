@@ -56,7 +56,7 @@ def send_terminal_command(connection, command):
         connection.sendline('\r')
         connection.sendcontrol('c')
         connection.expect(prompt_patterns + [pexpect.TIMEOUT], timeout=5)
-        matched_pattern = connection.match.group(0) if connection.match else ""
+        matched_pattern = connection.match.group(0) if connection.match and connection.match is not pexpect.TIMEOUT else ""
         command_response2 = f"{connection.before.strip()}{matched_pattern}"
 
 

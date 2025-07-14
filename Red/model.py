@@ -19,6 +19,11 @@ class LLMModel(str, Enum):
     OLLAMA_LLAMA32_3b = "llama3.2:3b"
     OLLAMA_DEEPSEEK_R1_5b = "deepseek-r1:1.5b"
 
+class ReconfigMethod(str, Enum):
+    NO_RECONFIG = "no_reconfig"
+    NEW_TECHNIQUES = "new_techniques"
+    SESSION_LENGTH = "session_length"
+
 class LLMConfig:
     """Configuration for the LLM host and model."""
     def __init__(self, host: LLMHost, model: LLMModel):

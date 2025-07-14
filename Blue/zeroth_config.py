@@ -1,5 +1,4 @@
 import textgrad as tg
-from dotenv import load_dotenv
 import os
 from pathlib import Path
 import sys
@@ -9,8 +8,6 @@ import json
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from Blue.utils import clean_and_finalize_config, extract_json
 from Blue.new_config_pipeline import save_config_as_file
-
-env = load_dotenv()
 
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 

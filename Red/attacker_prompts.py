@@ -1,8 +1,6 @@
 from enum import Enum
 import os
 
-from dotenv import load_dotenv
-load_dotenv()
 
 PROMPT_TEMPLATE = """
 You are an autonomous red-team operator with SSH access to a fully interactive Kali Linux terminal (the password is "toor"). The IP address of the Kali machine is {half_ip}.0.2

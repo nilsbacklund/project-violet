@@ -1,4 +1,6 @@
 # %%
+from dotenv import load_dotenv
+load_dotenv()
 import os
 print(os.getcwd())
 import config
@@ -10,9 +12,7 @@ from Blue_Lagoon.honeypot_tools import init_docker, start_dockers, stop_dockers
 from Red.extraction import extract_session
 from Utils.meta import create_experiment_folder
 from Utils.jsun import save_json_to_file, append_json_to_file
-from dotenv import load_dotenv
 
-load_dotenv()
 
 def main():
     base_path = create_experiment_folder(config.save_logs, experiment_name=config.experiment_name)

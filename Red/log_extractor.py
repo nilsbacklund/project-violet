@@ -1,6 +1,7 @@
 import subprocess
 import datetime
 import json
+import os
 
 last_checked = datetime.datetime.now(datetime.UTC).isoformat()
 def get_new_hp_logs():
@@ -9,9 +10,8 @@ def get_new_hp_logs():
     Returns a list of parsed JSON objects or raw logs if parsing fails.
     """
     global last_checked
-
     process = subprocess.Popen(
-        ["sudo", "docker", "logs", "blue_lagoon", "--since", last_checked],
+        ["sudo", "docker", "logs", f"{os.getenv("RUNID")}_blue_lagoon_1", "--since", last_checked],
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         text=True,

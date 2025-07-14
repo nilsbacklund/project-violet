@@ -7,7 +7,6 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 import yaml
 import jsonschema
-from dotenv import load_dotenv
 import sys
 import time
 import fcntl
@@ -20,7 +19,6 @@ from Blue.attack_pattern_check import attack_methods_checker
 from Blue.utils import extract_json, cosine_similarity, clean_and_finalize_config
 
 # Load environment variables (for OpenAI API key)
-load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 # Set up base directory and important paths

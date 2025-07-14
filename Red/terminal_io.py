@@ -2,14 +2,12 @@ import openai
 import platform
 if platform.system() != 'Windows':
     import pexpect
-from dotenv import load_dotenv
 import datetime
 import config
 import os
 
 TIMEOUT = 60
 
-load_dotenv()
 openai.api_key = os.getenv('OPENAI_API_KEY')
 openai_client = openai.OpenAI()
 

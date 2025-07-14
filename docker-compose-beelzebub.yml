@@ -13,12 +13,11 @@ services:
   blue_lagoon:
     build: Blue_Lagoon
     restart: always
-
     environment:
       RABBITMQ_URI: ${RABBITMQ_URI}
       OPEN_AI_SECRET_KEY: ${OPENAI_API_KEY}
     volumes:
-      - "./configurations:/configurations"
+      - "./Blue_Lagoon/configurations:/configurations"
     networks:
       innet:
         ipv4_address: "${SUBSUBNET}.0.3"

@@ -10,7 +10,7 @@ save_logs = True
 save_configuration = True
 print_output = True
 num_of_attacks = 100
-min_num_of_attacks_reconfig = 10
+min_num_of_attacks_reconfig = 2
 max_session_length = 100
 
 honeypot = "beelzebub" # beelzebub / cowrie

@@ -1,10 +1,14 @@
 # %%
-from Red.model import LLMModel
+from Red.model import LLMModel, ReconfigMethod
+from Red.attacker_prompts import AttackerPrompts
 
 experiment_name = ""
 
 llm_model_sangria = LLMModel.GPT_4_1_MINI
 llm_model_config = LLMModel.GPT_4_1_MINI
+attacker_prompt: str = AttackerPrompts.GENERAL
+reconfig_method: str = ReconfigMethod.NEW_TECHNIQUES # Not implemented yet
+
 simulate_command_line = False
 save_logs = True
 save_configuration = True

@@ -9,6 +9,8 @@ sys.path.append(project_root)
 import ipywidgets as widgets
 from IPython.display import display
 from Style import colors
+import json
+import matplotlib.pyplot as plt
 
 logs_path = Path(__file__).resolve().parent.parent.parent / "logs"
 experiment_names = [name for name in os.listdir(logs_path)[::-1] if str(name).startswith("experiment")]
@@ -37,7 +39,7 @@ configs = sorted(
     key=lambda fn: int(Path(fn).stem.split('_')[-1])
 )
 
-sessions_list = [load_json(path / config / "sessions.json") for config in configs]
+sessions_list = [load_json(path / config / "sessions.json") for config in configs if "sessions.json" in os.listdir(path / config)]
 
 if filter_empty_sessions:
     new_sessions_list = []
@@ -53,11 +55,12 @@ print(f"Number of sessions: {len(combined_sessions)}")
 
 length_data = measure_session_length(combined_sessions)
 tactic_dist_data = measure_tactic_distribution(combined_sessions)
+print(json.dumps(tactic_dist_data, indent=2))
+
 unique_techniques_data = measure_unique_techniques(combined_sessions)
 
 
 #%% Plotting cumulative attack of unique techniqes vs sessions
-import matplotlib.pyplot as plt
 
 plt.figure(figsize=(12, 6))
 plt.plot(unique_techniques_data["session_cum_num_techniques"],
@@ -71,6 +74,8 @@ plt.legend()
 plt.show()
 
 # %%
+
+print(unique_techniques_data)
 
 plt.figure(figsize=(12, 6))
 plt.plot(unique_techniques_data["session_num_techniques"],

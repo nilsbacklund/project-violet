@@ -22,8 +22,8 @@ def measure_tactic_distribution(sessions: List[Dict]) -> Dict[str, Any]:
     total_techniques = sum(techniques_used.values())
     techniques_frac = {technique: (count / total_techniques) for technique, count in techniques_used.items()}
 
-    assert sum(tactics_frac.values()) == 1
-    assert sum(techniques_frac.values()) == 1
+    assert abs(sum(tactics_frac.values()) - 1) < 1e-5
+    assert abs(sum(techniques_frac.values()) - 1) < 1e-5
 
     results = {
         "tactics": tactics_used,

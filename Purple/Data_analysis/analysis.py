@@ -9,6 +9,7 @@ sys.path.append(project_root)
 import ipywidgets as widgets
 from IPython.display import display
 from Style import colors
+import json
 
 logs_path = Path(__file__).resolve().parent.parent.parent / "logs"
 experiment_names = [name for name in os.listdir(logs_path)[::-1] if str(name).startswith("experiment")]
@@ -53,6 +54,8 @@ print(f"Number of sessions: {len(combined_sessions)}")
 
 length_data = measure_session_length(combined_sessions)
 tactic_dist_data = measure_tactic_distribution(combined_sessions)
+print(json.dumps(tactic_dist_data, indent=2))
+
 unique_techniques_data = measure_unique_techniques(combined_sessions)
 
 

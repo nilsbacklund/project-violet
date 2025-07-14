@@ -32,7 +32,7 @@ def extract_session(logs: Dict):
         tool_entry_index = i + num_tool_calls + 1
 
         # If terminates before tool call
-        if tool_entry_index > len(logs):
+        if tool_entry_index >= len(logs):
             continue
 
         follow_up_entry = logs[tool_entry_index]

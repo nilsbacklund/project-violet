@@ -4,7 +4,8 @@ import os
 import sys
 from pathlib import Path
 # Add parent directory to sys.path to allow imports from project root
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(project_root)
 import ipywidgets as widgets
 from IPython.display import display
 from Style import colors
@@ -27,10 +28,14 @@ print(f"Analyzing experiment {selected_experiment}")
 
 from Utils.jsun import load_json
 import numpy as np
-from Data_analysis.metrics import measure_session_length, measure_tactic_distribution, measure_unique_techniques
+from Purple.Data_analysis.metrics import measure_session_length, measure_tactic_distribution, measure_unique_techniques
 
 path = logs_path / selected_experiment
 configs = [name for name in os.listdir(path) if str(name).startswith("hp_config")]
+configs = sorted(
+    configs,
+    key=lambda fn: int(Path(fn).stem.split('_')[-1])
+)
 
 sessions_list = [load_json(path / config / "sessions.json") for config in configs]
 

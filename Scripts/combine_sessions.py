@@ -5,8 +5,7 @@ import questionary
 
 # Add parent directory to sys.path to allow imports from project root
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from Red.extraction import extract_session
-from Utils.jsun import load_json, append_json_to_file
+from Utils.jsun import load_json, save_json_to_file
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,7 +26,7 @@ if __name__ == "__main__":
 
     # multi‑select checkbox prompt
     selected = questionary.checkbox(
-        "Select experiments to extract:",
+        "Select experiments to combine sessions in:",
         choices=all_experiments
     ).ask()
 
@@ -45,25 +44,8 @@ if __name__ == "__main__":
             key=lambda fn: int(Path(fn).stem.split('_')[-1])
         )
 
-        for config in sorted_configs:
-            config_path = experiment_path / config
-            full_logs_path = config_path / "full_logs"
-            session_path = config_path / "sessions.json"
+        sessions_list = [load_json(experiment_path / config / "sessions.json") for config in sorted_configs]
+        combined_sessions = sum(sessions_list, [])
 
-            # remove existing sessions.json
-            if session_path.exists():
-                session_path.unlink()
-                print(f"  • Removed existing: {session_path.name}")
-
-            attack_files = safe_listdir(full_logs_path)
-            sorted_attacks = sorted(
-                attack_files,
-                key=lambda fn: int(Path(fn).stem.split('_')[-1])
-            )
-
-            for attack in sorted_attacks:
-                attack_path = full_logs_path / attack
-                logs = load_json(attack_path)
-                session = extract_session(logs)
-                append_json_to_file(session, session_path, False)
-                print(f"    √ Extracted {attack}")
+        save_json_to_file(combined_sessions, experiment_path / "sessions.json")
+        print(f"Combined {len(combined_sessions)} sessions in {experiment}")

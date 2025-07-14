@@ -31,6 +31,10 @@ from Data_analysis.metrics import measure_session_length, measure_tactic_distrib
 
 path = logs_path / selected_experiment
 configs = [name for name in os.listdir(path) if str(name).startswith("hp_config")]
+configs = sorted(
+    configs,
+    key=lambda fn: int(Path(fn).stem.split('_')[-1])
+)
 
 sessions_list = [load_json(path / config / "sessions.json") for config in configs]
 

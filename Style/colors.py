@@ -1,6 +1,7 @@
 # This is a modification of the
 #  IBM color palette from
-#  https://siegal.bio.nyu.edu/color-palette/
+#  https://siegal.bio.nyu.edu/color-palette/ .
+#  Should be color blind friendly!
 
 black = "#000000"
 blue = "#648FFF"

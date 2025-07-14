@@ -15,3 +15,5 @@ torch
 textgrad
 rich
 questionary
+notebook
+ipykernel

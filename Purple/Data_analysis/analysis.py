@@ -7,6 +7,7 @@ from pathlib import Path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import ipywidgets as widgets
 from IPython.display import display
+from Style import colors
 
 logs_path = Path(__file__).resolve().parent.parent.parent / "logs"
 experiment_names = [name for name in os.listdir(logs_path)[::-1] if str(name).startswith("experiment")]
@@ -25,7 +26,6 @@ filter_empty_sessions = False
 print(f"Analyzing experiment {selected_experiment}")
 
 from Utils.jsun import load_json
-import pprint
 import numpy as np
 from Data_analysis.metrics import measure_session_length, measure_tactic_distribution, measure_unique_techniques
 
@@ -55,7 +55,8 @@ unique_techniques_data = measure_unique_techniques(combined_sessions)
 import matplotlib.pyplot as plt
 
 plt.figure(figsize=(12, 6))
-plt.plot(unique_techniques_data["session_cum_num_techniques"], marker="o", linestyle="--")
+plt.plot(unique_techniques_data["session_cum_num_techniques"],
+    marker="o", linestyle="--", c=colors.scheme[0])
 plt.title("Cumulative sum of unique techniques")
 plt.xlabel("Session")
 plt.ylabel("Number of Unique Tactics")
@@ -67,7 +68,8 @@ plt.show()
 # %%
 
 plt.figure(figsize=(12, 6))
-plt.plot(unique_techniques_data["session_num_techniques"], marker="o", linestyle="--")
+plt.plot(unique_techniques_data["session_num_techniques"],
+    marker="o", linestyle="--", c=colors.scheme[0])
 plt.title("Number of Unique Tactics per Session")
 plt.xlabel("Session")
 plt.ylabel("Number of Unique Tactics")
@@ -79,13 +81,14 @@ plt.show()
 # %% Session length
 
 plt.figure(figsize=(12, 6))
-plt.plot(length_data["session_lengths"], marker="o", linestyle="--")
+plt.plot(length_data["session_lengths"],
+    marker="o", linestyle="--", c=colors.scheme[0])
 plt.title("Session length per Session")
 plt.xlabel("Session")
 plt.ylabel("Session length")
 
 for index in reconfig_indices:
-    plt.axvline(index - 0.5, color="k", linestyle="--")
+    plt.axvline(index - 0.5, color=colors.black, linestyle="--")
 
 plt.grid()
 plt.ylim(bottom=0)
@@ -103,15 +106,17 @@ cached_tokens = [tokens["cached_tokens"] for tokens in combined_tokens]
 completion_tokens = [tokens["completion_tokens"] for tokens in combined_tokens]
 
 plt.figure(figsize=(12, 6))
-plt.plot(prompt_tokens, marker="o", linestyle="--")
+plt.plot(prompt_tokens, marker="o",
+    linestyle="--", c=colors.scheme[0])
 # plt.plot(cached_tokens, marker="o", linestyle="--")
-plt.plot(completion_tokens, marker="o", linestyle="--")
-plt.title("Session length per Session")
+plt.plot(completion_tokens, marker="o",
+    linestyle="--", c=colors.scheme[1])
+plt.title("Tokens per Session")
 plt.xlabel("Session")
 plt.ylabel("Session length")
 
 for index in token_reconfig_indices:
-    plt.axvline(index - 0.5, color="k", linestyle="--")
+    plt.axvline(index - 0.5, color=colors.black, linestyle="--")
 
 plt.grid()
 plt.ylim(bottom=0)

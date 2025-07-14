@@ -72,7 +72,7 @@ tools = [
                 "properties": {
                     "success": {
                         "type": "boolean",
-                        "description": "Whether the attack was successful or not."
+                        "description": "True if you discovered you where in a honeypot, false if you end due to other reasons."
                     }
                 },
                 "required": ['success']

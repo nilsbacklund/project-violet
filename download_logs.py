@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import subprocess
 
-# Run this code to fetch the logs on IBM Cloud
+# Run this code to fetch the logs
 
 subprocess.run([
     "scp",

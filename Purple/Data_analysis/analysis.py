@@ -12,7 +12,8 @@ from Style import colors
 import json
 import matplotlib.pyplot as plt
 
-logs_path = Path(__file__).resolve().parent.parent.parent / "logs"
+logs_path = Path(__file__).resolve().parent / "logs"
+print(logs_path)
 experiment_names = [name for name in os.listdir(logs_path)[::-1] if str(name).startswith("experiment")]
 
 dropdown = widgets.Dropdown(
@@ -63,11 +64,14 @@ unique_techniques_data = measure_unique_techniques(combined_sessions)
 #%% Plotting cumulative attack of unique techniqes vs sessions
 
 plt.figure(figsize=(12, 6))
-plt.plot(unique_techniques_data["session_cum_num_techniques"],
-    marker="o", linestyle="--", c=colors.scheme[0])
+plt.plot(unique_techniques_data["session_cum_num_techniques"], marker="o", linestyle="--", c=colors.scheme[0])
 plt.title("Cumulative sum of unique techniques")
 plt.xlabel("Session")
 plt.ylabel("Number of Unique Tactics")
+
+for index in reconfig_indices:
+    plt.axvline(index - 0.5, color=colors.scheme[0], linestyle="--")
+
 plt.ylim(bottom=0)
 plt.grid()
 plt.legend()
@@ -83,6 +87,9 @@ plt.plot(unique_techniques_data["session_num_techniques"],
 plt.title("Number of Unique Tactics per Session")
 plt.xlabel("Session")
 plt.ylabel("Number of Unique Tactics")
+for index in reconfig_indices:
+    plt.axvline(index - 0.5, color=colors.black, linestyle="--")
+
 plt.grid()
 plt.ylim(bottom=0)
 plt.legend()

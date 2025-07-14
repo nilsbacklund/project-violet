@@ -17,6 +17,9 @@ def measure_tactic_distribution(sessions: List[Dict]) -> Dict[str, Any]:
                     techniques_used[technique] = 0
                 techniques_used[technique] += 1
 
+    tactics_used = { k: v for k, v in sorted(tactics_used.items(), key=lambda item: item[1], reverse=True)}
+    techniques_used = { k: v for k, v in sorted(techniques_used.items(), key=lambda item: item[1], reverse=True)}
+
     total_commands = sum(tactics_used.values())
     tactics_frac = {tactic: (count / total_commands) for tactic, count in tactics_used.items()}
     total_techniques = sum(techniques_used.values())

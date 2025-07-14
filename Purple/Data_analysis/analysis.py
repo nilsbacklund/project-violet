@@ -106,7 +106,7 @@ plt.figure(figsize=(12, 6))
 plt.plot(prompt_tokens, marker="o", linestyle="--")
 # plt.plot(cached_tokens, marker="o", linestyle="--")
 plt.plot(completion_tokens, marker="o", linestyle="--")
-plt.title("Session length per Session")
+plt.title("Tokens per Session")
 plt.xlabel("Session")
 plt.ylabel("Session length")
 

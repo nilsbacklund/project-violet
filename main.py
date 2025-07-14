@@ -25,6 +25,7 @@ def main():
     config_counter = 1
     config_attack_counter = 0
     seen_techniques = set()
+    subseq_no_new_techniques = 0
 
     if not config.simulate_command_line:
         start_dockers()
@@ -73,11 +74,14 @@ def main():
         config_attack_counter += 1
 
         new_techniques = current_techniques - seen_techniques
-        has_new_techniques = len(new_techniques) > 0
+        if not len(new_techniques) > 0:
+            subseq_no_new_techniques += 1
+        else:
+            subseq_no_new_techniques = 0
 
-        if config_attack_counter >= config.min_num_of_attacks_reconfig and not has_new_techniques:
+        if config_attack_counter >= config.min_num_of_attacks_reconfig and subseq_no_new_techniques >= config.familiar_attacks_before_reconfig:
             print(f"Reconfiguring: No new techniques found after {config_attack_counter} attacks.")
-
+            subseq_no_new_techniques = 0
             if not config.simulate_command_line:
                 stop_dockers()
 

@@ -17,10 +17,15 @@ def reconfig_criteria_met(all_techniques_list: List[set], method) -> bool:
         return new_techniques_reconfigure(all_techniques_list, 20, 0.06)
     elif method == ReconfigMethod.NEW_TECHNIQUES:
         return new_techniques_reconfigure(all_techniques_list, 3, 0.5)
+    elif method == ReconfigMethod.EVERY_N_ATTACKS:
+        return every_n_attacks_reconfig(all_techniques_list, 20)
     elif method == ReconfigMethod.SESSION_LENGTH:
         print("")
     return False
 
+def every_n_attacks_reconfig(all_techniques_list: List[set], n: int) -> bool:
+    if len(all_techniques_list) == 0: return False
+    return len(all_techniques_list) % n == 0
 
 def new_techniques_reconfigure_old_not_working_as_it_should(all_techniques_list: List[set]) -> bool:
     if len(all_techniques_list) < 2:

@@ -23,6 +23,7 @@ class ReconfigMethod(str, Enum):
     NO_RECONFIG = "no_reconfig"
     NEW_TECHNIQUES = "new_techniques"
     SESSION_LENGTH = "session_length"
+    EVERY_N_ATTACKS = "every_n_attacks"
 
 class LLMConfig:
     """Configuration for the LLM host and model."""

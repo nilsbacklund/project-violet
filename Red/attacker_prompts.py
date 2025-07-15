@@ -71,3 +71,4 @@ class AttackerPrompts(str, Enum):
     CONFIDENTIALITY = confidentiality_prompt
     INTEGRITY = integrity_prompt
     AVAILABILITY = availability_prompt
+    CYCLE = "<CYCLE_PROMPT>"

@@ -1,12 +1,48 @@
 from Red.model import LLMHost
 import json
 from Red.attacker_prompts import AttackerPrompts
-from config import attacker_prompt
+import config
 
 model_host = LLMHost.OPENAI  # change when using Ollama, Anthropic is not supported yet
 
 # Can have prompt. C, I, A or general depending on intended purpose of attack.
 # C = Confidentiality, I = Integrity, A = Availability.
+
+def get_system_prompt(attacker_prompt: str) -> dict:
+    system_prompt = {
+        'role': 'system',
+        'content': attacker_prompt
+    }
+
+    if model_host == LLMHost.OPENAI:
+        system_prompt = system_prompt
+    elif model_host == LLMHost.OLLAMA:
+        system_prompt = system_prompt
+    elif model_host == LLMHost.OLLAMA_NO_FC:
+        system_prompt = get_system_prompt_workaround(attacker_prompt)
+    else:
+        raise ValueError(f"Unknown model host: {model_host}")
+    
+    return system_prompt
+
+def get_messages(prompt: str, i=0):
+    if prompt == AttackerPrompts.CYCLE:
+        if i % 4 == 0:
+            system_prompt = get_messages(AttackerPrompts.GENERAL)
+        elif i % 4 == 1:
+            system_prompt = get_messages(AttackerPrompts.CONFIDENTIALITY)
+        elif i % 4 == 2:
+            system_prompt = get_messages(AttackerPrompts.INTEGRITY)
+        elif i % 4 == 3:
+            system_prompt = get_messages(AttackerPrompts.AVAILABILITY)
+    else:
+        system_prompt = get_system_prompt(prompt)
+
+    messages = [
+        system_prompt,
+        {"role": "user", "content": "What is your next move?"}
+    ]
+    return messages
 
 tools = [
     {
@@ -101,43 +137,26 @@ tools = [
 #         for tool in tools
 #     ]
 
-system_prompt_ollama_workaround = {
-    "role": "system",
-    "content": (
-        f"{attacker_prompt}"
-        "## How to respond\n"
-        "1. You may output **either**:\n"
-        "   • normal assistant text (analysis, next steps, etc.), **or**\n"
-        "   • **exactly one** tool call in **JSON** form, with no extra text.\n"
-        "2. A tool call must be a single line that matches this schema *exactly*:\n"
-        "   `{ \"name\": \"<tool-name>\", \"arguments\": { … } }`\n"
-        "   – no markdown fences\n"
-        "   – no additional keys\n"
-        "3. After you call a tool, wait for the function result before continuing.\n\n"
+def get_system_prompt_workaround(attacker_prompt):
+    system_prompt_ollama_workaround = {
+        "role": "system",
+        "content": (
+            f"{attacker_prompt}"
+            "## How to respond\n"
+            "1. You may output **either**:\n"
+            "   • normal assistant text (analysis, next steps, etc.), **or**\n"
+            "   • **exactly one** tool call in **JSON** form, with no extra text.\n"
+            "2. A tool call must be a single line that matches this schema *exactly*:\n"
+            "   `{ \"name\": \"<tool-name>\", \"arguments\": { … } }`\n"
+            "   – no markdown fences\n"
+            "   – no additional keys\n"
+            "3. After you call a tool, wait for the function result before continuing.\n\n"
 
-        "### Example tool call\n"
-        "{ \"name\": \"terminal_input\", \"arguments\": { \"command\": \"nmap -sS -p- 10.0.0.5\" } }\n\n"
+            "### Example tool call\n"
+            "{ \"name\": \"terminal_input\", \"arguments\": { \"command\": \"nmap -sS -p- 10.0.0.5\" } }\n\n"
 
-        "## Available tools\n"
-        f"{json.dumps(tools, indent=2)}\n"
-    )
-}
+            "## Available tools\n"
+            f"{json.dumps(tools, indent=2)}\n"
+        )
+    }
 
-system_prompt = {
-    'role': 'system',
-    'content': attacker_prompt
-}
-
-if model_host == LLMHost.OPENAI:
-    system_prompt = system_prompt
-elif model_host == LLMHost.OLLAMA:
-    system_prompt = system_prompt
-elif model_host == LLMHost.OLLAMA_NO_FC:
-    system_prompt = system_prompt_ollama_workaround
-else:
-    raise ValueError(f"Unknown model host: {model_host}")
-
-messages = [
-    system_prompt,
-    {"role": "user", "content": "What is your next move?"}
-]

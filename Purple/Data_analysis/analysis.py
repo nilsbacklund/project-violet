@@ -10,6 +10,7 @@ import ipywidgets as widgets
 from IPython.display import display
 from Style import colors
 import json
+import pprint
 import matplotlib.pyplot as plt
 
 logs_path = Path(__file__).resolve().parent.parent.parent / "logs"
@@ -30,7 +31,9 @@ print(f"Analyzing experiment {selected_experiment}")
 
 from Utils.jsun import load_json
 import numpy as np
-from Purple.Data_analysis.metrics import measure_session_length, measure_tactic_distribution, measure_unique_techniques
+from Purple.Data_analysis.metrics import measure_session_length, \
+    measure_tactic_distribution, measure_unique_techniques, \
+    measure_entropy_session_length, measure_entropy_techniques
 
 path = logs_path / selected_experiment
 configs = [name for name in os.listdir(path) if str(name).startswith("hp_config")]
@@ -55,12 +58,11 @@ print(f"Number of sessions: {len(combined_sessions)}")
 
 length_data = measure_session_length(combined_sessions)
 tactic_dist_data = measure_tactic_distribution(combined_sessions)
-
 unique_techniques_data = measure_unique_techniques(combined_sessions)
-
+entropy_techniques_data = measure_entropy_techniques(combined_sessions)
+session_entropy_techniques_data = [measure_entropy_techniques(session) for session in sessions_list]
 
 #%% Plotting cumulative attack of unique techniqes vs sessions
-
 plt.figure(figsize=(12, 6))
 plt.plot(unique_techniques_data["session_cum_num_techniques"], marker="o", linestyle="-", c=colors.scheme[0])
 plt.title("Cumulative sum of unique techniques")
@@ -206,4 +208,38 @@ for i, tactics in enumerate(tactics_list):
     ax.set_thetagrids(np.degrees(angles[:-1]), labels)
     plt.figlegend()
     plt.show()
+
+#%% Plotting entropy
+
+entropies = [list(result["entropies"]) for result in session_entropy_techniques_data]
+entropies = sum(entropies, [])
+
+plt.figure(figsize=(12, 6))
+plt.plot(entropies, marker="o", linestyle="-", c=colors.scheme[0])
+plt.title("Config entropy")
+plt.xlabel("Session")
+plt.ylabel("Entropy of unique techniques")
+
+for index in reconfig_indices:
+    plt.axvline(index - 0.5, color=colors.black, linestyle="--", alpha=0.2)
+
+plt.ylim(bottom=0)
+# plt.grid()
+plt.legend()
+plt.show()
+# %%
+
+plt.figure(figsize=(12, 6))
+plt.plot(entropy_techniques_data["entropies"], marker="o", linestyle="-", c=colors.scheme[0])
+plt.title("Experiment entropy of unique techniques")
+plt.xlabel("Session")
+plt.ylabel("Entropy of unique techniques")
+
+for index in reconfig_indices:
+    plt.axvline(index - 0.5, color=colors.black, linestyle="--", alpha=0.2)
+
+plt.ylim(bottom=0)
+# plt.grid()
+plt.legend()
+plt.show()
 # %%

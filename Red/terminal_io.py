@@ -24,7 +24,7 @@ def start_ssh():
     ssh = pexpect.spawn('ssh -o StrictHostKeyChecking=no -p' +  os.getenv('HOST_PORT') +' root@localhost', encoding='utf-8')
     ssh.expect("root@localhost's password: ")
     ssh.sendline('toor')
-    ssh.expect(r'└─\x1b\[1;31m#', timeout=4)
+    ssh.expect(r'└─\x1b\[1;31m#', timeout=60)
     a = ssh.before.strip()
     # Real ghetto to put here but just want it to run after the hp has spun up
     global last_checked

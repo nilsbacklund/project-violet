@@ -1,4 +1,15 @@
 from typing import Dict, List, Any
+import numpy as np
+
+def create_heatmap(rows: List[str], data: List[Dict[str, int]]) -> np.ndarray:
+    rows_to_num = { row:i for i, row in enumerate(rows)}
+    heatmap = np.zeros((len(rows), len(data)))
+
+    for i, session in enumerate(data):
+        for row, freq in session.items():
+            heatmap[rows_to_num[row], i] = freq
+
+    return heatmap
 
 def measure_tactic_distribution(sessions: List[Dict]) -> Dict[str, Any]:
     all_tactics = {}
@@ -40,6 +51,13 @@ def measure_tactic_distribution(sessions: List[Dict]) -> Dict[str, Any]:
     assert abs(sum(tactics_frac.values()) - 1) < 1e-5
     assert abs(sum(techniques_frac.values()) - 1) < 1e-5
 
+    # Let's create a heatmap for funsies
+
+    tactic_names = list(all_tactics.keys())
+    technique_names = list(all_techniques.keys())
+    tactics_heatmap = create_heatmap(tactic_names, session_tactics)
+    techniques_heatmap = create_heatmap(technique_names, session_techniques)
+
     results = {
         "tactics": all_tactics,
         "techniques": all_techniques,
@@ -47,6 +65,8 @@ def measure_tactic_distribution(sessions: List[Dict]) -> Dict[str, Any]:
         "techniques_frac": techniques_frac,
         "session_tactics": session_tactics,
         "session_techniques": session_techniques,
+        "tactics_heatmap": tactics_heatmap,
+        "techniques_heatmap": techniques_heatmap
     }
 
     return results

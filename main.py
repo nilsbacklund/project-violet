@@ -1,4 +1,5 @@
 # %%
+import json
 from dotenv import load_dotenv
 load_dotenv()
 import os
@@ -49,7 +50,9 @@ def main():
         print(f"Attack {i+1} / {config.num_of_attacks}")
         logs_path = full_logs_path / f"attack_{i+1}.json"
 
-        messages = sangria_config.get_messages(config.attacker_prompt, i)
+        messages = sangria_config.get_messages(config.attacker_prompt, i)[0]
+        print(messages)
+        print(json.dumps(messages, indent=2))
 
         logs, tokens_used = run_single_attack(messages, config.max_session_length, logs_path)
         

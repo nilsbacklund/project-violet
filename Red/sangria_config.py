@@ -37,7 +37,7 @@ def get_messages(prompt: str, i=0):
             system_prompt = get_messages(AttackerPrompts.AVAILABILITY)
     else:
         system_prompt = get_system_prompt(prompt)
-
+    print(f"Using prompt: i={i}, prompt={prompt}")
     messages = [
         system_prompt,
         {"role": "user", "content": "What is your next move?"}

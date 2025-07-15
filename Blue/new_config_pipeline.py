@@ -223,7 +223,7 @@ def retrieve_top_vulns(user_query, vulns_db, embeddings_path, top_n=5):
     
     return top_vulns
 
-def build_config_prompt(schema_path, top_vulns):
+def build_config_prompt(schema_path, top_vulns, prev_config=None):
     """
     Build a prompt for the LLM to generate a new honeypot config, including the schema and selected vulnerabilities.
     """
@@ -254,6 +254,11 @@ def build_config_prompt(schema_path, top_vulns):
         cve_id = vuln_data.get("cve_id", "N/A")
         description = vuln_data.get("description", "No description provided.")
         config_prompt += f"- {cve_id}: {description}\n"
+
+    if prev_config:
+        config_prompt += f"Here is the previously generated configuration file that you should improve upon and update to use the provided vulnerabilities.\n"
+        config_prompt += prev_config + "\n"
+
     return config_prompt
 
 def generate_config_with_llm(config_prompt):
@@ -297,7 +302,7 @@ def save_config_as_file(config, path):
     print(f"Config saved to {filepath}")
 
 # Main Pipeline
-def generate_new_honeypot_config(experiment_base_path=None):
+def generate_new_honeypot_config(experiment_base_path=None, prev_config_path=None):
     """
     Main pipeline to generate a new honeypot config:
     - Loads attack patterns and vulnerabilities
@@ -330,7 +335,9 @@ def generate_new_honeypot_config(experiment_base_path=None):
             cve_id = vuln.get('id', 'N/A')
         if not description:
             description = vuln.get('description', 'No description')
-    config_prompt = build_config_prompt(schema_path, top5_vulns)
+
+    prev_config = None if prev_config_path is None else load_json(prev_config_path)
+    config_prompt = build_config_prompt(schema_path, top5_vulns, prev_config)
     # print("\nPrompt sent to LLM for config generation:\n")
     # print(config_prompt[:1000], "...")
     

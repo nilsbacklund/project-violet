@@ -90,7 +90,8 @@ def main():
             if not config.simulate_command_line:
                 stop_dockers()
 
-            config_id, honeypot_config = generate_new_honeypot_config(base_path)
+            prev_config_file_path = config_path / f"honeypot_config.json"
+            config_id, honeypot_config = generate_new_honeypot_config(base_path, prev_config_file_path)
             set_honeypot_config(honeypot_config)
 
             config_counter += 1

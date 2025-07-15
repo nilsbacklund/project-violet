@@ -11,7 +11,7 @@ def get_new_hp_logs():
     """
     global last_checked
     process = subprocess.Popen(
-        ["sudo", "docker", "logs", f"{os.getenv("RUNID")}_blue_lagoon_1", "--since", last_checked],
+        ["sudo", "docker", "logs", f"{os.getenv('RUNID')}_blue_lagoon_1", "--since", last_checked],
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         text=True,

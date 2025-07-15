@@ -21,7 +21,7 @@ prompt_patterns = [pexpect.EOF,
                     "Please type 'yes', 'no' or the fingerprint: "]
 
 def start_ssh():
-    ssh = pexpect.spawn('ssh -p ' +  os.getenv('HOST_PORT') +' root@localhost', encoding='utf-8')
+    ssh = pexpect.spawn('ssh -o StrictHostKeyChecking=no -p' +  os.getenv('HOST_PORT') +' root@localhost', encoding='utf-8')
     ssh.expect("root@localhost's password: ")
     ssh.sendline('toor')
     ssh.expect(r'└─\x1b\[1;31m#', timeout=4)

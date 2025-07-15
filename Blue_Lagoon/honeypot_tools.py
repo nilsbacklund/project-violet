@@ -15,12 +15,12 @@ def init_docker():
 
 def start_dockers():
     print("Starting Docker containers...")
-    subprocess.run(["sudo", "docker-compose","-f", f"docker-compose-{honeypot}.yml", "-p", os.environ.get("RUNID"), "build"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    subprocess.run(["sudo", "docker-compose", "-f", f"docker-compose-{honeypot}.yml", "-p", os.environ.get("RUNID"), "up", "-d"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run(["sudo", "docker-compose","-f", f"docker-compose.yml", "-p", os.environ.get("RUNID"), "build"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run(["sudo", "docker-compose", "-f", f"docker-compose.yml", "-p", os.environ.get("RUNID"), "up", "-d"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     print("Docker containers started")
 
 
 def stop_dockers():
     print("Stopping Docker containers...")
-    subprocess.run(["sudo", "docker-compose", "-f", f"docker-compose-{honeypot}.yml", "-p", os.environ.get("RUNID"),"down"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run(["sudo", "docker-compose", "-f", f"docker-compose.yml", "-p", os.environ.get("RUNID"),"down"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     print("Docker containers stopped")

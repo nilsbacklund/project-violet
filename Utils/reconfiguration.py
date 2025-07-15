@@ -11,19 +11,20 @@ from typing import List, Dict, Any
 from pathlib import Path
 from Red.model import ReconfigMethod
 import numpy as np
+import config
 
 def reconfig_criteria_met(all_techniques_list: List[set], method) -> bool:
     if method == ReconfigMethod.NO_RECONFIG:
-        return new_techniques_reconfigure(all_techniques_list, 20, 0.06)
+        return new_techniques_reconfigure(all_techniques_list, config.end_window_size, config.end_saturation_limit)
     elif method == ReconfigMethod.NEW_TECHNIQUES:
-        return new_techniques_reconfigure(all_techniques_list, 3, 0.5)
+        return new_techniques_reconfigure(all_techniques_list, config.n_config_window_size, config.saturation_limit)
     elif method == ReconfigMethod.EVERY_N_ATTACKS:
-        return every_n_attacks_reconfig(all_techniques_list, 20)
+        return every_n_attacks_reconfig(all_techniques_list, config.n_attacks)
     elif method == ReconfigMethod.SESSION_LENGTH:
         print("")
     return False
 
-def every_n_attacks_reconfig(all_techniques_list: List[set], n: int) -> bool:
+def every_n_attacks_reconfig(all_techniques_list: List[set], n: int = 20) -> bool:
     if len(all_techniques_list) == 0: return False
     return len(all_techniques_list) % n == 0
 

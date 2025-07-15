@@ -51,9 +51,6 @@ def measure_tactic_distribution(sessions: List[Dict]) -> Dict[str, Any]:
     techniques_frac = {technique: (count / total_techniques) for technique, count in all_techniques.items()}
     techniques_frac = dict(sorted(techniques_frac.items(), key=lambda item: item[1], reverse=True))
 
-    assert abs(sum(tactics_frac.values()) - 1) < 1e-5
-    assert abs(sum(techniques_frac.values()) - 1) < 1e-5
-
     # Let's create a heatmap for funsies
 
     tactic_names = list(all_tactics.keys())

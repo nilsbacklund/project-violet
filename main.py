@@ -78,6 +78,9 @@ def main():
         all_techniques_list.extend(current_techniques)
         reconfigure = reconfig_criteria_met(all_techniques_list, config.reconfig_method)
 
+        if config.reconfig_method == config.ReconfigMethod.NO_RECONFIG and reconfigure:
+            break
+            
         if config_attack_counter >= config.min_num_of_attacks_reconfig and reconfigure:
             print(f"Reconfiguring: No new techniques found after {config_attack_counter} attacks.")
             if not config.simulate_command_line:

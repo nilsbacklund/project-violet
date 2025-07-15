@@ -14,7 +14,7 @@ import numpy as np
 
 def reconfig_criteria_met(all_techniques_list: List[set], method) -> bool:
     if method == ReconfigMethod.NO_RECONFIG:
-        return False
+        return new_techniques_reconfigure(all_techniques_list, 20, 0.06)
     elif method == ReconfigMethod.NEW_TECHNIQUES:
         return new_techniques_reconfigure(all_techniques_list, 3, 0.5)
     elif method == ReconfigMethod.SESSION_LENGTH:

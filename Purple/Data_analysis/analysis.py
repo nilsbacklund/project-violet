@@ -12,8 +12,7 @@ from Style import colors
 import json
 import matplotlib.pyplot as plt
 
-logs_path = Path(__file__).resolve().parent / "logs"
-print(logs_path)
+logs_path = Path(__file__).resolve().parent.parent.parent / "logs"
 experiment_names = [name for name in os.listdir(logs_path)[::-1] if str(name).startswith("experiment")]
 
 dropdown = widgets.Dropdown(
@@ -56,12 +55,6 @@ print(f"Number of sessions: {len(combined_sessions)}")
 
 length_data = measure_session_length(combined_sessions)
 tactic_dist_data = measure_tactic_distribution(combined_sessions)
-# number of tactics and techniques
-print(f"Number of tactics: {len(tactic_dist_data['tactics'])}")
-print(f"Number of techniques: {len(tactic_dist_data['techniques'])}")
-print(json.dumps(tactic_dist_data['tactics_frac'], indent=2))
-print(json.dumps(tactic_dist_data['techniques_frac'], indent=2))
-
 
 unique_techniques_data = measure_unique_techniques(combined_sessions)
 
@@ -69,16 +62,16 @@ unique_techniques_data = measure_unique_techniques(combined_sessions)
 #%% Plotting cumulative attack of unique techniqes vs sessions
 
 plt.figure(figsize=(12, 6))
-plt.plot(unique_techniques_data["session_cum_num_techniques"], marker="o", linestyle="--", c=colors.scheme[0])
+plt.plot(unique_techniques_data["session_cum_num_techniques"], marker="o", linestyle="-", c=colors.scheme[0])
 plt.title("Cumulative sum of unique techniques")
 plt.xlabel("Session")
-plt.ylabel("Number of Unique Tactics")
+plt.ylabel("Number of Unique techniques")
 
 for index in reconfig_indices:
-    plt.axvline(index - 0.5, color=colors.scheme[0], linestyle="--")
+    plt.axvline(index - 0.5, color=colors.black, linestyle="--", alpha=0.2)
 
 plt.ylim(bottom=0)
-plt.grid()
+# plt.grid()
 plt.legend()
 plt.show()
 
@@ -87,15 +80,14 @@ plt.show()
 print(unique_techniques_data)
 
 plt.figure(figsize=(12, 6))
-plt.plot(unique_techniques_data["session_num_techniques"],
-    marker="o", linestyle="--", c=colors.scheme[0])
-plt.title("Number of Unique Tactics per Session")
+plt.plot(unique_techniques_data["session_num_techniques"][0:30],
+    marker="o", linestyle="-", c=colors.scheme[0])
+plt.title("Number of Unique Techniques per Session")
 plt.xlabel("Session")
-plt.ylabel("Number of Unique Tactics")
-for index in reconfig_indices:
-    plt.axvline(index - 0.5, color=colors.black, linestyle="--")
+plt.ylabel("Number of Unique Techniques")
+for index in reconfig_indices[0:10]:
+    plt.axvline(index - 0.5, color=colors.black, linestyle="--", alpha=0.2)
 
-plt.grid()
 plt.ylim(bottom=0)
 plt.legend()
 plt.show()
@@ -103,16 +95,14 @@ plt.show()
 # %% Session length
 
 plt.figure(figsize=(12, 6))
-plt.plot(length_data["session_lengths"],
-    marker="o", linestyle="--", c=colors.scheme[0])
+plt.bar(range(len(length_data["session_lengths"])), length_data["session_lengths"])
 plt.title("Session length per Session")
 plt.xlabel("Session")
 plt.ylabel("Session length")
 
 for index in reconfig_indices:
-    plt.axvline(index - 0.5, color=colors.black, linestyle="--")
+    plt.axvline(index - 0.5, color=colors.black, linestyle="--", alpha=0.2)
 
-plt.grid()
 plt.ylim(bottom=0)
 plt.legend()
 plt.show()
@@ -128,21 +118,92 @@ cached_tokens = [tokens["cached_tokens"] for tokens in combined_tokens]
 completion_tokens = [tokens["completion_tokens"] for tokens in combined_tokens]
 
 plt.figure(figsize=(12, 6))
-plt.plot(prompt_tokens, marker="o",
-    linestyle="--", c=colors.scheme[0])
-# plt.plot(cached_tokens, marker="o", linestyle="--")
-plt.plot(completion_tokens, marker="o",
-    linestyle="--", c=colors.scheme[1])
+plt.bar(range(len(prompt_tokens)), prompt_tokens,label="prompt tokens")
+# plt.bar(range(len(cached_tokens)), prompt_tokens,label="cached tokens")
+plt.bar(range(len(completion_tokens)), completion_tokens, label="completion tokens")
 plt.title("Tokens per Session")
 plt.xlabel("Session")
 plt.ylabel("Session length")
 
 for index in token_reconfig_indices:
-    plt.axvline(index - 0.5, color=colors.black, linestyle="--")
+    plt.axvline(index - 0.5, color=colors.black, linestyle="--", alpha=0.2)
 
-plt.grid()
+# plt.grid()
 plt.ylim(bottom=0)
 plt.legend()
 plt.show()
 
+# %%
+
+tactics = list(tactic_dist_data["tactics"].keys())
+techniques = list(tactic_dist_data["tactics"].keys())
+
+print(tactic_dist_data["tactics_heatmap"])
+
+plt.figure(figsize=(15, 20))
+plt.imshow(tactic_dist_data["tactics_heatmap"])
+plt.xlabel("Session")
+plt.ylabel("Tactic")
+plt.yticks(range(len(tactics)), tactics)
+
+# %%
+
+tactics = list(tactic_dist_data["techniques"].keys())
+techniques = list(tactic_dist_data["techniques"].keys())
+
+print(tactic_dist_data["techniques_heatmap"])
+
+plt.figure(figsize=(15, 20))
+plt.imshow(tactic_dist_data["techniques_heatmap"])
+plt.xlabel("Session")
+plt.ylabel("Technique")
+plt.yticks(range(len(tactics)), tactics)
+
+# %%
+
+import matplotlib.pyplot as plt
+
+# your data
+tactics = list(tactic_dist_data["tactics"].keys())
+values  = list(tactic_dist_data["tactics"].values())
+
+plt.figure(figsize=(10, 5))
+bars = plt.bar(range(len(tactics)), values)
+plt.xticks(range(len(tactics)), tactics, rotation=70)
+
+# add value labels on top of each bar
+for bar in bars:
+    height = bar.get_height()
+    plt.text(
+        bar.get_x() + bar.get_width()/2,  # x position: center of the bar
+        height,                           # y position: top of the bar
+        f'{height}',                      # label text
+        ha='center',                      # horizontal alignment
+        va='bottom'                       # vertical alignment
+    )
+
+plt.tight_layout()
+plt.show()
+
+
+# %%
+import matplotlib.pyplot as plt
+import numpy as np
+
+tactics_list = list(sorted(tactic_dist_data["session_tactics"],
+    key=lambda data: sum(list(data.values())), reverse=True))[:5]
+
+for i, tactics in enumerate(tactics_list):
+    fig, ax = plt.subplots(subplot_kw=dict(polar=True))
+    labels = list(tactics.keys())
+    stats  = list(tactics.values())
+    angles = np.linspace(0, 2*np.pi, len(labels), endpoint=False).tolist()
+    stats += stats[:1]
+    angles += angles[:1]
+    
+    ax.plot(angles, stats, '-', linewidth=2, c=colors.scheme[i], alpha=0.5, label=f"Session number {i}: length = {sum(tactics.values())}")
+    ax.fill(angles, stats, alpha=0.2, c=colors.scheme[i])
+    ax.set_thetagrids(np.degrees(angles[:-1]), labels)
+    plt.figlegend()
+    plt.show()
 # %%

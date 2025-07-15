@@ -19,3 +19,4 @@ notebook
 ipykernel
 matplotlib
 paramiko
+sentence_transformers

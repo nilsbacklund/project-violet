@@ -12,6 +12,7 @@ from Blue_Lagoon.honeypot_tools import init_docker, start_dockers, stop_dockers
 from Red.extraction import extract_session
 from Utils.meta import create_experiment_folder
 from Utils.jsun import save_json_to_file, append_json_to_file
+from Utils.reconfiguration import reconfig_criteria_met 
 
 
 def main():
@@ -24,7 +25,9 @@ def main():
 
     config_counter = 1
     config_attack_counter = 0
+
     seen_techniques = set()
+    all_techniques_list = []
 
     if not config.simulate_command_line:
         start_dockers()
@@ -38,6 +41,7 @@ def main():
     if config.save_configuration and not config.simulate_command_line:
         save_json_to_file(honeypot_config, config_path / f"honeypot_config.json")
 
+    reconfigure = False
     for i in range(config.num_of_attacks):
         if config.save_logs:
             os.makedirs(config_path, exist_ok=True) 
@@ -67,14 +71,15 @@ def main():
                current_techniques.add(command_entry["technique"])
 
         if config.save_logs:
-            # update sessions
             append_json_to_file(session, config_path / f"sessions.json")
 
-        config_attack_counter += 1
 
         new_techniques = current_techniques - seen_techniques
         has_new_techniques = len(new_techniques) > 0
+        all_techniques_list.extend(current_techniques)
+        reconfigure = reconfig_criteria_met(all_techniques_list, config.reconfig_method)
 
+        config_attack_counter += 1
         if config_attack_counter >= config.min_num_of_attacks_reconfig and not has_new_techniques:
             print(f"Reconfiguring: No new techniques found after {config_attack_counter} attacks.")
 

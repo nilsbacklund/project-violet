@@ -56,7 +56,12 @@ print(f"Number of sessions: {len(combined_sessions)}")
 
 length_data = measure_session_length(combined_sessions)
 tactic_dist_data = measure_tactic_distribution(combined_sessions)
-print(json.dumps(tactic_dist_data, indent=2))
+# number of tactics and techniques
+print(f"Number of tactics: {len(tactic_dist_data['tactics'])}")
+print(f"Number of techniques: {len(tactic_dist_data['techniques'])}")
+print(json.dumps(tactic_dist_data['tactics_frac'], indent=2))
+print(json.dumps(tactic_dist_data['techniques_frac'], indent=2))
+
 
 unique_techniques_data = measure_unique_techniques(combined_sessions)
 

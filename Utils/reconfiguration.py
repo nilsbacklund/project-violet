@@ -43,8 +43,6 @@ def new_techniques_reconfigure(all_techniques_list: List[set], n_avg=5, limit=0.
     last_avg = limit+1
     print(n_new_techniques_list)
 
-
-
     if len(n_new_techniques_list) < n_avg:
         last_avg = np.mean(n_new_techniques_list)
         print(last_avg, limit)

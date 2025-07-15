@@ -12,8 +12,7 @@ from Blue_Lagoon.honeypot_tools import init_docker, start_dockers, stop_dockers
 from Red.extraction import extract_session
 from Utils.meta import create_experiment_folder
 from Utils.jsun import save_json_to_file, append_json_to_file
-from collections import Counter
-from Utils.entropy import entropy
+from Utils.reconfiguration import reconfig_criteria_met 
 
 
 def main():
@@ -26,7 +25,9 @@ def main():
 
     config_counter = 1
     config_attack_counter = 0
+
     seen_techniques = set()
+    all_techniques_list = []
 
     if not config.simulate_command_line:
         start_dockers()
@@ -40,11 +41,7 @@ def main():
     if config.save_configuration and not config.simulate_command_line:
         save_json_to_file(honeypot_config, config_path / f"honeypot_config.json")
 
-    entropies = [0]  # Initialize entropies list
-    current_techniques = Counter() 
-
-    # init reconfig-object
-
+    reconfigure = False
     for i in range(config.num_of_attacks):
         if config.save_logs:
             os.makedirs(config_path, exist_ok=True) 
@@ -67,38 +64,33 @@ def main():
         # extract session and add attack pattern to set
         session = extract_session(logs)
 
-        # reconf_object.update(session)
-
         # Extract individual techniques from full_session
+        current_techniques = set()
         for command_entry in session.get("full_session", []):
            if "technique" in command_entry and command_entry["technique"]:
-               current_techniques.update([command_entry["technique"]])
+               current_techniques.add(command_entry["technique"])
 
         if config.save_logs:
-            # update sessions
             append_json_to_file(session, config_path / f"sessions.json")
 
-        config_attack_counter += 1
 
-        entropy_value = entropy(current_techniques)
-        entropies.append(entropy_value)
+        new_techniques = current_techniques - seen_techniques
+        all_techniques_list.extend(current_techniques)
+        reconfigure = reconfig_criteria_met(all_techniques_list, config.reconfig_method)
 
-        # if reconf_object.should_reconfig
-        if config_attack_counter >= config.min_num_of_attacks_reconfig and not abs(entropy_value-entropies[-2]) < 1e-2:
+        if config.reconfig_method == config.ReconfigMethod.NO_RECONFIG and reconfigure:
+            break
+            
+        if config_attack_counter >= config.min_num_of_attacks_reconfig and reconfigure:
             print(f"Reconfiguring: No new techniques found after {config_attack_counter} attacks.")
-
             if not config.simulate_command_line:
                 stop_dockers()
 
-            prev_config_file_path = config_path / f"honeypot_config.json"
-            config_id, honeypot_config = generate_new_honeypot_config(base_path, prev_config_file_path)
+            config_id, honeypot_config = generate_new_honeypot_config(base_path)
             set_honeypot_config(honeypot_config)
 
             config_counter += 1
             config_attack_counter = 0
-            entropies = [0]
-            current_techniques = Counter() 
-
             print(f"Configuration {config_counter}")
             config_path = base_path / f"hp_config_{config_counter}"
             full_logs_path = config_path / "full_logs"

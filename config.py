@@ -22,7 +22,7 @@ min_num_of_attacks_reconfig = 2
 max_session_length = 100
 
 # Reconfiguration settings 
-reset_every_reconfig = False
+reset_every_reconfig = True
 ## Basic reconfiguration
 interval: int = 20
 ## Finite difference reconfiguration

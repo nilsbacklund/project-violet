@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Dict, Any
 
 class AbstractReconfigCriterion(ABC):
-    def __init__(self, reset_every_reconfig: bool = False):
+    def __init__(self, reset_every_reconfig: bool = True):
         self.reset()
         self.reset_every_reconfig = reset_every_reconfig
     

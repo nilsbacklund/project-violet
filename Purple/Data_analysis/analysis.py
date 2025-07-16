@@ -62,6 +62,10 @@ unique_techniques_data = measure_unique_techniques(combined_sessions)
 entropy_techniques_data = measure_entropy_techniques(combined_sessions)
 session_entropy_techniques_data = [measure_entropy_techniques(session) for session in sessions_list]
 
+entropy_session_length_data = measure_entropy_session_length(combined_sessions)
+session_entropy_session_length_data = [measure_entropy_session_length(session) for session in sessions_list]
+
+
 #%% Plotting cumulative attack of unique techniqes vs sessions
 plt.figure(figsize=(12, 6))
 plt.plot(unique_techniques_data["session_cum_num_techniques"], marker="o", linestyle="-", c=colors.scheme[0])
@@ -209,7 +213,7 @@ for i, tactics in enumerate(tactics_list):
     plt.figlegend()
     plt.show()
 
-#%% Plotting entropy
+#%% Plotting entropy of techniques
 
 entropies = [list(result["entropies"]) for result in session_entropy_techniques_data]
 entropies = sum(entropies, [])
@@ -234,6 +238,41 @@ plt.plot(entropy_techniques_data["entropies"], marker="o", linestyle="-", c=colo
 plt.title("Experiment entropy of unique techniques")
 plt.xlabel("Session")
 plt.ylabel("Entropy of unique techniques")
+
+for index in reconfig_indices:
+    plt.axvline(index - 0.5, color=colors.black, linestyle="--", alpha=0.2)
+
+plt.ylim(bottom=0)
+# plt.grid()
+plt.legend()
+plt.show()
+# %%
+
+
+#%% Plotting entropy of session length
+
+entropies = [list(result["entropies"]) for result in session_entropy_session_length_data]
+entropies = sum(entropies, [])
+
+plt.figure(figsize=(12, 6))
+plt.plot(entropies, marker="o", linestyle="-", c=colors.scheme[0])
+plt.title("Config entropy")
+plt.xlabel("Session")
+plt.ylabel("Entropy of session length")
+
+for index in reconfig_indices:
+    plt.axvline(index - 0.5, color=colors.black, linestyle="--", alpha=0.2)
+
+plt.ylim(bottom=0)
+# plt.grid()
+plt.legend()
+plt.show()
+# %%
+plt.figure(figsize=(12, 6))
+plt.plot(entropy_session_length_data["entropies"], marker="o", linestyle="-", c=colors.scheme[0])
+plt.title("Experiment entropy of session length")
+plt.xlabel("Session")
+plt.ylabel("Entropy of session length")
 
 for index in reconfig_indices:
     plt.axvline(index - 0.5, color=colors.black, linestyle="--", alpha=0.2)

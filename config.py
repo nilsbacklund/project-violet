@@ -34,7 +34,6 @@ en_variable = "techniques"
 en_tolerance = 1e-2
 
 # Other
-honeypot = "beelzebub" # beelzebub / cowrie
 ISO_FORMAT = "%Y-%m-%dT%H_%M_%S"
 
 # %%

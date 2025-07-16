@@ -5,10 +5,10 @@ services:
     image: bloatedkali4
     privileged: true
     ports:
-      - "${HOST_PORT}:3022"  # SSH from host -> Kali
+      - "30${RUNID}:3022"  # SSH from host -> Kali
     networks:
       innet:
-        ipv4_address: "${SUBSUBNET}.0.2"
+        ipv4_address: "172.${RUNID}.0.2"
 
   blue_lagoon:
     build: Blue_Lagoon
@@ -20,12 +20,12 @@ services:
       - "./Blue_Lagoon/configurations:/configurations"
     networks:
       innet:
-        ipv4_address: "${SUBSUBNET}.0.3"
+        ipv4_address: "172.${RUNID}.0.3"
 
 networks:
   innet:
     driver: bridge
     ipam:
       config:
-        - subnet: "${SUBSUBNET}.0.0/24"
+        - subnet: "172.${RUNID}.0.0/24"
 

@@ -1,5 +1,4 @@
 import subprocess
-from config import honeypot
 import os
 
 def init_docker():

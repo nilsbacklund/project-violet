@@ -1,9 +1,8 @@
 from Red.model import LLMHost
 import json
 from Red.attacker_prompts import AttackerPrompts
-import config
 
-model_host = LLMHost.OPENAI  # change when using Ollama, Anthropic is not supported yet
+model_host = LLMHost.OPENAI  # change when using Ollama
 
 # Can have prompt. C, I, A or general depending on intended purpose of attack.
 # C = Confidentiality, I = Integrity, A = Availability.
@@ -25,19 +24,21 @@ def get_system_prompt(attacker_prompt: str) -> dict:
     
     return system_prompt
 
-def get_messages(prompt: str, i=0):
-    if prompt == AttackerPrompts.CYCLE:
-        if i % 4 == 0:
-            system_prompt = get_messages(AttackerPrompts.GENERAL)
-        elif i % 4 == 1:
-            system_prompt = get_messages(AttackerPrompts.CONFIDENTIALITY)
-        elif i % 4 == 2:
-            system_prompt = get_messages(AttackerPrompts.INTEGRITY)
-        elif i % 4 == 3:
-            system_prompt = get_messages(AttackerPrompts.AVAILABILITY)
+def get_messages(i=0):
+    if i % 4 == 0:
+        system_prompt = get_system_prompt(AttackerPrompts.GENERAL)
+        prompt = "General"
+    elif i % 4 == 1:
+        system_prompt = get_system_prompt(AttackerPrompts.CONFIDENTIALITY)
+        prompt = "Confidentiality"
+    elif i % 4 == 2:
+        system_prompt = get_system_prompt(AttackerPrompts.INTEGRITY)
+        prompt = "Integrity"
     else:
-        system_prompt = get_system_prompt(prompt)
-    print(f"Using prompt: i={i}, prompt={prompt}")
+        system_prompt = get_system_prompt(AttackerPrompts.AVAILABILITY)
+        prompt = "Availability"
+
+    print(f"Using prompt = {prompt}")
     messages = [
         system_prompt,
         {"role": "user", "content": "What is your next move?"}

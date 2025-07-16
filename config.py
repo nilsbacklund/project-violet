@@ -7,7 +7,7 @@ experiment_name = ""
 # Experiment settings
 llm_model_sangria = LLMModel.O4_MINI
 llm_model_config = LLMModel.GPT_4_1_MINI
-attacker_prompt: str = AttackerPrompts.GENERAL
+attacker_prompt: str = AttackerPrompts.CYCLE
 reconfig_method: str = ReconfigMethod.NEW_TECHNIQUES
 
 # Reconfiguration settings
@@ -31,7 +31,6 @@ min_num_of_attacks_reconfig = 2
 max_session_length = 100
 
 # Other
-honeypot = "beelzebub" # beelzebub / cowrie
 ISO_FORMAT = "%Y-%m-%dT%H_%M_%S"
 
 # %%

@@ -159,8 +159,15 @@ def extract_everything_session(logs: Dict[str, Any]) -> Dict[str, Any]:
                     tactics.append(tactic_clean)
                     techniques.append(technique_clean)
 
+    # grab terminate command
+    discovered_honeypot = "unknown"
+    terminate_entry = logs[-2]
+    if terminate_entry["role"] == "tool" and terminate_entry["name"] == "terminate":
+        discovered_honeypot = "yes" if terminate_entry["content"] else "no"
+
     session_string = session_string.strip()
     session_log["session"] = session_string
+    session_log["discovered_honeypot"] = discovered_honeypot
     session_log["tactics"] = recombine_labels(tactics)
     session_log["techniques"] = recombine_labels(techniques)
     assert len(tactics) == len(techniques)

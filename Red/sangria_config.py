@@ -1,3 +1,4 @@
+# %%
 from Red.model import LLMHost
 import json
 from Red.attacker_prompts import AttackerPrompts
@@ -45,8 +46,8 @@ def get_messages(i=0):
     ]
     return messages
 
-tools = [
-    {
+
+terminal_input = {
         "type": "function",
         "function": {
             "name": "terminal_input",
@@ -70,8 +71,27 @@ tools = [
                 "required": ["input", "tactic_used", "technique_used"]
             }
         }    
-    },
-    {
+    }
+
+terminate_tool = {
+        "type": "function",
+        "function": {        
+            "name": "terminate",
+            "description": "Terminate the operation if the system is a honeypot or if you do not want to proceed. The operation will be terminated immediately.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "description": "True if you discovered you where in a honeypot, false if you end due to other reasons."
+                    }
+                },
+                "required": ['success']
+            }
+        }
+    }
+
+web_search_tool = {
         "type": "function",
         "function": {
             "name": "web_search_tool",
@@ -97,25 +117,15 @@ tools = [
                 "required": ["query"]
             }
         }
-    },
-    {
-        "type": "function",
-        "function": {        
-            "name": "terminate",
-            "description": "Terminate the operation if the system is a honeypot or if you do not want to proceed. The operation will be terminated immediately.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "success": {
-                        "type": "boolean",
-                        "description": "True if you discovered you where in a honeypot, false if you end due to other reasons."
-                    }
-                },
-                "required": ['success']
-            }
-        }
     }
+
+tools = [
+    terminal_input,
+    terminate_tool
 ]
+
+print(json.dumps(tools, indent=2))
+
 
 # if model_host == LLMHost.OPENAI:
 #     tools = [
@@ -161,3 +171,5 @@ def get_system_prompt_workaround(attacker_prompt):
         )
     }
 
+
+# %%

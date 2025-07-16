@@ -19,11 +19,11 @@ class LLMModel(str, Enum):
     OLLAMA_LLAMA32_3b = "llama3.2:3b"
     OLLAMA_DEEPSEEK_R1_5b = "deepseek-r1:1.5b"
 
-class ReconfigMethod(str, Enum):
+class ReconfigCriteria(str, Enum):
     NO_RECONFIG = "no_reconfig"
-    NEW_TECHNIQUES = "new_techniques"
-    SESSION_LENGTH = "session_length"
-    EVERY_N_ATTACKS = "every_n_attacks"
+    BASIC = "basic"
+    FINITE_DIFFERENCE = "finite_difference"
+    ENTROPY = "entropy"
 
 class LLMConfig:
     """Configuration for the LLM host and model."""

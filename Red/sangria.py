@@ -11,7 +11,7 @@ from Utils.jsun import append_json_to_file, save_json_to_file
 from Red.terminal_io import start_ssh
 
 tools = sangria_config.tools
-messages = sangria_config.get_messages(config.attacker_prompt)
+messages = sangria_config.get_messages()
 
 openai.api_key = os.getenv('OPENAI_API_KEY')
 openai_client = openai.OpenAI()

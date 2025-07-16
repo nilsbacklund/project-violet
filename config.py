@@ -7,7 +7,6 @@ experiment_name = ""
 # Experiment settings
 llm_model_sangria = LLMModel.O4_MINI
 llm_model_config = LLMModel.GPT_4_1_MINI
-attacker_prompt: str = AttackerPrompts.CYCLE
 reconfig_method: str = ReconfigMethod.NEW_TECHNIQUES
 
 # Reconfiguration settings

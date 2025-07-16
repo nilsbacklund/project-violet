@@ -38,7 +38,6 @@ def create_metadata():
         min_num_of_attacks_reconfig=config.min_num_of_attacks_reconfig,
         max_session_length=config.max_session_length,
         save_logs=config.save_logs,
-        system_prompt=config.attacker_prompt,
         reconfig_method=config.reconfig_method
     )
 
@@ -46,14 +45,13 @@ def create_metadata():
     
 
 class MetaDataObject:
-    def __init__(self, llm_model_sangria, llm_model_honeypot, num_of_attacks, min_num_of_attacks_reconfig, max_session_length, save_logs, system_prompt, reconfig_method):
+    def __init__(self, llm_model_sangria, llm_model_honeypot, num_of_attacks, min_num_of_attacks_reconfig, max_session_length, save_logs, reconfig_method):
         self.llm_model_sangria = llm_model_sangria
         self.llm_model_honeypot = llm_model_honeypot
         self.num_of_attacks = num_of_attacks
         self.min_num_of_attacks_reconfig = min_num_of_attacks_reconfig
         self.max_session_length = max_session_length
         self.save_logs = save_logs
-        self.system_prompt = system_prompt
         self.reconfig_method = reconfig_method
 
     def to_dict(self):
@@ -64,6 +62,5 @@ class MetaDataObject:
             "min_num_of_attacks_reconfig": self.min_num_of_attacks_reconfig,
             "max_session_length": self.max_session_length,
             "save_logs": self.save_logs,
-            "system_prompt": self.system_prompt,
             "reconfig_method": self.reconfig_method
         }

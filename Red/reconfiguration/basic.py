@@ -2,7 +2,7 @@ from Red.reconfiguration.abstract import AbstractReconfigCriterion
 
 class BasicReconfigCriterion(AbstractReconfigCriterion):
     def __init__(self, interval: int, reset_every_reconfig: bool = False):
-        assert self.interval >= 0, f"The interval to reconfig must be non-negative ({interval} < 0)"
+        assert interval >= 0, f"The interval to reconfig must be non-negative ({interval} < 0)"
         self.interval = interval
         super().__init__(reset_every_reconfig)
 

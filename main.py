@@ -12,7 +12,7 @@ from Red.sangria import run_single_attack
 from Red.model import ReconfigCriteria
 from Red.extraction import extract_session
 from Red.reconfiguration import EntropyReconfigCriterion, BasicReconfigCriterion, \
-    FiniteDifferenceReconfigCriterion, NeverReconfigCriterion
+    MeanIncreaseReconfigCriterion, NeverReconfigCriterion
 
 from Blue.new_config_pipeline import generate_new_honeypot_config, get_honeypot_config, set_honeypot_config
 from Blue_Lagoon.honeypot_tools import init_docker, start_dockers, stop_dockers
@@ -42,11 +42,12 @@ def main():
                     config.interval,
                     config.reset_every_reconfig
                 )
-        case ReconfigCriteria.FINITE_DIFFERENCE:
-            reconfigurator = FiniteDifferenceReconfigCriterion(
+        case ReconfigCriteria.MEAN_INCREASE:
+            reconfigurator = MeanIncreaseReconfigCriterion(
                     config.fd_variable,
                     config.fd_tolerance,
                     config.fd_window_size,
+                    config.fd_reset_techniques,
                     config.reset_every_reconfig
                 )
         case ReconfigCriteria.ENTROPY:

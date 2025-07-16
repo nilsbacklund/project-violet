@@ -29,6 +29,7 @@ interval: int = 20
 fd_variable = "techniques"
 fd_tolerance = 0.5
 fd_window_size = 5
+fd_reset_techniques = True
 ## Entropy reconfiguration
 en_variable = "techniques"
 en_tolerance = 1e-2

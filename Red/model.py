@@ -22,7 +22,7 @@ class LLMModel(str, Enum):
 class ReconfigCriteria(str, Enum):
     NO_RECONFIG = "no_reconfig"
     BASIC = "basic"
-    FINITE_DIFFERENCE = "finite_difference"
+    MEAN_INCREASE = "mean_increase"
     ENTROPY = "entropy"
 
 class LLMConfig:

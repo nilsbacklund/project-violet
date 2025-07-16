@@ -3,20 +3,22 @@ from Red.reconfiguration.abstract import AbstractReconfigCriterion
 
 VARIABLES = ["techniques", "max_session_length"]
 
-class FiniteDifferenceReconfigCriterion(AbstractReconfigCriterion):
+class MeanIncreaseReconfigCriterion(AbstractReconfigCriterion):
     def __init__(self, variable: str, tolerance: float = 0.5, window_size: int = 5,
-            reset_every_reconfig = False):
+            reset_techniques: bool = True, reset_every_reconfig = False):
         
         assert variable in VARIABLES, f"Variable '{variable}' is not supported. Supported variables: {VARIABLES}"
         self.variable = variable
         assert window_size >= 0, f"Window size must be non-negative ({window_size} < 0)"
         self.tolerance = tolerance
         self.window_size = window_size
+        self.reset_techniques = reset_techniques
         super().__init__(reset_every_reconfig)
 
     def reset(self):
         self.values: List[int] = [0]
-        self.techniques: set[str] = {}
+        if self.reset_techniques:
+            self.techniques: set[str] = {}
 
     def update(self, session):
         match self.variable:

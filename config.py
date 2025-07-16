@@ -25,7 +25,7 @@ max_session_length = 100
 reset_every_reconfig = True
 ## Basic reconfiguration
 interval: int = 20
-## Finite difference reconfiguration
+## Mean increase reconfiguration
 fd_variable = "techniques"
 fd_tolerance = 0.5
 fd_window_size = 5

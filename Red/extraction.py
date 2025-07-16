@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Any
 import sys
 import json
 import os
@@ -12,7 +12,7 @@ from Utils.logprecis import recombine_labels, divide_statements
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # only keep commands when the attacker has gained access
-def extract_session(logs: Dict):
+def extract_session(logs: Dict[str, Any]) -> Dict[str, Any]:
     session_log = {}
 
     session_string = ""
@@ -51,14 +51,14 @@ def extract_session(logs: Dict):
                 tactic = arguments["tactic_used"]
                 tactic_clean = str(tactic).split(":")[-1]
             else:
-                tactic = "Error"
-                tactic_clean = "Error"
+                tactic = "Error: No tactic found"
+                tactic_clean = "Error: No tactic found"
             if "technique_used" in arguments:
                 technique = arguments["technique_used"]
                 technique_clean = str(technique).split(":")[-1]
             else:
-                technique = "Error"
-                technique_clean = "Error"
+                technique = "Error: No technique found"
+                technique_clean = "Error: No technique found"
 
             hp_entry = logs[i + j + 1]
             # check that hp iteration is a tool
@@ -73,9 +73,8 @@ def extract_session(logs: Dict):
                 if str(event["Protocol"]).lower() != "ssh":
                     continue
 
-                if "Command" in event and event["Command"]:
-                    hp_commands = event["Command"]
-
+                if "Command" in event and str(event["Command"]).strip():
+                    hp_commands = str(event["Command"]).strip()
                     for hp_command in divide_statements(hp_commands):
                         session_string += hp_command + " "
                         full_session.append({
@@ -88,6 +87,77 @@ def extract_session(logs: Dict):
                         })
                         tactics.append(tactic_clean)
                         techniques.append(technique_clean)
+
+    session_string = session_string.strip()
+    session_log["session"] = session_string
+    session_log["tactics"] = recombine_labels(tactics)
+    session_log["techniques"] = recombine_labels(techniques)
+    assert len(tactics) == len(techniques)
+    session_log["length"] = len(tactics)
+    session_log["full_session"] = full_session
+    return session_log
+
+def extract_everything_session(logs: Dict[str, Any]) -> Dict[str, Any]:
+    session_log = {}
+    session_string = ""
+    tactics = []
+    techniques = []
+    full_session = []
+
+    for i, entry in enumerate(logs):
+        if entry["role"] != "assistant":
+            continue
+
+        if not entry["tool_calls"]:
+            continue
+    
+        # Get follow up message
+        num_tool_calls = len(entry["tool_calls"])
+        tool_entry_index = i + num_tool_calls + 1
+
+        # If terminates before tool call
+        if tool_entry_index >= len(logs):
+            continue
+
+        follow_up_entry = logs[tool_entry_index]
+        assert follow_up_entry["role"] == "assistant"
+        follow_up_content = follow_up_entry["content"]
+        
+        for tool in entry["tool_calls"]:
+            if tool["function"]["name"] != "terminal_input":
+                continue
+
+            arguments = tool["function"]["arguments"]
+            if type(arguments) is str:
+                arguments = json.loads(arguments)
+
+            if "tactic_used" in arguments:
+                tactic = arguments["tactic_used"]
+                tactic_clean = str(tactic).split(":")[-1]
+            else:
+                tactic = "Error: No tactic found"
+                tactic_clean = "Error: No tactic found"
+            if "technique_used" in arguments:
+                technique = arguments["technique_used"]
+                technique_clean = str(technique).split(":")[-1]
+            else:
+                technique = "Error: No technique found"
+                technique_clean = "Error: No technique found"
+
+            commands = str(arguments["input"]).strip() 
+            if commands:
+                for command in divide_statements(commands):
+                    session_string += command + " "
+                    full_session.append({
+                        "command": command,
+                        "tactic_raw": tactic,
+                        "tactic": tactic_clean,
+                        "technique_raw": technique,
+                        "technique": technique_clean,
+                        "content": follow_up_content
+                    })
+                    tactics.append(tactic_clean)
+                    techniques.append(technique_clean)
 
     session_string = session_string.strip()
     session_log["session"] = session_string

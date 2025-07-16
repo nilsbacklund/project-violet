@@ -16,13 +16,18 @@ def safe_listdir(p: Path):
 if __name__ == "__main__":
     logs_path = BASE_DIR / "logs"
     all_experiments = sorted(
-        [name for name in safe_listdir(logs_path) if name.startswith("experiment")],
+        safe_listdir(logs_path),
         reverse=True
     )
 
     if not all_experiments:
         print("No experiments found under", logs_path)
         sys.exit(1)
+
+    extract_omni = questionary.confirm(
+        "Do you only want to combine omni sessions as well?",
+        default=False
+    ).ask()
 
     # multi‑select checkbox prompt
     selected = questionary.checkbox(
@@ -46,6 +51,10 @@ if __name__ == "__main__":
 
         sessions_list = [load_json(experiment_path / config / "sessions.json") for config in sorted_configs]
         combined_sessions = sum(sessions_list, [])
-
         save_json_to_file(combined_sessions, experiment_path / "sessions.json")
+
+        if extract_omni:
+            omni_sessions_list = [load_json(experiment_path / config / "omni_sessions.json") for config in sorted_configs]
+            combined_omni_sessions = sum(omni_sessions_list, [])
+            save_json_to_file(combined_omni_sessions, experiment_path / "omni_sessions.json")
         print(f"Combined {len(combined_sessions)} sessions in {experiment}")

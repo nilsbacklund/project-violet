@@ -26,13 +26,13 @@ reset_every_reconfig = True
 ## Basic reconfiguration
 interval: int = 20
 ## Mean increase reconfiguration
-fd_variable = "techniques"
-fd_tolerance = 0.5
-fd_window_size = 5
-fd_reset_techniques = True
+fd_variable: str = "techniques"
+fd_tolerance: float = 0.5
+fd_window_size: int = 5
+fd_reset_techniques: bool = True
 ## Entropy reconfiguration
-en_variable = "techniques"
-en_tolerance = 1e-2
+en_variable: str = "techniques"
+en_tolerance: float = 1e-2
 
 # Other
 ISO_FORMAT = "%Y-%m-%dT%H_%M_%S"

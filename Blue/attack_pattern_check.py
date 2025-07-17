@@ -53,37 +53,43 @@ def extract_ordered_tactic_technique_sequence(patterns):
         return tuple()
 
 # Load all previous ordered sequences of (tactic, technique) pairs from log files
-def load_all_previous_sequences(logs_path=LOGS_PATH):
+def load_all_previous_sequences(experiment_dir):
     all_sequences = set()
-    for log_file in Path(logs_path).glob("full_logs_*.json"):
+    experiment_path = Path(experiment_dir)
+
+    for config_folder in experiment_path.glob("hp_config_*"):
+        sessions_file = config_folder / "sessions.json"
+        if not sessions_file.exists():
+            print(f"Skipping {config_folder}: sessions.json not found.")
+            continue
         try:
-            with open(log_file, "r", encoding="utf8") as f:
+            with open(sessions_file, "r", encoding="utf8") as f:
                 sessions = json.load(f)
         except Exception as e:
-            print(f"Failed to load or parse {log_file}: {e}")
+            print(f"Failed to load or parse {sessions_file}: {e}")
             continue
+
         for session in sessions:
             sequence = []
-            for entry in session:
+            for entry in session.get("full_session", []):
                 try:
-                    mitre = entry.get("mitre_attack_method", {})
-                    tactic = mitre.get("tactic_used")
-                    technique = mitre.get("technique_used")
+                    tactic = entry.get("tactic")
+                    technique = entry.get("technique")
                     if tactic and technique:
                         sequence.append((tactic, technique))
                 except Exception as e:
-                    print(f"Failed to extract entry in {log_file}: {e}")
+                    print(f"Failed to extract entry in {sessions_file}: {e}")
             if sequence:
                 all_sequences.add(tuple(sequence))
+
     return all_sequences
 
 # Main checker: compares the new config's predicted attack sequence to all previous ones
-def attack_methods_checker(config, logs_path=LOGS_PATH):
-    print("[1] Querying LLM for MITRE attack patterns...")
+def attack_methods_checker(config, experiment_dir):
+    print("Checking if the predicted attack sequence is novel...")
     new_patterns = query_attack_patterns(config)
-    print("Predicted attack patterns:", new_patterns)
     new_sequence = extract_ordered_tactic_technique_sequence(new_patterns)
-    previous_sequences = load_all_previous_sequences(logs_path)
+    previous_sequences = load_all_previous_sequences(experiment_dir)
     if new_sequence in previous_sequences:
         print("Exact attack sequence already observed. Please regenerate.")
         return False

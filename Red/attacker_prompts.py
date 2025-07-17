@@ -34,7 +34,7 @@ CIA_OBJECTIVES = {
     "General": dict(
         objective_1="Perform reconnaissance and try to penetrate the target system. "
                     "If access is gained, extract sensitive files, escalate privileges, "
-                    "and establish persistence.",
+                    "and establish persistence. Focus on breaching the confidentiality and Integrity of the system.",
         principle="",     # no extra text
     ),
     "Confidentiality": dict(

@@ -76,7 +76,7 @@ def openai_call(model, messages, tools, tool_choice, wait_time=1):
         time.sleep(wait_time)
         return openai_call(model, messages, tools, tool_choice, wait_time * 2)
 
-def run_single_attack(messages, max_session_length, full_logs_path):
+def run_single_attack(messages, max_session_length, full_logs_path, attack_counter=0, config_counter=0):
     '''
         Main loop for running a single attack session.
         This function will let the LLM respond to the user, call tools, and log the responses.
@@ -93,10 +93,13 @@ def run_single_attack(messages, max_session_length, full_logs_path):
         ssh = start_ssh()
 
     for message in messages:
-        append_json_to_file(message, full_logs_path)
+        append_json_to_file(message, full_logs_path, False)
 
     for i in range(max_session_length):
-        print(f'Iteration {i+1} / {max_session_length}')
+        BOLD   = "\033[1m"
+        RESET  = "\033[0m"
+
+        print(f'{BOLD}Iteration {i+1} / {max_session_length}, Attack {attack_counter+1}, Configuration {config_counter}{RESET}')
 
         assistant_response = openai_call(config.llm_model_sangria, messages, tools, "auto")
 
@@ -148,9 +151,13 @@ def run_single_attack(messages, max_session_length, full_logs_path):
             # messages[-1]["honeypot_logs"] = last_terminal_input_tool.get("honeypot_logs", "")
 
 
-
-            print(f"Tool call: {fn_name} with args: {fn_args}\n")
-            print(f"Tool response: {result['content']}")
+            BOLD   = "\033[1m"
+            RESET  = "\033[0m"
+            print(f"{BOLD}Tool call: {RESET} {fn_name}")
+            print(f"{BOLD}With args: {RESET}")
+            for key, value in fn_args.items():
+                print(f"\t{key}: {value}")
+            print(f"\n{BOLD}Tool response: {RESET} {result['content']}")
             print("\x1b[0m")
 
 
@@ -160,7 +167,9 @@ def run_single_attack(messages, max_session_length, full_logs_path):
             messages.append(assistant_msg.model_dump())
             append_json_to_file(assistant_msg.model_dump(), full_logs_path, False)
 
-            print(f"Follow-up message: {assistant_msg.content}")
+            BOLD   = "\033[1m"
+            RESET  = "\033[0m"
+            print(f"{BOLD}Follow‑up message:{RESET} {assistant_msg.content}")
 
         if fn_name == "terminate":
             print("Termination tool called, ending session.")

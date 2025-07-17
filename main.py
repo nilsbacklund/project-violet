@@ -64,7 +64,9 @@ def main():
         start_dockers()
 
     tokens_used_list = []
-    print(f"New Configuration: configuration {config_counter}")
+    BOLD   = "\033[1m"
+    RESET  = "\033[0m"
+    print(f"{BOLD}New Configuration: configuration {config_counter}{RESET}")
     config_path = base_path / f"hp_config_{config_counter}"
     full_logs_path = config_path / "full_logs"
     os.makedirs(full_logs_path, exist_ok=True)
@@ -74,20 +76,20 @@ def main():
 
     for i in range(config.num_of_attacks):
         if config.save_logs:
-            os.makedirs(config_path, exist_ok=True) 
-    
-        print(f"Attack {i+1} / {config.num_of_attacks}, configuration {config_counter}")
+            os.makedirs(config_path, exist_ok=True)
+
+        print(f"{BOLD}Attack {i+1} / {config.num_of_attacks}, configuration {config_counter}{RESET}")
         logs_path = full_logs_path / f"attack_{i+1}.json"
 
         messages = sangria_config.get_messages(i)
 
-        logs, tokens_used = run_single_attack(messages, config.max_session_length, logs_path)
-        
+        logs, tokens_used = run_single_attack(messages, config.max_session_length, logs_path, i, config_counter)
+
         if config.save_logs:
             # save logs
             # save_json_to_file(logs, full_logs_path / f"attack_{i+1}.json")
             # update tokens used
-            append_json_to_file(tokens_used, config_path / f"tokens_used.json")
+            append_json_to_file(tokens_used, config_path / f"tokens_used.json", False)
 
         # append tokens
         tokens_used_list.append(tokens_used)
@@ -97,11 +99,14 @@ def main():
         reconfigurator.update(session)
 
         if config.save_logs:
-            append_json_to_file(session, config_path / f"sessions.json")
+            append_json_to_file(session, config_path / f"sessions.json", False)
 
         if (config_attack_counter >= config.min_num_of_attacks_reconfig) \
                 and reconfigurator.should_reconfigure():
-            print(f"Reconfiguring: Using {config.reconfig_method}.")
+            
+            BOLD   = "\033[1m"
+            RESET  = "\033[0m"
+            print(f"{BOLD}Reconfiguring: Using {config.reconfig_method}.{RESET}")
             if not config.simulate_command_line:
                 stop_dockers()
 

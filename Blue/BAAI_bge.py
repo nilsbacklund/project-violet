@@ -17,7 +17,7 @@ texts = [json.dumps(v) for v in vulns]
 print(f"Prepared {len(texts)} texts for embedding.")
 
 # Load the model
-model = SentenceTransformer("BAAI/bge-m3")
+model = SentenceTransformer("BAAI/bge-m3", device="cpu")
 
 # Generate embeddings
 embeddings = model.encode(texts, show_progress_bar=True)

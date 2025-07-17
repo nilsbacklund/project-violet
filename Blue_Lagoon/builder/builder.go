@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"net/http"
 	"os"
 
 	"github.com/mariocandela/beelzebub/v3/parser"
@@ -15,7 +14,6 @@ import (
 	"github.com/mariocandela/beelzebub/v3/protocols/strategies/TCP"
 	"github.com/mariocandela/beelzebub/v3/tracer"
 
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 	amqp "github.com/rabbitmq/amqp091-go"
 	log "github.com/sirupsen/logrus"
 )
@@ -97,16 +95,6 @@ func (b *Builder) Run() error {
 ██   ██ ██      ██      ██       ███    ██      ██   ██ ██    ██ ██   ██ 
 ██████  ███████ ███████ ███████ ███████ ███████ ██████   ██████  ██████  
 Honeypot Framework, happy hacking!`)
-	// Init Prometheus openmetrics
-	go func() {
-		if (b.beelzebubCoreConfigurations.Core.Prometheus != parser.Prometheus{}) {
-			http.Handle(b.beelzebubCoreConfigurations.Core.Prometheus.Path, promhttp.Handler())
-
-			if err := http.ListenAndServe(b.beelzebubCoreConfigurations.Core.Prometheus.Port, nil); err != nil {
-				log.Fatalf("Error init Prometheus: %s", err.Error())
-			}
-		}
-	}()
 
 	// Init Protocol strategies
 	secureShellStrategy := &SSH.SSHStrategy{}

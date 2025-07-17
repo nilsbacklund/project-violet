@@ -23,3 +23,5 @@ def stop_dockers():
     print("Stopping Docker containers...")
     subprocess.run(["sudo", "docker-compose", "-f", f"docker-compose.yml", "-p", os.environ.get("RUNID"),"down"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     print("Docker containers stopped")
+    subprocess.run(["sudo", "docker", "image", "prune", "-f"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+

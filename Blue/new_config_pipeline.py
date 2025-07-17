@@ -206,7 +206,7 @@ def retrieve_top_vulns(user_query, vulns_db, embeddings_path, top_n=5):
     Return the top_n most similar vulnerabilities from the database.
     """
     MODEL_NAME = "BAAI/bge-m3"
-    model = SentenceTransformer(MODEL_NAME)
+    model = SentenceTransformer(MODEL_NAME, device="cpu")
     vulns_embeddings = np.load(embeddings_path)
     query_embedding = model.encode([user_query])[0]
     similarities = [cosine_similarity(query_embedding, emb) for emb in vulns_embeddings]

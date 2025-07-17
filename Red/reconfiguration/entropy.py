@@ -5,6 +5,8 @@ from typing import List
 from collections import Counter
 from Red.reconfiguration.abstract import AbstractReconfigCriterion
 
+VARIABLES = ["techniques", "session_length"]
+
 def compute_entropy(prob_dist: List[float], base=math.e) -> float:
     return -sum(p * math.log(p, base) for p in prob_dist if p > 0)
 
@@ -12,15 +14,16 @@ def get_prob_dist(data: Counter) -> List[float]:
     total = sum(data.values())
     return [freq / total for freq in data.values()]
 
-VARIABLES = ["techniques", "session_length"]
-
-# TODO: Add moving avg for to increase noise robustness
+def moving_average(x: np.ndarray, w: int):
+    return np.convolve(x, np.ones(w), 'valid') / w
 
 class EntropyReconfigCriterion(AbstractReconfigCriterion):
     def __init__(self, variable: str, tolerance: float = 1e-2,
-            reset_every_reconfig: bool = False):
+            window_size: int = 1, reset_every_reconfig: bool = False):
         assert variable in VARIABLES, f"Variable '{variable}' is not supported. Supported variables: {VARIABLES}"
         self.variable = variable
+        assert window_size >= 0, f"Window size must be non-negative ({window_size} < 0)"
+        self.window_size = window_size
         self.tolerance = tolerance
         super().__init__(reset_every_reconfig)
 
@@ -41,15 +44,8 @@ class EntropyReconfigCriterion(AbstractReconfigCriterion):
         self.entropies.append(entropy_value)
         
     def should_reconfigure(self):
-        return abs(self.entropies[-1] - self.entropies[-2]) < self.tolerance
-
-if __name__ == "__main__":
-    x = [0, 1, 1, 2, 3, 3, 4, 5, 5, 6, 7, 9]
-
-    # Simple moving average
-    def moving_average(x, w):
-        return np.convolve(x, np.ones(w), 'valid') / w
-
-    smoothed = moving_average(x, 2)
-    diffs = np.diff(smoothed)   
-    print(smoothed)
+        if len(self.entropies) < self.window_size:
+            return False
+        
+        smoothed_entropies = moving_average(self.entropies, self.window_size)
+        return abs(smoothed_entropies[-1] - smoothed_entropies[-2]) < self.tolerance

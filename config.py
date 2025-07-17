@@ -26,12 +26,13 @@ reset_every_reconfig = True
 ## Basic reconfiguration
 interval: int = 1
 ## Mean increase reconfiguration
-fd_variable: str = "techniques"
-fd_tolerance: float = 0.5
-fd_window_size: int = 5
-fd_reset_techniques: bool = True
+mi_variable: str = "techniques"
+mi_tolerance: float = 0.5
+mi_window_size: int = 5
+mi_reset_techniques: bool = True
 ## Entropy reconfiguration
 en_variable: str = "techniques"
+en_window_size: int = 1
 en_tolerance: float = 1e-2
 
 # Other

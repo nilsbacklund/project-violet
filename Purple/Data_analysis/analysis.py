@@ -27,7 +27,8 @@ display(dropdown)
 #%%
 
 selected_experiment = dropdown.value
-filter_empty_sessions = True
+filter_empty_sessions = False
+use_omni_sessions = True
 print(f"Analyzing experiment {selected_experiment}")
 
 from Utils.jsun import load_json
@@ -42,7 +43,8 @@ configs = sorted(
     key=lambda fn: int(Path(fn).stem.split('_')[-1])
 )
 
-sessions_list = [load_json(path / config / "sessions.json") for config in configs if "sessions.json" in os.listdir(path / config)]
+session_file_name = "omni_sessions.json" if use_omni_sessions else "sessions.json"
+sessions_list = [load_json(path / config / session_file_name) for config in configs if session_file_name in os.listdir(path / config)]
 
 if filter_empty_sessions:
     new_sessions_list = []
@@ -215,8 +217,20 @@ plt.legend()
 plt.show()
 # %%
 
+# Simple moving average
+def moving_average(x, w):
+    return np.convolve(x, np.ones(w), 'valid') / w
+
+eps = 5e-3
+window_size = 2
+smoothed = moving_average(entropy_techniques_data["entropies"], window_size)
+diffs = np.abs(np.diff(smoothed, prepend=np.ones((window_size,)) * np.inf))
+
 plt.figure(figsize=(12, 6))
-plt.plot(entropy_techniques_data["entropies"], marker="o", linestyle="-", c=colors.scheme[0])
+plt.plot(entropy_techniques_data["entropies"], marker="", linestyle="-", c=colors.scheme[0])
+plt.plot(diffs, marker="", linestyle="-", c=colors.scheme[1])
+plt.scatter(np.arange(len(diffs))[diffs >= eps], entropy_techniques_data["entropies"][diffs >= eps], c=colors.scheme[0])
+plt.scatter(np.arange(len(diffs))[diffs < eps], entropy_techniques_data["entropies"][diffs < eps], c=colors.scheme[-1])
 plt.title("Experiment entropy of unique techniques")
 plt.xlabel("Session")
 plt.ylabel("Entropy of unique techniques")
@@ -245,7 +259,6 @@ plt.ylim(bottom=0)
 plt.legend()
 plt.show()
 
-# %%
 
 #%% Plotting entropy of techniques every config
 
@@ -276,7 +289,7 @@ entropies = sum(entropies, [])
 
 plt.figure(figsize=(12, 6))
 plt.plot(entropies, marker="o", linestyle="-", c=colors.scheme[0])
-plt.title("Config entropy")
+plt.title("Config entropy of session length")
 plt.xlabel("Session")
 plt.ylabel("Entropy of session length")
 

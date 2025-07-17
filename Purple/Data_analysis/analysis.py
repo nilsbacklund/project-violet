@@ -275,8 +275,6 @@ plt.ylim(bottom=0)
 plt.legend()
 plt.show()
 
-# %%
-
 #%% Plotting entropy of techniques every config
 
 entropies = [list(result["entropies"]) for result in session_entropy_tactics_data]
@@ -295,8 +293,6 @@ plt.ylim(bottom=0)
 # plt.grid()
 plt.legend()
 plt.show()
-
-# %%
 
 
 #%% Plotting entropy of session length
@@ -317,6 +313,7 @@ plt.ylim(bottom=0)
 # plt.grid()
 plt.legend()
 plt.show()
+
 # %%
 plt.figure(figsize=(12, 6))
 plt.plot(entropy_session_length_data["entropies"], marker="o", linestyle="-", c=colors.scheme[0])

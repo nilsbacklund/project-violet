@@ -53,17 +53,15 @@ technique_options = retrieve_unique_techniques()
 technique_options = [
     f"{technique['id']}:{technique['name']}" for technique in technique_options
 ]
-technique_options = technique_options.append("T0000:Harmless")
+technique_options.append("T0000:Harmless")
 
-print(technique_options)
 
 tactic_options = retrieve_unique_tactics()
 tactic_options = [
     f"{tactic['id']}:{tactic['name']}" for tactic in tactic_options
 ]
-tactic_options = tactic_options.append("TA0000:Harmless")
+tactic_options.append("TA0000:Harmless")
 
-print(tactic_options)
 
 
 terminal_input = {

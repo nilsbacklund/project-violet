@@ -63,7 +63,7 @@ def main():
         start_dockers()
 
     tokens_used_list = []
-    print(f"Configuration {config_counter}")
+    print(f"New Configuration: configuration {config_counter}")
     config_path = base_path / f"hp_config_{config_counter}"
     full_logs_path = config_path / "full_logs"
     os.makedirs(full_logs_path, exist_ok=True)
@@ -75,7 +75,7 @@ def main():
         if config.save_logs:
             os.makedirs(config_path, exist_ok=True) 
     
-        print(f"Attack {i+1} / {config.num_of_attacks}")
+        print(f"Attack {i+1} / {config.num_of_attacks}, configuration {config_counter}")
         logs_path = full_logs_path / f"attack_{i+1}.json"
 
         messages = sangria_config.get_messages(i)
@@ -100,7 +100,7 @@ def main():
 
         if (config_attack_counter >= config.min_num_of_attacks_reconfig) \
                 and reconfigurator.should_reconfigure():
-            print(f"Reconfiguring: No new techniques found after {config_attack_counter} attacks.")
+            print(f"Reconfiguring: Using {config.reconfig_method}.")
             if not config.simulate_command_line:
                 stop_dockers()
 
@@ -112,7 +112,7 @@ def main():
 
             config_counter += 1
             config_attack_counter = 0
-            print(f"Configuration {config_counter}")
+
             config_path = base_path / f"hp_config_{config_counter}"
             full_logs_path = config_path / "full_logs"
             os.makedirs(full_logs_path, exist_ok=True)

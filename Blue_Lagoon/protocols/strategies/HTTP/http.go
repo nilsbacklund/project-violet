@@ -116,6 +116,9 @@ func buildHTTPResponse(servConf parser.BeelzebubServiceConfiguration, tr tracer.
 			resp.Body = "404 Not Found!"
 			return resp, fmt.Errorf("ExecuteModel error: %s, %v", command, err)
 		}
+		if strings.Contains(completions, "404") {
+			resp.StatusCode = 404
+		}
 		resp.Body = completions
 	}
 	return resp, nil

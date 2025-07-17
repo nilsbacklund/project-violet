@@ -5,6 +5,7 @@ if platform.system() != 'Windows':
 import datetime
 import config
 import os
+import time
 
 TIMEOUT = 60
 
@@ -21,15 +22,17 @@ prompt_patterns = [pexpect.EOF,
                     "Please type 'yes', 'no' or the fingerprint: "]
 
 def start_ssh():
-    ssh = pexpect.spawn('ssh -o StrictHostKeyChecking=no -p30' +  os.getenv('RUNID') +' root@localhost', encoding='utf-8')
-    ssh.expect("root@localhost's password: ")
-    ssh.sendline('toor')
-    ssh.expect(r'└─\x1b\[1;31m#', timeout=60)
-    a = ssh.before.strip()
-    # Real ghetto to put here but just want it to run after the hp has spun up
-
-
-    return ssh
+    try:
+        ssh = pexpect.spawn('ssh -o StrictHostKeyChecking=no -p30' +  os.getenv('RUNID') +' root@localhost', encoding='utf-8')
+        ssh.expect("root@localhost's password: ")
+        ssh.sendline('toor')
+        ssh.expect(r'└─\x1b\[1;31m#', timeout=60)
+        ssh.before.strip()
+        return ssh
+    except pexpect.exceptions.EOF:
+        print("Got EOF error, trying again")
+        time.sleep(60)
+        return start_ssh()
 
 def send_terminal_command(connection, command):
     try:

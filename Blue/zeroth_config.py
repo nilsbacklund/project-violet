@@ -4,6 +4,9 @@ from pathlib import Path
 import sys
 import json
 
+from dotenv import load_dotenv
+load_dotenv()
+
 # Add parent directory to sys.path to allow imports from project root
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from Blue.utils import clean_and_finalize_config, extract_json
@@ -42,8 +45,8 @@ class TextualGradientDescentWithKwargs(tg.TGD):
             if self.do_gradient_memory:
                 self.update_gradient_memory(parameter)
 
-# gpt-4o mini is ass with textgrad, use gpt-4.1-mini
-engine = tg.get_engine("gpt-4.1-mini")
+# gpt-4o mini is ass with textgrad, use gpt-4.1
+engine = tg.get_engine("gpt-4.1")
 
 tg.set_backward_engine(engine, override=True)
 
@@ -63,10 +66,10 @@ def main():
         "You are a security‐expert reviewer.  "
         "I will show you a honeypot configuration in JSON; **do not** re‐emit or re‐write the config.  "
         "Only point out, as concisely as possible, where it violates any of the requirements below:\n\n"
-        "- At least 5 distinct services (HTTP, SSH, TCP)\n"
-        "- Atleast half of the services need to be LLM‐powered\n"
+        "- The configuration should have one HTTP and one SSH service\n"
+        "- The services should not be LLM‐powered\n"
         "- Well‐defined vulnerabilities for attackers\n"
-        "If the requirements are approved, you can provide tips for improvement (do not suggest to add commands to TCP services).\n\n"
+        "If the requirements are approved, you can provide tips for improvement.\n\n"
         f"Configuration schema that must be followed: {schema_text}\n"
     )
 
@@ -75,7 +78,7 @@ def main():
     optimizer = TextualGradientDescentWithKwargs(parameters=[new_config])
 
     # Run optimization
-    for step in range(5):
+    for step in range(2):
         loss = loss_fn(new_config)
         print(f"Step {step+1} loss:", loss)
         # Make the config update conform to the JSON schema

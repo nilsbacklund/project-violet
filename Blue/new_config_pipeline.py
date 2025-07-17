@@ -9,7 +9,6 @@ import yaml
 import jsonschema
 import sys
 import time
-import fcntl
 from config import print_output, llm_model_config
 from Utils.jsun import load_json
 
@@ -81,8 +80,10 @@ def set_honeypot_config(config):
     
     with open(lock_file_path, "w") as lock_file:
         try:
-            # Acquire exclusive lock
-            fcntl.lockf(lock_file.fileno(), fcntl.LOCK_EX)
+            if sys.platform == "linux":
+                import fcntl
+                # Acquire exclusive lock
+                fcntl.lockf(lock_file.fileno(), fcntl.LOCK_EX)
             
             # Remove old service files to avoid stale configs
             for file in target_dir.iterdir():

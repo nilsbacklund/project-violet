@@ -14,7 +14,7 @@ import pprint
 import matplotlib.pyplot as plt
 
 logs_path = Path(__file__).resolve().parent.parent.parent / "logs"
-experiment_names = [name for name in os.listdir(logs_path)[::-1] if str(name).startswith("experiment")]
+experiment_names = os.listdir(logs_path)[::-1]
 
 dropdown = widgets.Dropdown(
     options=experiment_names,

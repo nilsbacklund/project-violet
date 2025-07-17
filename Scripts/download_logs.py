@@ -29,6 +29,10 @@ selected_experiments = questionary.checkbox(
     choices=all_experiments
 ).ask()
 
+if not selected_experiments:
+    print("Nothing selected, exiting.")
+    sys.exit(0)
+
 save_attacks = questionary.confirm(
     "Do you you want to save attack files as well? (this requires way more storage)"
 ).ask()

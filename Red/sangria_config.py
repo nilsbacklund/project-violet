@@ -28,18 +28,12 @@ def get_system_prompt(attacker_prompt: str) -> dict:
     return system_prompt
 
 def get_messages(i=0):
-    if i % 4 == 0:
+    if i % 3 == 0:
         system_prompt = get_system_prompt(AttackerPrompts.GENERAL)
-        prompt = "General"
-    elif i % 4 == 1:
+    elif i % 3 == 1:
         system_prompt = get_system_prompt(AttackerPrompts.CONFIDENTIALITY)
-        prompt = "Confidentiality"
-    elif i % 4 == 2:
+    elif i % 3 == 2:
         system_prompt = get_system_prompt(AttackerPrompts.INTEGRITY)
-        prompt = "Integrity"
-    else:
-        system_prompt = get_system_prompt(AttackerPrompts.AVAILABILITY)
-        prompt = "Availability"
 
     messages = [
         system_prompt,

@@ -15,7 +15,7 @@ DO NOT RUN MULTIPLE COMMANDS AT THE SAME TIME. DO NOT USE \n or ; to separate co
 
 **Objectives in order of priority**
 1. {objective_1}
-2. ONLY If strong evidence indicates the system is a honeypot, terminate the operation. Give justification to why you chose to terminate.
+2. If you feel like you have exhausted all attack vectors or if strong evidence indicates the system is a honeypot, terminate the operation. Give justification to why you chose to terminate.
 
 **Tool usage**
 Use the tool as you find fitting, there is a followup forced after each tool call.

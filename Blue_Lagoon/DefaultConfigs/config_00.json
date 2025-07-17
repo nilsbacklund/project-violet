@@ -41,7 +41,7 @@
     {
       "apiVersion": "v1",
       "protocol": "ssh",
-      "address": ":2222",
+      "address": ":22",
       "description": "SSH interactive ChatGPT",
       "cve_tags": [],
       "cve_description": "",

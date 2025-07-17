@@ -1,0 +1,79 @@
+{
+    "id": "static",
+    "description": "Static configuration with HTTP and SSH services",
+    "timestamp": "2025-07-17T00:00:00Z",
+    "services": [
+        {
+            "apiVersion": "v1",
+            "protocol": "http",
+            "address": ":80",
+            "description": "Wordpress 6.0",
+            "cve_tags": [],
+            "cve_description": "",
+            "commands": [
+                {
+                    "regex": "^(/index.php|/index.html|/)$",
+                    "handler": "<html>\n        <header>\n          <title>Wordpress 6 test page</title>\n        </header>\n        <body>\n          <h1>Hello from Wordpress</h1>\n        </body>\n      </html>",
+                    "headers": [
+                        "Content-Type: text/html",
+                        "Server: Apache/2.4.53 (Debian)",
+                        "X-Powered-By: PHP/7.4.29"
+                    ],
+                    "statusCode": 200
+                },
+                {
+                    "regex": "^.*$",
+                    "handler": "",
+                    "headers": [],
+                    "statusCode": 200
+                }
+            ]
+        },
+        {
+            "apiVersion": "v1",
+            "protocol": "ssh",
+            "address": ":22",
+            "description": "SSH interactive",
+            "cve_tags": [],
+            "cve_description": "",
+            "commands": [
+                {
+                    "regex": "^ls$",
+                    "handler": "Documents Images  Desktop Downloads .m2 .kube .ssh  .docker"
+                },
+                {
+                    "regex": "^pwd$",
+                    "handler": "/home/"
+                },
+                {
+                    "regex": "^uname -m$",
+                    "handler": "x86_64"
+                },
+                {
+                    "regex": "^docker ps$",
+                    "handler": "CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES"
+                },
+                {
+                    "regex": "^docker .*$",
+                    "handler": "Error response from daemon: dial unix docker.raw.sock: connect: connection refused"
+                },
+                {
+                    "regex": "^uname$",
+                    "handler": "Linux"
+                },
+                {
+                    "regex": "^ps$",
+                    "handler": "  PID TTY           TIME CMD\\n21642 ttys000    0:00.07 /bin/dockerd"
+                },
+                {
+                    "regex": "^(.+)$",
+                    "handler": "command not found"
+                }
+            ],
+            "serverVersion": "OpenSSH",
+            "serverName": "ubuntu",
+            "passwordRegex": "^(root|qwerty|Smoker666|123456|jenkins|minecraft|sinus|alex|postgres|Ly123456)$",
+            "deadlineTimeoutSeconds": 60
+        }
+    ]
+}

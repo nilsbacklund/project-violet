@@ -28,7 +28,7 @@
           "regex": "^.*$",
           "handler": "",
           "headers": [],
-          "statusCode": 200
+          "plugin": "LLMHoneypot"
         }
       ],
       "plugin": {
@@ -60,23 +60,7 @@
         "openAISecretKey": "placeholder",
         "prompt": "You will act as an Ubuntu Linux terminal. The user will type commands, and you are to reply with what the terminal should show. Your responses must be contained within a single code block. Do not provide notes or explanations. Simulate realistic filesystem responses, process lists, or command output as needed."
       }
-    },
-    {
-      "apiVersion": "v1",
-      "protocol": "tcp",
-      "address": ":3306",
-      "description": "Mysql 8.0.29",
-      "cve_tags": [
-        "CVE-2022-21449"
-      ],
-      "cve_description": "MySQL before 8.0.30 allows unauthenticated attackers to cause a crash via malformed handshake packets.",
-      "banner": "8.0.29",
-      "plugin": {
-        "llmProvider": "openai",
-        "llmModel": "gpt-4o-mini",
-        "openAISecretKey": "placeholder",
-        "prompt": "You will act as a tcp service, you will recieve commands and act as a MySQL server v. 8.0.29. Your responses must be contained within a single code block. Do not provide notes or explanations."
-      }
     }
+   
   ]
 }

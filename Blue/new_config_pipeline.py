@@ -348,8 +348,8 @@ def generate_new_honeypot_config(experiment_base_path=None, prev_config_path=Non
             if not validate_config(config, schema_path):
                 print("Config is invalid. Not saving.")
                 continue
-            
-            is_novel = attack_methods_checker(config)
+    
+            is_novel = attack_methods_checker(config, experiment_base_path)
             if not is_novel:
                 print("Config is too similar to previous attack patterns. Regenerating or aborting.")
                 continue

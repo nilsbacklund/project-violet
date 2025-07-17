@@ -43,16 +43,17 @@ def main():
                 )
         case ReconfigCriteria.MEAN_INCREASE:
             reconfigurator = MeanIncreaseReconfigCriterion(
-                    config.fd_variable,
-                    config.fd_tolerance,
-                    config.fd_window_size,
-                    config.fd_reset_techniques,
+                    config.mi_variable,
+                    config.mi_tolerance,
+                    config.mi_window_size,
+                    config.mi_reset_techniques,
                     config.reset_every_reconfig
                 )
         case ReconfigCriteria.ENTROPY:
             reconfigurator = EntropyReconfigCriterion(
                     config.en_variable,
-                    config.en_variable,
+                    config.en_tolerance,
+                    config.en_window_size,
                     config.reset_every_reconfig
                 )
         case _:

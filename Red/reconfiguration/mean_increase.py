@@ -10,8 +10,8 @@ class MeanIncreaseReconfigCriterion(AbstractReconfigCriterion):
         assert variable in VARIABLES, f"Variable '{variable}' is not supported. Supported variables: {VARIABLES}"
         self.variable = variable
         assert window_size >= 0, f"Window size must be non-negative ({window_size} < 0)"
-        self.tolerance = tolerance
         self.window_size = window_size
+        self.tolerance = tolerance
         self.reset_techniques = reset_techniques
         super().__init__(reset_every_reconfig)
 

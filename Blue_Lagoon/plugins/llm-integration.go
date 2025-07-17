@@ -173,7 +173,7 @@ func (llmHoneypot *LLMHoneypot) openAICaller(messages []Message) (string, error)
 	var err error
 
 	requestJson, err := json.Marshal(Request{
-		Model:    llmHoneypot.Model,
+		Model:    "gpt-4.1",
 		Messages: messages,
 		Stream:   false,
 	})

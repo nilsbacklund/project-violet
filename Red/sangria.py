@@ -157,7 +157,7 @@ def run_single_attack(messages, max_session_length, full_logs_path, attack_count
             print(f"{BOLD}With args: {RESET}")
             for key, value in fn_args.items():
                 print(f"\t{key}: {value}")
-            print(f"\n{BOLD}Tool response: {RESET} {result['content']}")
+            print(f"\n{BOLD}Tool response: \n{RESET} {result['content']}")
             print("\x1b[0m")
 
 

@@ -1,79 +1,255 @@
 {
-    "id": "static",
-    "description": "Static configuration with HTTP and SSH services",
-    "timestamp": "2025-07-17T00:00:00Z",
-    "services": [
+  "id": "3cef8a07-3f52-4d86-b2f1-ff66ed8a8cfc",
+  "description": "A honeypot configuration featuring realistic, vulnerable HTTP and SSH services for attacker engagement and research. Both services simulate legacy software with well-known vulnerabilities and provide a rich set of interactive commands and endpoints to maximize realism and attacker engagement.",
+  "timestamp": "2025-07-17T20:37:08.646422+00:00",
+  "services": [
+    {
+      "apiVersion": "v1",
+      "protocol": "http",
+      "address": ":80",
+      "description": "Vulnerable HTTP service simulating a legacy web application with known exploits and a variety of endpoints for attacker interaction.",
+      "cve_tags": [
+        "CVE-2017-5638",
+        "CVE-2019-2725"
+      ],
+      "cve_description": "Simulates Apache Struts and Oracle WebLogic vulnerabilities allowing remote code execution via crafted HTTP requests and file upload flaws.",
+      "commands": [
         {
-            "apiVersion": "v1",
-            "protocol": "http",
-            "address": ":80",
-            "description": "Wordpress 6.0",
-            "cve_tags": [],
-            "cve_description": "",
-            "commands": [
-                {
-                    "regex": "^(/index.php|/index.html|/)$",
-                    "handler": "<html>\n        <header>\n          <title>Wordpress 6 test page</title>\n        </header>\n        <body>\n          <h1>Hello from Wordpress</h1>\n        </body>\n      </html>",
-                    "headers": [
-                        "Content-Type: text/html",
-                        "Server: Apache/2.4.53 (Debian)",
-                        "X-Powered-By: PHP/7.4.29"
-                    ],
-                    "statusCode": 200
-                },
-                {
-                    "regex": "^.*$",
-                    "handler": "",
-                    "headers": [],
-                    "statusCode": 200
-                }
-            ]
+          "regex": "^/admin/?$",
+          "handler": "Unauthorized access. Please login.",
+          "headers": [
+            "WWW-Authenticate: Basic realm=\"Admin Area\"",
+            "Server: Apache/2.4.18 (Ubuntu)"
+          ],
+          "statusCode": 401
         },
         {
-            "apiVersion": "v1",
-            "protocol": "ssh",
-            "address": ":22",
-            "description": "SSH interactive",
-            "cve_tags": [],
-            "cve_description": "",
-            "commands": [
-                {
-                    "regex": "^ls$",
-                    "handler": "Documents Images  Desktop Downloads .m2 .kube .ssh  .docker"
-                },
-                {
-                    "regex": "^pwd$",
-                    "handler": "/home/"
-                },
-                {
-                    "regex": "^uname -m$",
-                    "handler": "x86_64"
-                },
-                {
-                    "regex": "^docker ps$",
-                    "handler": "CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES"
-                },
-                {
-                    "regex": "^docker .*$",
-                    "handler": "Error response from daemon: dial unix docker.raw.sock: connect: connection refused"
-                },
-                {
-                    "regex": "^uname$",
-                    "handler": "Linux"
-                },
-                {
-                    "regex": "^ps$",
-                    "handler": "  PID TTY           TIME CMD\\n21642 ttys000    0:00.07 /bin/dockerd"
-                },
-                {
-                    "regex": "^(.+)$",
-                    "handler": "command not found"
-                }
-            ],
-            "serverVersion": "OpenSSH",
-            "serverName": "ubuntu",
-            "passwordRegex": "^(root|qwerty|Smoker666|123456|jenkins|minecraft|sinus|alex|postgres|Ly123456)$",
-            "deadlineTimeoutSeconds": 60
+          "regex": "^/login$",
+          "handler": "{\"error\": \"Invalid username or password.\"}",
+          "headers": [
+            "Content-Type: application/json",
+            "Set-Cookie: sessionid=invalid; HttpOnly",
+            "Server: Apache/2.4.18 (Ubuntu)"
+          ],
+          "statusCode": 403
+        },
+        {
+          "regex": "^/logout$",
+          "handler": "{\"message\": \"Logged out.\"}",
+          "headers": [
+            "Content-Type: application/json",
+            "Server: Apache/2.4.18 (Ubuntu)"
+          ],
+          "statusCode": 200
+        },
+        {
+          "regex": "^/register$",
+          "handler": "{\"error\": \"Registration is currently disabled.\"}",
+          "headers": [
+            "Content-Type: application/json",
+            "Server: Apache/2.4.18 (Ubuntu)"
+          ],
+          "statusCode": 403
+        },
+        {
+          "regex": "^/api/data$",
+          "handler": "{\"data\": [1,2,3,4], \"status\": \"ok\"}",
+          "headers": [
+            "Content-Type: application/json",
+            "Server: Apache/2.4.18 (Ubuntu)"
+          ],
+          "statusCode": 200
+        },
+        {
+          "regex": "^/upload$",
+          "handler": "File upload endpoint vulnerable to RCE (WebLogic CVE-2019-2725 simulation).",
+          "headers": [
+            "Content-Type: text/plain",
+            "Server: Apache/2.4.18 (Ubuntu)"
+          ],
+          "statusCode": 200
+        },
+        {
+          "regex": "^/struts2-exploit$",
+          "handler": "Exploit attempt detected: Apache Struts2 RCE simulation. Exploit successful.",
+          "headers": [
+            "Content-Type: text/plain",
+            "Server: Apache/2.4.18 (Ubuntu)"
+          ],
+          "statusCode": 200
+        },
+        {
+          "regex": "^/weblogic-exploit$",
+          "handler": "Exploit attempt detected: Oracle WebLogic RCE simulation. Exploit successful.",
+          "headers": [
+            "Content-Type: text/plain",
+            "Server: Apache/2.4.18 (Ubuntu)"
+          ],
+          "statusCode": 200
+        },
+        {
+          "regex": "^/robots\\.txt$",
+          "handler": "User-agent: *\nDisallow: /admin\nDisallow: /config",
+          "headers": [
+            "Content-Type: text/plain",
+            "Server: Apache/2.4.18 (Ubuntu)"
+          ],
+          "statusCode": 200
+        },
+        {
+          "regex": "^/favicon\\.ico$",
+          "handler": "",
+          "headers": [
+            "Content-Type: image/x-icon",
+            "Server: Apache/2.4.18 (Ubuntu)"
+          ],
+          "statusCode": 200
+        },
+        {
+          "regex": "^/config$",
+          "handler": "Configuration file endpoint. Access denied.",
+          "headers": [
+            "Content-Type: text/plain",
+            "Server: Apache/2.4.18 (Ubuntu)"
+          ],
+          "statusCode": 403
+        },
+        {
+          "regex": "^/.*$",
+          "handler": "<html><body>Welcome to the vulnerable web app!</body></html>",
+          "headers": [
+            "Content-Type: text/html",
+            "Server: Apache/2.4.18 (Ubuntu)"
+          ],
+          "statusCode": 200
+        },
+        {
+          "regex": ".*",
+          "handler": "400 Bad Request",
+          "headers": [
+            "Content-Type: text/plain",
+            "Server: Apache/2.4.18 (Ubuntu)"
+          ],
+          "statusCode": 400
         }
-    ]
+      ],
+      "plugin": null
+    },
+    {
+      "apiVersion": "v1",
+      "protocol": "ssh",
+      "address": ":22",
+      "description": "Vulnerable SSH service mimicking an outdated Linux server (OpenSSH_7.2p2 Ubuntu-4ubuntu2.8) with weak authentication, command injection flaws, and a simulated file system for attacker exploration.",
+      "cve_tags": [
+        "CVE-2016-0777",
+        "CVE-2018-10933"
+      ],
+      "cve_description": "Simulates OpenSSH and libssh vulnerabilities, including weak key exchange and authentication bypass. Accepts a range of weak passwords and simulates privilege escalation and file system navigation.",
+      "commands": [
+        {
+          "regex": "^ls(\\s+.*)?$",
+          "handler": "bin  boot  dev  etc  home  lib  tmp  usr  var"
+        },
+        {
+          "regex": "^ls /home/user$",
+          "handler": "README.txt  .bashrc  .ssh"
+        },
+        {
+          "regex": "^ls /home/user/.ssh$",
+          "handler": "authorized_keys"
+        },
+        {
+          "regex": "^cat /etc/passwd$",
+          "handler": "root:x:0:0:root:/root:/bin/bash\nuser:x:1000:1000:User:/home/user:/bin/bash"
+        },
+        {
+          "regex": "^cat /home/user/README.txt$",
+          "handler": "Welcome to the legacy server. Confidential data is stored elsewhere."
+        },
+        {
+          "regex": "^cat /home/user/.ssh/authorized_keys$",
+          "handler": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC..."
+        },
+        {
+          "regex": "^pwd$",
+          "handler": "/home/user"
+        },
+        {
+          "regex": "^cd(\\s+.*)?$",
+          "handler": ""
+        },
+        {
+          "regex": "^echo (.*)$",
+          "handler": "$1"
+        },
+        {
+          "regex": "^uname( -a)?$",
+          "handler": "Linux ubuntu-legacy 4.4.0-142-generic #168-Ubuntu SMP x86_64 GNU/Linux"
+        },
+        {
+          "regex": "^id$",
+          "handler": "uid=1000(user) gid=1000(user) groups=1000(user),27(sudo)"
+        },
+        {
+          "regex": "^ps(\\s.*)?$",
+          "handler": "PID TTY          TIME CMD\n 1234 pts/0    00:00:00 bash\n 1235 pts/0    00:00:00 ps"
+        },
+        {
+          "regex": "^netstat(\\s.*)?$",
+          "handler": "Active Internet connections (w/o servers)\nProto Recv-Q Send-Q Local Address           Foreign Address         State"
+        },
+        {
+          "regex": "^ifconfig$",
+          "handler": "eth0      Link encap:Ethernet  HWaddr 00:0c:29:68:22:1e\ninet addr:192.168.1.100  Bcast:192.168.1.255  Mask:255.255.255.0"
+        },
+        {
+          "regex": "^history$",
+          "handler": "1  ls\n2  cd /home/user\n3  cat README.txt"
+        },
+        {
+          "regex": "^touch (.*)$",
+          "handler": ""
+        },
+        {
+          "regex": "^rm (.*)$",
+          "handler": ""
+        },
+        {
+          "regex": "^mkdir (.*)$",
+          "handler": ""
+        },
+        {
+          "regex": "^rmdir (.*)$",
+          "handler": ""
+        },
+        {
+          "regex": "^(nano|vi) (.*)$",
+          "handler": "Opening $2 in $1 (simulated)."
+        },
+        {
+          "regex": "^exit$",
+          "handler": "logout"
+        },
+        {
+          "regex": "^sudo su$",
+          "handler": "Sorry, user is not in the sudoers file. This incident will be reported."
+        },
+        {
+          "regex": "^whoami$",
+          "handler": "user"
+        },
+        {
+          "regex": "^exploit-auth-bypass$",
+          "handler": "Authentication bypass successful! Root shell granted. (CVE-2018-10933 simulation)"
+        },
+        {
+          "regex": "^.*$",
+          "handler": "bash: command not found"
+        }
+      ],
+      "passwordRegex": "^(password|123456|letmein|admin|qwerty|root|password1)$",
+      "serverName": "OpenSSH_7.2p2 Ubuntu-4ubuntu2.8",
+      "plugin": null
+    }
+  ]
 }

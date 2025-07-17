@@ -12,6 +12,7 @@ from Style import colors
 import json
 import pprint
 import matplotlib.pyplot as plt
+from Purple.RagData.retrive_techniques import retrieve_unique_techniques
 
 logs_path = Path(__file__).resolve().parent.parent.parent / "logs"
 experiment_names = [name for name in os.listdir(logs_path)[::-1] if str(name).startswith("experiment")]
@@ -65,6 +66,35 @@ session_entropy_techniques_data = [measure_entropy_techniques(session) for sessi
 entropy_session_length_data = measure_entropy_session_length(combined_sessions)
 session_entropy_session_length_data = [measure_entropy_session_length(session) for session in sessions_list]
 
+# %% scrap code to see how big the difference is 
+print("All techniques:")
+attack_tech = [tactic.split(":") for tactic in tactic_dist_data["techniques"]]
+attack_techs = []
+for tactic in attack_tech:
+    if len(tactic) > 1:
+        attack_techs.append({"id": tactic[0], "name": tactic[1]})
+
+m_tactics = retrieve_unique_techniques()
+m_tactics_formated = [f"{tactic['id']}:{tactic['name']}" for tactic in m_tactics]
+
+name_list = []
+
+for tactic in attack_techs:
+    print(tactic['id'])
+    # retrive all id from m_tactics list of objects
+    print(m_tactics)
+    if tactic['id'] in [tactic['id'] for tactic in m_tactics]:
+        # Find the matching tactic by id
+        matching_tactic = next((m_tactic for m_tactic in m_tactics if m_tactic['id'] == tactic['id']), None)
+        if matching_tactic:
+            name_list.append({'name': tactic['name'], 'matching_name': matching_tactic['name']})
+
+print(f"Number of techniques: {(attack_techs)}")
+print(f"number of matches: {sum([tac['name'] == tac['matching_name'] for tac in name_list])}")
+
+print("techniques length:", len(tactic_dist_data["techniques"]))
+
+print(tactic_dist_data["techniques"].keys())
 
 #%% Plotting cumulative attack of unique techniqes vs sessions
 plt.figure(figsize=(12, 6))

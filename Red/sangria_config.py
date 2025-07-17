@@ -2,6 +2,8 @@
 from Red.model import LLMHost
 import json
 from Red.attacker_prompts import AttackerPrompts
+from Purple.RagData.retrive_techniques import retrieve_unique_techniques, retrieve_unique_tactics
+
 
 model_host = LLMHost.OPENAI  # change when using Ollama
 
@@ -47,11 +49,29 @@ def get_messages(i=0):
     return messages
 
 
+technique_options = retrieve_unique_techniques()
+technique_options = [
+    f"{technique['id']}:{technique['name']}" for technique in technique_options
+]
+technique_options = technique_options.append("T0000:Harmless")
+
+print(technique_options)
+
+tactic_options = retrieve_unique_tactics()
+tactic_options = [
+    f"{tactic['id']}:{tactic['name']}" for tactic in tactic_options
+]
+tactic_options = tactic_options.append("TA0000:Harmless")
+
+print(tactic_options)
+
+
 terminal_input = {
         "type": "function",
         "function": {
             "name": "terminal_input",
-        "description": "Run a command on the Kali Linux SSH and name its connection to the MITRE ATT&CK Tactic and Technique. If the command is not an offensive tool, specify tactic and technique as 'Harmless'. Try not to use verbose options unless necessary. ",
+            "description": "Run a command on the Kali Linux SSH and name its connection to the MITRE ATT&CK Tactic and Technique. If the command is not an offensive tool, specify tactic and technique as 'Harmless'. Try not to use verbose options unless necessary. ",
+            "strict": True,
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -61,14 +81,17 @@ terminal_input = {
                     },
                     "tactic_used": {
                         "type": "string",
-                        "description": "The name of the tactic from MITRE ATT&CK. For example: 'TA0007:Discovery'"
+                        "description": "The name of the tactic from MITRE ATT&CK. For example: 'TA0007:Discovery'",
+                        "enum": tactic_options
                     },
                     "technique_used": {
                         "type": "string",
-                        "description": "The name of the technique from MITRE ATT&CK. For example: 'T1018:Remote System Discovery'"
+                        "description": "The name of the technique from MITRE ATT&CK. For example: 'T1018:Remote System Discovery'",
+                        "enum": technique_options
                     }
                 },
-                "required": ["input", "tactic_used", "technique_used"]
+                "required": ["input", "tactic_used", "technique_used"],
+                "additionalProperties": False
             }
         }    
     }
@@ -124,7 +147,7 @@ tools = [
     terminate_tool
 ]
 
-print(json.dumps(tools, indent=2))
+# print(json.dumps(tools, indent=2))
 
 
 # if model_host == LLMHost.OPENAI:

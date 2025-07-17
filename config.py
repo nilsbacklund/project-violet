@@ -7,7 +7,7 @@ experiment_name = ""
 # Experiment settings
 llm_model_sangria = LLMModel.O4_MINI
 llm_model_config = LLMModel.GPT_4_1_MINI
-attacker_prompt: str = AttackerPrompts.GENERAL
+attacker_prompt: str = AttackerPrompts.CYCLE
 reconfig_method: ReconfigCriteria = ReconfigCriteria.BASIC
 
 # General settings
@@ -24,7 +24,7 @@ max_session_length = 100
 # Reconfiguration settings 
 reset_every_reconfig = True
 ## Basic reconfiguration
-interval: int = 20
+interval: int = 1
 ## Mean increase reconfiguration
 fd_variable: str = "techniques"
 fd_tolerance: float = 0.5

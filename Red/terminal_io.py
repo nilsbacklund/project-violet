@@ -27,8 +27,7 @@ def start_ssh():
     ssh.expect(r'└─\x1b\[1;31m#', timeout=60)
     a = ssh.before.strip()
     # Real ghetto to put here but just want it to run after the hp has spun up
-    global last_checked
-    last_checked = datetime.datetime.now(datetime.UTC).isoformat()
+
 
     return ssh
 

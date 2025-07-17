@@ -124,7 +124,6 @@ tools = [
     terminate_tool
 ]
 
-print(json.dumps(tools, indent=2))
 
 
 # if model_host == LLMHost.OPENAI:

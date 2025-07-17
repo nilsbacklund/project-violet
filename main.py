@@ -3,7 +3,6 @@ import json
 from dotenv import load_dotenv
 load_dotenv()
 import os
-print(os.getcwd())
 import config
 from pathlib import Path
 
@@ -80,7 +79,6 @@ def main():
         logs_path = full_logs_path / f"attack_{i+1}.json"
 
         messages = sangria_config.get_messages(i)
-        print(json.dumps(messages, indent=2))
 
         logs, tokens_used = run_single_attack(messages, config.max_session_length, logs_path)
         

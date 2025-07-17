@@ -19,7 +19,7 @@ print_output = True
 # Session settings
 num_of_attacks = 100
 min_num_of_attacks_reconfig = 0
-max_session_length = 100
+max_session_length = 1
 
 # Reconfiguration settings 
 reset_every_reconfig = True

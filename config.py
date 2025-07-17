@@ -12,9 +12,6 @@ reconfig_method: ReconfigCriteria = ReconfigCriteria.BASIC
 
 # General settings
 simulate_command_line = False
-save_logs = True
-save_configuration = True
-print_output = True
 
 # Session settings
 num_of_attacks = 100

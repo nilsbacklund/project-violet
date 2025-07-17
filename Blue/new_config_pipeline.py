@@ -10,7 +10,7 @@ import jsonschema
 import sys
 import time
 import fcntl
-from config import print_output, llm_model_config
+from config import llm_model_config
 from Utils.jsun import load_json
 
 # Add parent directory to sys.path to allow imports from project root
@@ -27,19 +27,6 @@ BASE_DIR = Path(__file__).resolve().parent
 vulns_db_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'vulnsDB_cleaned.json'
 vulns_embeddings_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'vulns_cleaned_embeddings_bge_m3.npy'
 schema_path = BASE_DIR.parent / 'Blue' / 'RagData' / 'services_schema.json'
-
-# Handle print output based on config setting
-_builtin_print = print
-
-def silent_print(*args, **kwargs):
-    pass
-
-# Override print globally
-if not print_output:
-    print = silent_print
-else:
-    print = _builtin_print
-
 
 def query_openai(prompt: str, model: str = None, temperature: float = 0.7) -> str:
     """

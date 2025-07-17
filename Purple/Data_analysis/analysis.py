@@ -2,6 +2,7 @@
 
 import os
 import sys
+import numpy as np
 from pathlib import Path
 # Add parent directory to sys.path to allow imports from project root
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -26,14 +27,13 @@ display(dropdown)
 #%%
 
 selected_experiment = dropdown.value
-filter_empty_sessions = False
+filter_empty_sessions = True
 print(f"Analyzing experiment {selected_experiment}")
 
 from Utils.jsun import load_json
 import numpy as np
-from Purple.Data_analysis.metrics import measure_session_length, \
-    measure_tactic_distribution, measure_unique_techniques, \
-    measure_entropy_session_length, measure_entropy_techniques
+from Purple.Data_analysis.metrics import measure_session_length, measure_mitre_distribution, \
+    measure_entropy_session_length, measure_entropy_techniques, measure_entropy_tactics
 
 path = logs_path / selected_experiment
 configs = [name for name in os.listdir(path) if str(name).startswith("hp_config")]
@@ -57,8 +57,11 @@ print(f"Number of sessions: {len(combined_sessions)}")
 
 
 length_data = measure_session_length(combined_sessions)
-tactic_dist_data = measure_tactic_distribution(combined_sessions)
-unique_techniques_data = measure_unique_techniques(combined_sessions)
+mitre_dist_data = measure_mitre_distribution(combined_sessions)
+
+entropy_tactics_data = measure_entropy_tactics(combined_sessions)
+session_entropy_tactics_data = [measure_entropy_tactics(session) for session in sessions_list]
+
 entropy_techniques_data = measure_entropy_techniques(combined_sessions)
 session_entropy_techniques_data = [measure_entropy_techniques(session) for session in sessions_list]
 
@@ -68,7 +71,7 @@ session_entropy_session_length_data = [measure_entropy_session_length(session) f
 
 #%% Plotting cumulative attack of unique techniqes vs sessions
 plt.figure(figsize=(12, 6))
-plt.plot(unique_techniques_data["session_cum_num_techniques"], marker="o", linestyle="-", c=colors.scheme[0])
+plt.plot(mitre_dist_data["session_cum_num_techniques"], marker="o", linestyle="-", c=colors.scheme[0])
 plt.title("Cumulative sum of unique techniques")
 plt.xlabel("Session")
 plt.ylabel("Number of Unique techniques")
@@ -81,12 +84,12 @@ plt.ylim(bottom=0)
 plt.legend()
 plt.show()
 
+print(np.max(mitre_dist_data["session_cum_num_techniques"]))
+
 # %%
 
-print(unique_techniques_data)
-
 plt.figure(figsize=(12, 6))
-plt.plot(unique_techniques_data["session_num_techniques"][0:30],
+plt.plot(mitre_dist_data["session_num_techniques"],
     marker="o", linestyle="-", c=colors.scheme[0])
 plt.title("Number of Unique Techniques per Session")
 plt.xlabel("Session")
@@ -141,26 +144,26 @@ plt.show()
 
 # %%
 
-tactics = list(tactic_dist_data["tactics"].keys())
-techniques = list(tactic_dist_data["tactics"].keys())
+tactics = list(mitre_dist_data["tactics"].keys())
+techniques = list(mitre_dist_data["tactics"].keys())
 
-print(tactic_dist_data["tactics_heatmap"])
+print(mitre_dist_data["tactics_heatmap"])
 
 plt.figure(figsize=(15, 20))
-plt.imshow(tactic_dist_data["tactics_heatmap"])
+plt.imshow(mitre_dist_data["tactics_heatmap"])
 plt.xlabel("Session")
 plt.ylabel("Tactic")
 plt.yticks(range(len(tactics)), tactics)
 
 # %%
 
-tactics = list(tactic_dist_data["techniques"].keys())
-techniques = list(tactic_dist_data["techniques"].keys())
+tactics = list(mitre_dist_data["techniques"].keys())
+techniques = list(mitre_dist_data["techniques"].keys())
 
-print(tactic_dist_data["techniques_heatmap"])
+print(mitre_dist_data["techniques_heatmap"])
 
 plt.figure(figsize=(15, 20))
-plt.imshow(tactic_dist_data["techniques_heatmap"])
+plt.imshow(mitre_dist_data["techniques_heatmap"])
 plt.xlabel("Session")
 plt.ylabel("Technique")
 plt.yticks(range(len(tactics)), tactics)
@@ -170,8 +173,8 @@ plt.yticks(range(len(tactics)), tactics)
 import matplotlib.pyplot as plt
 
 # your data
-tactics = list(tactic_dist_data["tactics"].keys())
-values  = list(tactic_dist_data["tactics"].values())
+tactics = list(mitre_dist_data["tactics"].keys())
+values  = list(mitre_dist_data["tactics"].values())
 
 plt.figure(figsize=(10, 5))
 bars = plt.bar(range(len(tactics)), values)
@@ -191,27 +194,6 @@ for bar in bars:
 plt.tight_layout()
 plt.show()
 
-
-# %%
-import matplotlib.pyplot as plt
-import numpy as np
-
-tactics_list = list(sorted(tactic_dist_data["session_tactics"],
-    key=lambda data: sum(list(data.values())), reverse=True))[:5]
-
-for i, tactics in enumerate(tactics_list):
-    fig, ax = plt.subplots(subplot_kw=dict(polar=True))
-    labels = list(tactics.keys())
-    stats  = list(tactics.values())
-    angles = np.linspace(0, 2*np.pi, len(labels), endpoint=False).tolist()
-    stats += stats[:1]
-    angles += angles[:1]
-    
-    ax.plot(angles, stats, '-', linewidth=2, c=colors.scheme[i], alpha=0.5, label=f"Session number {i}: length = {sum(tactics.values())}")
-    ax.fill(angles, stats, alpha=0.2, c=colors.scheme[i])
-    ax.set_thetagrids(np.degrees(angles[:-1]), labels)
-    plt.figlegend()
-    plt.show()
 
 #%% Plotting entropy of techniques
 
@@ -246,6 +228,44 @@ plt.ylim(bottom=0)
 # plt.grid()
 plt.legend()
 plt.show()
+
+# %% Entropy tactics all session
+
+plt.figure(figsize=(12, 6))
+plt.plot(entropy_tactics_data["entropies"], marker="o", linestyle="-", c=colors.scheme[0])
+plt.title("Experiment entropy of unique tactics")
+plt.xlabel("Session")
+plt.ylabel("Entropy of unique tactics")
+
+for index in reconfig_indices:
+    plt.axvline(index - 0.5, color=colors.black, linestyle="--", alpha=0.2)
+
+plt.ylim(bottom=0)
+# plt.grid()
+plt.legend()
+plt.show()
+
+# %%
+
+#%% Plotting entropy of techniques every config
+
+entropies = [list(result["entropies"]) for result in session_entropy_tactics_data]
+entropies = sum(entropies, [])
+
+plt.figure(figsize=(12, 6))
+plt.plot(entropies, marker="o", linestyle="-", c=colors.scheme[0])
+plt.title("Config entropy")
+plt.xlabel("Session")
+plt.ylabel("Entropy of unique tactics")
+
+for index in reconfig_indices:
+    plt.axvline(index - 0.5, color=colors.black, linestyle="--", alpha=0.2)
+
+plt.ylim(bottom=0)
+# plt.grid()
+plt.legend()
+plt.show()
+
 # %%
 
 

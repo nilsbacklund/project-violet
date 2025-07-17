@@ -6,7 +6,7 @@ import questionary
 # Add parent directory to sys.path to allow imports from project root
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from Red.extraction import extract_session, extract_everything_session
-from Utils.jsun import load_json, append_json_to_file
+from Utils.jsun import load_json, append_json_to_file, save_json_to_file
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -49,7 +49,7 @@ if __name__ == "__main__":
             configs,
             key=lambda fn: int(Path(fn).stem.split('_')[-1])
         )
-
+        sessions = []
         for config in sorted_configs:
             config_path = experiment_path / config
             full_logs_path = config_path / "full_logs"
@@ -74,5 +74,6 @@ if __name__ == "__main__":
                     session = extract_everything_session(logs)
                 else:
                     session = extract_session(logs)
-                append_json_to_file(session, session_path, False)
+                sessions.append(session)
                 print(f"    √ Extracted {attack}")
+        save_json_to_file(session, session_path, False)

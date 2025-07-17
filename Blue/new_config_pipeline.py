@@ -68,8 +68,10 @@ def set_honeypot_config(config):
     
     with open(lock_file_path, "w") as lock_file:
         try:
-            # Acquire exclusive lock
-            fcntl.lockf(lock_file.fileno(), fcntl.LOCK_EX)
+            if sys.platform == "linux":
+                import fcntl
+                # Acquire exclusive lock
+                fcntl.lockf(lock_file.fileno(), fcntl.LOCK_EX)
             
             # Remove old service files to avoid stale configs
             for file in target_dir.iterdir():
@@ -223,7 +225,7 @@ def build_config_prompt(schema_path, top_vulns, prev_config=None):
         "- **Maximize Session Length**: Design services that encourage prolonged attacker engagement\n"
         "- **Promote Attack Pattern Novelty**: Create configurations that attract diverse and uncommon attack techniques\n\n"
         "Requirements:\n"
-        "1. Use **3 different services**, including one `http`, one `ssh`, and one `tcp` protocol.\n"
+        "1. Use **2 different services**, including one `http` and one `ssh` protocol.\n"
         "2. Each service must:\n"
         "   - Include a **relevant and unique CVE** (avoid duplicate CVEs across services).\n"
         "   - Provide a meaningful `cve_description` and valid `cve_tags`.\n"

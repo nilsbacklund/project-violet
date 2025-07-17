@@ -29,7 +29,7 @@ display(dropdown)
 
 selected_experiment = dropdown.value
 filter_empty_sessions = False
-use_omni_sessions = True
+use_omni_sessions = False
 print(f"Analyzing experiment {selected_experiment}")
 
 from Utils.jsun import load_json
@@ -58,9 +58,9 @@ combined_sessions = sum(sessions_list, [])
 print(f"Reconfig indices: {reconfig_indices}")
 print(f"Number of sessions: {len(combined_sessions)}")
 
-
 length_data = measure_session_length(combined_sessions)
 mitre_dist_data = measure_mitre_distribution(combined_sessions)
+session_mitre_dist_data = [measure_mitre_distribution(session) for session in sessions_list]
 
 entropy_tactics_data = measure_entropy_tactics(combined_sessions)
 session_entropy_tactics_data = [measure_entropy_tactics(session) for session in sessions_list]
@@ -102,36 +102,12 @@ print("techniques length:", len(mitre_dist_data["techniques"]))
 print(mitre_dist_data["techniques"].keys())
 
 #%% Plotting cumulative attack of unique techniqes vs sessions
-plt.figure(figsize=(12, 6))
-plt.plot(mitre_dist_data["session_cum_num_techniques"], marker="o", linestyle="-", c=colors.scheme[0])
-plt.title("Cumulative sum of unique techniques")
-plt.xlabel("Session")
-plt.ylabel("Number of Unique techniques")
 
-for index in reconfig_indices:
-    plt.axvline(index - 0.5, color=colors.black, linestyle="--", alpha=0.2)
+from Purple.Data_analysis.plots import plot_mitre_data, plot_session_length
 
-plt.ylim(bottom=0)
-# plt.grid()
-plt.legend()
-plt.show()
+plot_mitre_data(combined_sessions, reconfig_indices)
+plot_session_length(combined_sessions, reconfig_indices)
 
-print(np.max(mitre_dist_data["session_cum_num_techniques"]))
-
-# %%
-
-plt.figure(figsize=(12, 6))
-plt.plot(mitre_dist_data["session_num_techniques"],
-    marker="o", linestyle="-", c=colors.scheme[0])
-plt.title("Number of Unique Techniques per Session")
-plt.xlabel("Session")
-plt.ylabel("Number of Unique Techniques")
-for index in reconfig_indices[0:10]:
-    plt.axvline(index - 0.5, color=colors.black, linestyle="--", alpha=0.2)
-
-plt.ylim(bottom=0)
-plt.legend()
-plt.show()
 
 # %% Session length
 
@@ -193,6 +169,18 @@ tactics = list(mitre_dist_data["techniques"].keys())
 techniques = list(mitre_dist_data["techniques"].keys())
 
 print(mitre_dist_data["techniques_heatmap"])
+
+plt.figure(figsize=(15, 20))
+plt.imshow(mitre_dist_data["techniques_heatmap"])
+plt.xlabel("Session")
+plt.ylabel("Technique")
+plt.yticks(range(len(tactics)), tactics)
+
+# %%
+
+tactics_heatmaps = [data["tactics_heatmap"] for data in session_mitre_dist_data]
+
+print(tactics_heatmaps)
 
 plt.figure(figsize=(15, 20))
 plt.imshow(mitre_dist_data["techniques_heatmap"])

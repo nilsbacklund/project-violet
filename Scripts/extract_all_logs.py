@@ -49,7 +49,7 @@ if __name__ == "__main__":
             configs,
             key=lambda fn: int(Path(fn).stem.split('_')[-1])
         )
-        sessions = []
+        all_sessions = []
         sessions_file_name = "omni_sessions.json" if extract_everything else "sessions.json"
         all_sessions_path = experiment_path / sessions_file_name
 
@@ -76,7 +76,7 @@ if __name__ == "__main__":
                     session = extract_everything_session(logs)
                 else:
                     session = extract_session(logs)
-                sessions.append(session)
+                all_sessions.append(session)
+                append_json_to_file(session, session_path, False)
                 print(f"    √ Extracted {attack}")
-            save_json_to_file(session, session_path, False)
-        save_json_to_file(sessions, session_path, False)
+        save_json_to_file(all_sessions, session_path, False)

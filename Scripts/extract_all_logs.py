@@ -76,4 +76,4 @@ if __name__ == "__main__":
                     session = extract_session(logs)
                 sessions.append(session)
                 print(f"    √ Extracted {attack}")
-        save_json_to_file(session, session_path, False)
+        save_json_to_file(sessions, session_path, False)

@@ -50,10 +50,12 @@ if __name__ == "__main__":
             key=lambda fn: int(Path(fn).stem.split('_')[-1])
         )
         sessions = []
+        sessions_file_name = "omni_sessions.json" if extract_everything else "sessions.json"
+        all_sessions_path = experiment_path / sessions_file_name
+
         for config in sorted_configs:
             config_path = experiment_path / config
             full_logs_path = config_path / "full_logs"
-            sessions_file_name = "omni_sessions.json" if extract_everything else "sessions.json"
             session_path = config_path / sessions_file_name
 
             # remove existing sessions json file
@@ -76,4 +78,5 @@ if __name__ == "__main__":
                     session = extract_session(logs)
                 sessions.append(session)
                 print(f"    √ Extracted {attack}")
+            save_json_to_file(session, session_path, False)
         save_json_to_file(sessions, session_path, False)

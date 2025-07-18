@@ -29,19 +29,6 @@ def create_experiment_folder(experiment_name=None):
 
     return path
 
-def create_metadata():
-    md = MetaDataObject(
-        llm_model_sangria=config.llm_model_sangria,
-        llm_model_honeypot=config.llm_model_config,
-        num_of_attacks=config.num_of_attacks,
-        min_num_of_attacks_reconfig=config.min_num_of_attacks_reconfig,
-        max_session_length=config.max_session_length,
-        reconfig_method=config.reconfig_method
-    )
-
-    return md
-    
-
 class MetaDataObject:
     def __init__(self, llm_model_sangria, llm_model_honeypot, num_of_attacks, min_num_of_attacks_reconfig, max_session_length, reconfig_method):
         self.llm_model_sangria = llm_model_sangria
@@ -60,6 +47,18 @@ class MetaDataObject:
             "max_session_length": self.max_session_length,
             "reconfig_method": self.reconfig_method
         }
+
+def create_metadata():
+    md = MetaDataObject(
+        llm_model_sangria=config.llm_model_sangria,
+        llm_model_honeypot=config.llm_model_config,
+        num_of_attacks=config.num_of_attacks,
+        min_num_of_attacks_reconfig=config.min_num_of_attacks_reconfig,
+        max_session_length=config.max_session_length,
+        reconfig_method=config.reconfig_method
+    )
+
+    return md
 
 def select_reconfigurator(reconfigurator_method: ReconfigCriteria):
     match reconfigurator_method:

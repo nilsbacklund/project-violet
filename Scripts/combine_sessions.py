@@ -25,7 +25,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     extract_omni = questionary.confirm(
-        "Do you only want to combine omni sessions as well?",
+        "Do you want to combine omni sessions as well?",
         default=False
     ).ask()
 

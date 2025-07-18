@@ -62,7 +62,7 @@
         },
         {
           "regex": "^/upload$",
-          "handler": "File upload endpoint vulnerable to RCE (WebLogic CVE-2019-2725 simulation).",
+          "handler": "File upload endpoint",
           "headers": [
             "Content-Type: text/plain",
             "Server: Apache/2.4.18 (Ubuntu)"
@@ -116,7 +116,7 @@
         },
         {
           "regex": "^/.*$",
-          "handler": "<html><body>Welcome to the vulnerable web app!</body></html>",
+          "handler": "<html><body>Welcome to the web app!</body></html>",
           "headers": [
             "Content-Type: text/html",
             "Server: Apache/2.4.18 (Ubuntu)"

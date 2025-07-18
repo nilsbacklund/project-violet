@@ -39,8 +39,8 @@ class EntropyReconfigCriterion(AbstractReconfigCriterion):
                         self.counter.update([command_entry["technique"]])
             case "session_length":
                 raise NotImplementedError("My bad lol // Sackarias")
-
-        entropy_value = compute_entropy(self.counter)
+        prob_dist = get_prob_dist(self.counter)
+        entropy_value = compute_entropy(prob_dist)
         self.entropies.append(entropy_value)
         
     def should_reconfigure(self):

@@ -103,25 +103,66 @@ print(mitre_dist_data["techniques"].keys())
 
 #%% Plotting cumulative attack of unique techniqes vs sessions
 
-from Purple.Data_analysis.plots import plot_mitre_data, plot_session_length
+from Purple.Data_analysis.plots import plot_mitre_data, plot_session_length, plot_heatmaps
 
 plot_mitre_data(combined_sessions, reconfig_indices)
 plot_session_length(combined_sessions, reconfig_indices)
+plot_heatmaps(combined_sessions, reconfig_indices)
 
+# %%
+from matplotlib.ticker import MultipleLocator, FuncFormatter
 
-# %% Session length
-
-plt.figure(figsize=(12, 6))
-plt.bar(range(len(length_data["session_lengths"])), length_data["session_lengths"])
-plt.title("Session length per Session")
+tactics = list(mitre_dist_data["tactics"].keys())
+import matplotlib
+colors_tab20 = plt.get_cmap("tab10").colors + plt.get_cmap("tab20b").colors 
+heatmap = np.hstack([
+    mitre_dist_data["tactics_heatmap"]
+])
+plt.plot(heatmap.T)
+plt.figure(figsize=(12,7))
+bottom = np.zeros(heatmap.shape[1])
+for tactic, row, color in zip(tactics, heatmap, colors_tab20):
+    plt.bar(range(len(row)), row, bottom=bottom, label=tactic,
+        color=color, width=1, edgecolor=colors.black, linewidth=0.5)
+    bottom += row
 plt.xlabel("Session")
 plt.ylabel("Session length")
+ax = plt.gca()
 
-for index in reconfig_indices:
-    plt.axvline(index - 0.5, color=colors.black, linestyle="--", alpha=0.2)
+ax.xaxis.set_major_formatter(
+    FuncFormatter(lambda x, pos: f"{int(x+6)}" if ((x + 0.5)%10 == 0) else "")
+)
 
-plt.ylim(bottom=0)
-plt.legend()
+ax.yaxis.set_major_formatter(
+    FuncFormatter(lambda x, pos: f"{int(x)}" if (x % 10 == 0) else "")
+)
+
+ax.tick_params(
+    axis='x',          # x‐axis
+    which='both',      # both major and minor
+    bottom=True,       # ticks on bottom
+    top=False,         # no ticks on top
+    labelbottom=True, # no labels
+    length=3 ,         # length of the tick‐marks
+
+)
+ax.tick_params(
+    axis='y',          # y‐axis
+    which='both',
+    left=True,
+    right=False,
+    labelleft=True,
+    length=3
+)
+ax.xaxis.set_major_locator(MultipleLocator(1, 0.5))
+ax.yaxis.set_major_locator(MultipleLocator(1))
+#ax.yaxis.set_minor_locator(MultipleLocator(0.5))
+
+
+
+
+
+plt.legend(fontsize="small")
 plt.show()
 
 # %% Tokens vs session
@@ -150,47 +191,8 @@ plt.ylim(bottom=0)
 plt.legend()
 plt.show()
 
-# %%
-
-tactics = list(mitre_dist_data["tactics"].keys())
-techniques = list(mitre_dist_data["tactics"].keys())
-
-print(mitre_dist_data["tactics_heatmap"])
-
-plt.figure(figsize=(15, 20))
-plt.imshow(mitre_dist_data["tactics_heatmap"])
-plt.xlabel("Session")
-plt.ylabel("Tactic")
-plt.yticks(range(len(tactics)), tactics)
 
 # %%
-
-tactics = list(mitre_dist_data["techniques"].keys())
-techniques = list(mitre_dist_data["techniques"].keys())
-
-print(mitre_dist_data["techniques_heatmap"])
-
-plt.figure(figsize=(15, 20))
-plt.imshow(mitre_dist_data["techniques_heatmap"])
-plt.xlabel("Session")
-plt.ylabel("Technique")
-plt.yticks(range(len(tactics)), tactics)
-
-# %%
-
-tactics_heatmaps = [data["tactics_heatmap"] for data in session_mitre_dist_data]
-
-print(tactics_heatmaps)
-
-plt.figure(figsize=(15, 20))
-plt.imshow(mitre_dist_data["techniques_heatmap"])
-plt.xlabel("Session")
-plt.ylabel("Technique")
-plt.yticks(range(len(tactics)), tactics)
-
-# %%
-
-import matplotlib.pyplot as plt
 
 # your data
 tactics = list(mitre_dist_data["tactics"].keys())

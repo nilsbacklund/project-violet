@@ -18,7 +18,7 @@ class MeanIncreaseReconfigCriterion(AbstractReconfigCriterion):
     def reset(self):
         self.values: List[int] = [0]
         if self.reset_techniques:
-            self.techniques: set[str] = {}
+            self.techniques: set[str] = set([])
 
     def update(self, session):
         match self.variable:

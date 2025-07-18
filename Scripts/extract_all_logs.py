@@ -79,4 +79,4 @@ if __name__ == "__main__":
                 all_sessions.append(session)
                 append_json_to_file(session, session_path, False)
                 print(f"    √ Extracted {attack}")
-        save_json_to_file(all_sessions, session_path, False)
+        save_json_to_file(all_sessions, all_sessions_path, False)

@@ -16,6 +16,7 @@ services:
     environment:
       RABBITMQ_URI: ${RABBITMQ_URI}
       OPEN_AI_SECRET_KEY: ${OPENAI_API_KEY}
+      HP_MODEL: ${HP_MODEL}
     volumes:
       - "./Blue_Lagoon/configurations:/configurations"
     networks:

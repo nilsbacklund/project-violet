@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/go-resty/resty/v2"
-	"github.com/mariocandela/beelzebub/v3/tracer"
-	log "github.com/sirupsen/logrus"
 	"os"
 	"regexp"
 	"strings"
+	"github.com/go-resty/resty/v2"
+	"github.com/mariocandela/beelzebub/v3/tracer"
+	log "github.com/sirupsen/logrus"
 )
 
 const (
@@ -94,14 +94,18 @@ func FromStringToLLMProvider(llmProvider string) (LLMProvider, error) {
 }
 
 func InitLLMHoneypot(config LLMHoneypot) *LLMHoneypot {
-	// Inject the dependencies
-	config.client = resty.New()
-
-	if os.Getenv("OPEN_AI_SECRET_KEY") != "" {
-		config.OpenAIKey = os.Getenv("OPEN_AI_SECRET_KEY")
-	}
-
-	return &config
+    
+    config.client = resty.New()
+    
+    if os.Getenv("OPEN_AI_SECRET_KEY") != "" {
+        config.OpenAIKey = os.Getenv("OPEN_AI_SECRET_KEY")
+    }
+    
+    if os.Getenv("HP_MODEL") != "" {
+        config.Model = os.Getenv("HP_MODEL")
+    }
+    
+    return &config
 }
 
 func (llmHoneypot *LLMHoneypot) buildPrompt(command string) ([]Message, error) {
@@ -172,8 +176,13 @@ func (llmHoneypot *LLMHoneypot) buildPrompt(command string) ([]Message, error) {
 func (llmHoneypot *LLMHoneypot) openAICaller(messages []Message) (string, error) {
 	var err error
 
+	model := llmHoneypot.Model
+	if model == "" {
+		return "", errors.New("openAI model not specified")
+	}
+
 	requestJson, err := json.Marshal(Request{
-		Model:    "gpt-4.1",
+		Model:    model,
 		Messages: messages,
 		Stream:   false,
 	})

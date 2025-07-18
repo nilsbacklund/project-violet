@@ -1,0 +1,303 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Beelzebub Services Batch",
+  "description": "Top-level container for a set of honeypot service configurations.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for this configuration bundle."
+    },
+    "services": {
+      "type": "array",
+      "description": "List of individual service definitions.",
+      "items": {
+        "oneOf": [
+          { "$ref": "#/definitions/ServiceHTTP" },
+          { "$ref": "#/definitions/ServiceSSH" },
+          { "$ref": "#/definitions/ServiceTCP" }
+        ]
+      }
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable summary of what this bundle represents."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when this configuration was created or last updated."
+    }
+  },
+  "required": ["id", "services", "description", "timestamp"],
+  "additionalProperties": false,
+
+  "definitions": {
+    "LLMPlugin": {
+      "type": "object",
+      "description": "Configuration for integrating a large language model (LLM).",
+      "properties": {
+        "llmProvider": {
+          "type": "string",
+          "const": "openai",
+          "description": "The LLM provider name."
+        },
+        "llmModel": {
+          "type": "string",
+          "const": "gpt-4o-mini",
+          "description": "The specific model to use."
+        },
+        "openAISecretKey": {
+          "type": "string",
+          "const": "placeholder",
+          "description": "API key placeholder for authentication."
+        },
+        "prompt": {
+          "type": "string",
+          "description": "Base prompt to initialize the LLM conversation."
+        }
+      },
+      "required": ["llmProvider", "llmModel", "openAISecretKey", "prompt"],
+      "additionalProperties": false
+    },
+
+    "CommandHTTP": {
+      "type": "object",
+      "description": "Rule for handling incoming HTTP requests.",
+      "properties": {
+        "regex": {
+          "type": "string",
+          "description": "Regular expression to match request paths or payloads."
+        },
+        "handler": {
+          "type": "string",
+          "description": "Response body or handler name for matched requests."
+        },
+        "headers": {
+          "type": "array",
+          "description": "Tuple of HTTP header strings to include in the response.",
+          "items": { "type": "string" }
+        },
+        "statusCode": {
+          "type": "integer",
+          "description": "HTTP status code to return (e.g., 200, 404, 401)."
+        }
+      },
+      "required": ["regex", "handler", "headers", "statusCode"],
+      "additionalProperties": false
+    },
+
+    "CommandSSH": {
+      "type": "object",
+      "description": "Rule for handling SSH commands.",
+      "properties": {
+        "regex": {
+          "type": "string",
+          "description": "Regular expression to match an incoming SSH command."
+        },
+        "handler": {
+          "type": "string",
+          "description": "Text or action to respond with when the regex matches."
+        },
+        "plugin": {
+          "oneOf": [
+            { "type": "null" },
+            { "type": "string", "enum": ["LLMHoneypot"] }
+          ],
+          "description": "Optional name of a plugin to process the command (null or 'LLMHoneypot')."
+        }
+      },
+      "required": ["regex", "handler"],
+      "additionalProperties": false
+    },
+
+    "ServiceHTTP": {
+      "type": "object",
+      "description": "Configuration for an HTTP honeypot service.",
+      "properties": {
+        "apiVersion": {
+          "type": "string",
+          "const": "v1",
+          "description": "API version of the configuration schema."
+        },
+        "protocol": {
+          "type": "string",
+          "const": "http",
+          "description": "Always 'http' for HTTP services."
+        },
+        "address": {
+          "type": "string",
+          "description": "Network address and port to listen on (e.g., ':80')."
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description of the service."
+        },
+        "cve_tags": {
+          "type": "array",
+          "description": "List of CVE identifiers relevant to exploits targeting this service.",
+          "items": {
+            "type": "string",
+            "pattern": "^CVE-\\d{4}-\\d{4,}$"
+          }
+        },
+        "cve_description": {
+          "type": "string",
+          "description": "Description of the vulnerabilities exploited in this service."
+        },
+        "commands": {
+          "type": "array",
+          "description": "List of HTTP command rules.",
+          "items": { "$ref": "#/definitions/CommandHTTP" }
+        },
+        "plugin": {
+          "oneOf": [
+            { "$ref": "#/definitions/LLMPlugin" },
+            { "type": "null" }
+          ],
+          "description": "Optional LLM plugin for dynamic responses."
+        }
+      },
+      "required": [
+        "apiVersion",
+        "protocol",
+        "address",
+        "description",
+        "cve_tags",
+        "cve_description",
+        "commands"
+      ],
+      "additionalProperties": false
+    },
+
+    "ServiceSSH": {
+      "type": "object",
+      "description": "Configuration for an SSH honeypot service.",
+      "properties": {
+        "apiVersion": {
+          "type": "string",
+          "const": "v1",
+          "description": "API version of the configuration schema."
+        },
+        "protocol": {
+          "type": "string",
+          "const": "ssh",
+          "description": "Always 'ssh' for SSH services."
+        },
+        "address": {
+          "type": "string",
+          "description": "Network address and port to listen on (e.g., ':22')."
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description of the service."
+        },
+        "cve_tags": {
+          "type": "array",
+          "description": "List of CVE identifiers relevant to exploits targeting this service.",
+          "items": {
+            "type": "string",
+            "pattern": "^CVE-\\d{4}-\\d{4,}$"
+          }
+        },
+        "cve_description": {
+          "type": "string",
+          "description": "Description of the vulnerabilities exploited in this service."
+        },
+        "commands": {
+          "type": "array",
+          "description": "List of SSH command rules.",
+          "items": { "$ref": "#/definitions/CommandSSH" }
+        },
+        "passwordRegex": {
+          "type": "string",
+          "description": "Regex for accepted or logged passwords."
+        },
+
+        "serverName": {
+          "type": "string",
+          "description": "Fake server name reported to clients (e.g., 'ubuntu')."
+        },
+        "plugin": {
+          "oneOf": [
+            { "$ref": "#/definitions/LLMPlugin" },
+            { "type": "null" }
+          ],
+          "description": "Optional LLM plugin for dynamic SSH interaction."
+        }
+      },
+      "required": [
+        "apiVersion",
+        "protocol",
+        "address",
+        "description",
+        "cve_tags",
+        "cve_description",
+        "commands",
+        "passwordRegex",
+        "serverName"
+      ],
+      "additionalProperties": false
+    },
+
+    "ServiceTCP": {
+      "type": "object",
+      "description": "Configuration for a simple TCP honeypot service.",
+      "properties": {
+        "apiVersion": {
+          "type": "string",
+          "const": "v1",
+          "description": "API version of the configuration schema."
+        },
+        "protocol": {
+          "type": "string",
+          "const": "tcp",
+          "description": "Always 'tcp' for TCP services."
+        },
+        "address": {
+          "type": "string",
+          "description": "Network address and port to listen on (e.g., ':3306')."
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description of the service."
+        },
+        "cve_tags": {
+          "type": "array",
+          "description": "List of CVE identifiers relevant to exploits targeting this service.",
+          "items": {
+            "type": "string",
+            "pattern": "^CVE-\\d{4}-\\d{4,}$"
+          }
+        },
+        "cve_description": {
+          "type": "string",
+          "description": "Description of the vulnerabilities exploited in this service."
+        },
+        "banner": {
+          "type": "string",
+          "description": "Text banner sent to clients upon connection."
+        },
+
+        "plugin": {
+          "oneOf": [
+            { "$ref": "#/definitions/LLMPlugin" },
+            { "type": "null" }
+          ],
+          "description": "Optional LLM plugin for dynamic TCP interaction."
+        }
+      },
+      "required": [
+        "apiVersion",
+        "protocol",
+        "address",
+        "description",
+        "cve_tags",
+        "cve_description",
+        "banner"
+      ],
+      "additionalProperties": false
+    }
+
+  }
+}

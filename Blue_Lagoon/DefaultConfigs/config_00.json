@@ -5,41 +5,6 @@
   "services": [
     {
       "apiVersion": "v1",
-      "protocol": "http",
-      "address": ":80",
-      "description": "WordPress 6.0",
-      "cve_tags": [
-        "CVE-2024-29234",
-        "CVE-2021-41773"
-      ],
-      "cve_description": "Path traversal and privileged file disclosure vulnerabilities in WordPress 6.0 allowing attackers to read sensitive files like wp-config.php and backup archives.",
-      "commands": [
-        {
-          "regex": "^(/index.php|/index.html|/)$",
-          "handler": "<html>\n  <header>\n    <title>Wordpress 6 test page</title>\n  </header>\n  <body>\n    <h1>Hello from Wordpress</h1>\n  </body>\n</html>",
-          "headers": [
-            "Content-Type: text/html",
-            "Server: Apache/2.4.53 (Debian)",
-            "X-Powered-By: PHP/7.4.29"
-          ],
-          "statusCode": 200
-        },
-        {
-          "regex": "^.*$",
-          "handler": "",
-          "headers": [],
-          "plugin": "LLMHoneypot"
-        }
-      ],
-      "plugin": {
-        "llmProvider": "openai",
-        "llmModel": "gpt-4o-mini",
-        "openAISecretKey": "placeholder",
-        "prompt": "You will act as an unsecure HTTP Server running a WordPress 6.0 installation. The server has misconfigurations and may leak sensitive files like backup archives, wp-config.php, or error logs. You must respond to HTTP requests with plausible HTML or PHP error messages. Do not provide explanations or metadata unless explicitly requested."
-      }
-    },
-    {
-      "apiVersion": "v1",
       "protocol": "ssh",
       "address": ":22",
       "description": "SSH interactive ChatGPT",
@@ -58,7 +23,7 @@
         "llmProvider": "openai",
         "llmModel": "gpt-4o-mini",
         "openAISecretKey": "placeholder",
-        "prompt": "You will act as an Ubuntu Linux terminal. The user will type commands, and you are to reply with what the terminal should show. Your responses must be contained within a single code block. Do not provide notes or explanations. Simulate realistic filesystem responses, process lists, or command output as needed. You contain files with sensitive information and programs that are vulnerable but priorotize realism."
+        "prompt": "You will act as an Ubuntu Linux terminal. The user will type commands, and you are to reply with what the terminal should show. Your responses must be contained within a single code block. Do not provide notes or explanations. Simulate realistic filesystem responses, process lists, or command output as needed. You contain hidden files with sensitive information and exploitable programs. Try to mimic a realistic vulnerable system as best as possible."
       }
     }
    
